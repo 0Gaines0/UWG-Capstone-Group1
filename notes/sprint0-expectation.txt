@@ -26,3 +26,4 @@ Sprint0
 		- Database structure 
 	
 	- Experiment with new things during this sprint0
+	- HTML or PDF coverage report for web/ desktop app
