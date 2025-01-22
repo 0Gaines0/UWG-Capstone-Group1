@@ -1,0 +1,28 @@
+Sprint0
+	- Run coverage reports
+	- Lauch everything locally
+	- Show a demo of how all the tech stack can work together
+	- Anything not part of Vlab and standard must be noted
+	- Figure out how to set up project
+		- Super simple C# and ASP.net application pulling from the shared database
+	- Independent SQL server project
+	- Resharper
+	- GhostDOC | Try not to autodoc
+	- Tools:
+		- Sql server might be the easiest
+		- Tutorial with ASP app with SQL server
+		- Look at both MVC and Razor, try both
+		- Try different tools to find best to work with
+		- UWP | Windows Form
+		- C# shared library that can be accessed from ASP.net and Desktop app
+		- Templates for Pages in ASP
+		
+	- Diagrams needed for Sprint1:
+		- Product backlog
+		- Sprint backlog
+		- Use case scenerios
+		- Wireframes
+		- UML diagrams
+		- Database structure 
+	
+	- Experiment with new things during this sprint0
