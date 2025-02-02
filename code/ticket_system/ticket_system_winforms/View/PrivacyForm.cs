@@ -19,21 +19,21 @@ namespace ticket_system_winforms.View
 
         private void HomeNavBtn_Click(object sender, EventArgs e)
         {
-            var frm = new HomeForm();
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Close(); };
-            frm.Show();
+            Form form = new HomeForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
             this.Hide();
         }
 
         private void UsersNavBtn_Click(object sender, EventArgs e)
         {
-            var frm = new UsersForm();
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Close(); };
-            frm.Show();
+            Form form = new UsersForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
             this.Hide();
         }
     }

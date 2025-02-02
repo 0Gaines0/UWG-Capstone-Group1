@@ -21,21 +21,21 @@ namespace ticket_system_winforms
 
         private void UsersNavBtn_Click(object sender, EventArgs e)
         {
-            var frm = new UsersForm();
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Close(); };
-            frm.Show();
+            Form form = new UsersForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
             this.Hide();
         }
 
         private void PrivacyNavBtn_Click(object sender, EventArgs e)
         {
-            var frm = new PrivacyForm();
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Close(); };
-            frm.Show();
+            Form form = new PrivacyForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
             this.Hide();
         }
     }

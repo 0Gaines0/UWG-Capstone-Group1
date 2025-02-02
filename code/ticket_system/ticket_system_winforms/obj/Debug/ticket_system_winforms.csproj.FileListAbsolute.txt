@@ -12,3 +12,6 @@ C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_sy
 C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UsersForm.resources
 C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UserCreateForm.resources
 C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UserCRUD.UserUpdateForm.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.Dialogs.AlertDialog.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.Dialogs.ConfirmDialog.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UserCRUD.UserRetrieveForm.resources

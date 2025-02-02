@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ticket_system_winforms.View.Dialogs;
 
 namespace ticket_system_winforms.View
 {
@@ -26,27 +27,38 @@ namespace ticket_system_winforms.View
 
         private void HomeBtn_Click(object sender, EventArgs e)
         {
-            var frm = new HomeForm();
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Close(); };
-            frm.Show();
+            Form form = new HomeForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
             this.Hide();
         }
 
         private void BackNavBtn_Click(object sender, EventArgs e)
         {
-            var frm = new UsersForm();
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Close(); };
-            frm.Show();
+            Form form = new UsersForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
             this.Hide();
         }
 
         private void CreateBtn_Click(object sender, EventArgs e)
         {
-            this.viewmodel.Create();
+            if (this.viewmodel.Create())
+            {
+                Form alert = new AlertDialog("Success", "Successfully created new user.");
+                alert.ShowDialog();
+                
+                Form form = new UsersForm();
+                form.Location = this.Location;
+                form.StartPosition = FormStartPosition.Manual;
+                form.FormClosing += delegate { this.Close(); };
+                form.Show();
+                this.Hide();
+            }
         }
     }
 }

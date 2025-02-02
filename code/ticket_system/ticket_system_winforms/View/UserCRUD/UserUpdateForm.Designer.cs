@@ -57,6 +57,7 @@
             this.BackNavBtn.TabIndex = 1;
             this.BackNavBtn.Text = "Back";
             this.BackNavBtn.UseVisualStyleBackColor = true;
+            this.BackNavBtn.Click += new System.EventHandler(this.BackNavBtn_Click);
             // 
             // groupBox1
             // 
@@ -93,17 +94,14 @@
             // 
             // CurrentPasswordTextBox
             // 
-            this.CurrentPasswordTextBox.Enabled = false;
             this.CurrentPasswordTextBox.Location = new System.Drawing.Point(81, 71);
             this.CurrentPasswordTextBox.Name = "CurrentPasswordTextBox";
-            this.CurrentPasswordTextBox.PasswordChar = '*';
             this.CurrentPasswordTextBox.ReadOnly = true;
             this.CurrentPasswordTextBox.Size = new System.Drawing.Size(100, 20);
             this.CurrentPasswordTextBox.TabIndex = 11;
             // 
             // CurrentUserIDTextBox
             // 
-            this.CurrentUserIDTextBox.Enabled = false;
             this.CurrentUserIDTextBox.Location = new System.Drawing.Point(81, 19);
             this.CurrentUserIDTextBox.Name = "CurrentUserIDTextBox";
             this.CurrentUserIDTextBox.ReadOnly = true;
@@ -121,7 +119,6 @@
             // 
             // CurrentUsernameTextBox
             // 
-            this.CurrentUsernameTextBox.Enabled = false;
             this.CurrentUsernameTextBox.Location = new System.Drawing.Point(81, 45);
             this.CurrentUsernameTextBox.Name = "CurrentUsernameTextBox";
             this.CurrentUsernameTextBox.ReadOnly = true;

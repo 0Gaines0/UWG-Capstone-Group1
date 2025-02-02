@@ -5,18 +5,21 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ticket_system_winforms.DAL;
 using ticket_system_winforms.Model;
+using ticket_system_winforms.View.Dialogs;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace ticket_system_winforms.ViewModel
 {
     internal class UsersViewModel : INotifyPropertyChanged
     {
-        private UserDAL db = new UserDAL();
+        private UsersDAL db = new UsersDAL();
 
         private IList<User> users;
-        private User selectedUser;
+        private int selectedUserIndex;
+        private bool hasSelectedUser;
         public IList<User> Users
         {
             get => this.users;
@@ -26,12 +29,22 @@ namespace ticket_system_winforms.ViewModel
                 this.OnPropertyChanged();
             }
         }
-        public User SelectedUser
+        public int SelectedUserIndex
         {
-            get => this.selectedUser;
+            get => this.selectedUserIndex;
             set
             {
-                this.selectedUser = value;
+                this.selectedUserIndex = value;
+                this.HasSelectedUser = (value >= 0 && value < this.Users.Count);
+                this.OnPropertyChanged();
+            }
+        }
+        public bool HasSelectedUser
+        {
+            get => this.hasSelectedUser;
+            private set
+            {
+                this.hasSelectedUser = value;
                 this.OnPropertyChanged();
             }
         }
@@ -41,6 +54,11 @@ namespace ticket_system_winforms.ViewModel
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public UsersViewModel()
+        {
+            this.SelectedUserIndex = -1;
         }
 
         /// <summary>
@@ -56,17 +74,23 @@ namespace ticket_system_winforms.ViewModel
             }
             catch (Exception ex)
             {
-                //TODO remove this
-                this.Users = new List<User>();
-                this.users.Add(new User(1, "User1ID", "Username1", "Password1"));
-                this.users.Add(new User(2, "User2ID", "Username2", "Password2"));
-                this.users.Add(new User(3, "User3ID", "Username3", "Password3"));
+                Form alert = new AlertDialog("Error", ex.ToString());
+                alert.ShowDialog();
             }
-            finally
-            {
-                //TODO remove this
-                this.SelectedUser = this.Users[0];
+            finally {
+                this.SelectedUserIndex = this.SelectedUserIndex;
             }
+        }
+
+        /// <summary>
+        /// Deletes the currently selected user from the database and updates the user list.
+        /// </summary>
+        /// <precondition>true</precondition>
+        /// <postcondition>true</postcondition>
+        public void DeleteUser()
+        {
+            this.db.DeleteUser(this.Users[this.SelectedUserIndex].ID);
+            this.GetUsers();
         }
     }
 }

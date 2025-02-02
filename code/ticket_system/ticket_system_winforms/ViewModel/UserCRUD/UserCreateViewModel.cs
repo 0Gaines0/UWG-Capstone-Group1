@@ -5,13 +5,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ticket_system_winforms.DAL;
+using ticket_system_winforms.View.Dialogs;
 
 namespace ticket_system_winforms
 {
     public class UserCreateViewModel : INotifyPropertyChanged
     {
-        private UserDAL db = new UserDAL();
+        private UsersDAL db = new UsersDAL();
 
         private string userId;
         private string username;
@@ -70,13 +72,17 @@ namespace ticket_system_winforms
             try
             {
                 this.db.CreateUser(this.UserID, this.Username, this.Password);
-                this.ErrMsg = "Success"; //TODO remove this
                 return true;
+            }
+            catch (ArgumentNullException)
+            {
+                this.ErrMsg = "Please fill in all information.";
+                return false;
             }
             catch (Exception ex)
             {
-                this.errMsg = ex.Message;
-                this.ErrMsg = this.UserID + this.Username + this.Password; //TODO remove this
+                Form alert = new AlertDialog("Error", ex.ToString());
+                alert.ShowDialog();
                 return false;
             }
         }

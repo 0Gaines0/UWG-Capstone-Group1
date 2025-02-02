@@ -47,16 +47,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\DBConfig.cs" />
-    <Compile Include="DAL\UserDAL.cs" />
+    <Compile Include="DAL\UsersDAL.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="ViewModel\UserCRUD\UserCreateViewModel.cs" />
     <Compile Include="ViewModel\UserCRUD\UserUpdateViewModel.cs" />
     <Compile Include="ViewModel\UsersViewModel.cs" />
+    <Compile Include="View\Dialogs\AlertDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialogs\AlertDialog.Designer.cs">
+      <DependentUpon>AlertDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\ConfirmDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialogs\ConfirmDialog.Designer.cs">
+      <DependentUpon>ConfirmDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\PrivacyForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\PrivacyForm.Designer.cs">
       <DependentUpon>PrivacyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserCRUD\UserRetrieveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\UserCRUD\UserRetrieveForm.Designer.cs">
+      <DependentUpon>UserRetrieveForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\UserCRUD\UserUpdateForm.cs">
       <SubType>Form</SubType>
@@ -93,6 +111,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\Dialogs\AlertDialog.resx">
+      <DependentUpon>AlertDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialogs\ConfirmDialog.resx">
+      <DependentUpon>ConfirmDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\PrivacyForm.resx">
       <DependentUpon>PrivacyForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -101,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\HomeForm.resx">
       <DependentUpon>HomeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\UserCRUD\UserRetrieveForm.resx">
+      <DependentUpon>UserRetrieveForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\UserCRUD\UserUpdateForm.resx">
       <DependentUpon>UserUpdateForm.cs</DependentUpon>

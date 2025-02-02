@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ticket_system_winforms.Model;
+using ticket_system_winforms.View.Dialogs;
 using ticket_system_winforms.ViewModel;
 
 namespace ticket_system_winforms.View.UserCRUD
@@ -33,7 +34,28 @@ namespace ticket_system_winforms.View.UserCRUD
 
         private void UpdateBtn_Click(object sender, EventArgs e)
         {
-            this.viewmodel.Update();
+            if (this.viewmodel.Update())
+            {
+                Form alert = new AlertDialog("Success", "Updated user successfully.");
+                alert.ShowDialog();
+
+                Form form = new UsersForm();
+                form.Location = this.Location;
+                form.StartPosition = FormStartPosition.Manual;
+                form.FormClosing += delegate { this.Close(); };
+                form.Show();
+                this.Hide();
+            }
+        }
+
+        private void BackNavBtn_Click(object sender, EventArgs e)
+        {
+            Form form = new UsersForm();
+            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.Manual;
+            form.FormClosing += delegate { this.Close(); };
+            form.Show();
+            this.Hide();
         }
     }
 }

@@ -70,13 +70,13 @@
             // 
             // DeleteUserBtn
             // 
-            this.DeleteUserBtn.Enabled = false;
             this.DeleteUserBtn.Location = new System.Drawing.Point(139, 128);
             this.DeleteUserBtn.Name = "DeleteUserBtn";
             this.DeleteUserBtn.Size = new System.Drawing.Size(75, 23);
             this.DeleteUserBtn.TabIndex = 15;
             this.DeleteUserBtn.Text = "Delete";
             this.DeleteUserBtn.UseVisualStyleBackColor = true;
+            this.DeleteUserBtn.Click += new System.EventHandler(this.DeleteUserBtn_Click);
             // 
             // UpdateUserBtn
             // 
@@ -97,6 +97,7 @@
             this.RetrieveUserBtn.TabIndex = 13;
             this.RetrieveUserBtn.Text = "Details (WIP)";
             this.RetrieveUserBtn.UseVisualStyleBackColor = true;
+            this.RetrieveUserBtn.Click += new System.EventHandler(this.RetrieveUserBtn_Click);
             // 
             // CreateUserBtn
             // 
@@ -116,6 +117,7 @@
             this.UsersListBox.Name = "UsersListBox";
             this.UsersListBox.Size = new System.Drawing.Size(120, 108);
             this.UsersListBox.TabIndex = 16;
+            this.UsersListBox.SelectedIndexChanged += new System.EventHandler(this.UsersListBox_SelectedIndexChanged);
             // 
             // UsersForm
             // 

@@ -14,7 +14,7 @@ namespace ticket_system_winforms.DAL
     /// </summary>
     /// <author>Jacob Wilson</author>
     /// <version>Spring 2025</version>
-    public class UserDAL
+    public class UsersDAL
     {
         /// <summary>
         /// Creates a new user with the specified information.
@@ -30,15 +30,15 @@ namespace ticket_system_winforms.DAL
             if (username == null) { throw new ArgumentNullException("username"); }
             if (password == null) { throw new ArgumentNullException("password"); }
 
-            string query = "INSERT INTO User(user_id, username, password) VALUES (@UserID, @Username, @Password)";
+            string query = "INSERT INTO Users(userId, username, password) VALUES (@UserID, @Username, @Password)";
 
             using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString)) {
+            connection.Open();
             using (SqlCommand command = new SqlCommand(query, connection)) {
                 command.Parameters.AddWithValue("@UserID", userId);
                 command.Parameters.AddWithValue("@Username", username);
                 command.Parameters.AddWithValue("@Password", password);
 
-                connection.Open();
                 command.ExecuteNonQuery();
             }
             }
@@ -54,16 +54,16 @@ namespace ticket_system_winforms.DAL
         public User RetrieveUser(int id)
         {
             User result = null;
-            string query =  "SELECT u.id, u.user_id, u.username, u.password " +
-                            "FROM User u " +
+            string query =  "SELECT u.id, u.userId, u.username, u.password " +
+                            "FROM Users u " +
                             "WHERE u.id = @ID";
 
             using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString)) {
+            connection.Open();
             using (SqlCommand command = new SqlCommand(query, connection)) {
             using (SqlDataReader reader = command.ExecuteReader()) {
                 command.Parameters.AddWithValue("@ID", id);
 
-                connection.Open();
                 while (reader.Read())
                 {
                     int userId = reader.GetInt32(0);
@@ -93,17 +93,17 @@ namespace ticket_system_winforms.DAL
             if (password == null) { throw new ArgumentNullException("password"); }
 
             User result = null;
-            string query =  "SELECT u.id, u.user_id, u.username, u.password " +
-                            "FROM User u " +
+            string query =  "SELECT u.id, u.userId, u.username, u.password " +
+                            "FROM Users u " +
                             "WHERE u.username = \"@Username\" AND u.password = \"@Password\"";
 
             using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString)) {
+            connection.Open();
             using (SqlCommand command = new SqlCommand(query, connection)) {
             using (SqlDataReader reader = command.ExecuteReader()) {
                 command.Parameters.AddWithValue("@Username", username);
                 command.Parameters.AddWithValue("@Password", password);
 
-                connection.Open();
                 while (reader.Read())
                 {
                     int userId = reader.GetInt32(0);
@@ -128,13 +128,13 @@ namespace ticket_system_winforms.DAL
         public IList<User> RetrieveAllUsers()
         {
             IList<User> result = new List<User>();
-            string query =  "SELECT u.id, u.user_id, u.username, u.password " +
-                            "FROM User u";
+            string query =  "SELECT u.id, u.userId, u.username, u.password " +
+                            "FROM Users u";
 
             using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString)) {
+            connection.Open();
             using (SqlCommand command = new SqlCommand(query, connection)) {
             using (SqlDataReader reader = command.ExecuteReader()) {
-                connection.Open();
                 while (reader.Read())
                 {
                     int userId = reader.GetInt32(0);
@@ -164,18 +164,18 @@ namespace ticket_system_winforms.DAL
             if (username == null) { throw new ArgumentNullException("username"); }
             if (password == null) { throw new ArgumentNullException("password"); }
 
-            string query =  "UPDATE User " +
-                            "SET id = @ID, user_id = \"@UserID\", username = \"@Username\", password = \"@Password\" " +
+            string query =  "UPDATE Users " +
+                            "SET userId = @UserID, username = @Username, password = @Password " +
                             "WHERE id = @ID";
 
             using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString)) {
+            connection.Open();
             using (SqlCommand command = new SqlCommand(query, connection)) {
                 command.Parameters.AddWithValue("@ID", id);
                 command.Parameters.AddWithValue("@UserID", userId);
                 command.Parameters.AddWithValue("@Username", username);
                 command.Parameters.AddWithValue("@Password", password);
 
-                connection.Open();
                 command.ExecuteNonQuery();
             }
             }
@@ -190,18 +190,16 @@ namespace ticket_system_winforms.DAL
         public void DeleteUser(int id)
         {
             string query =  "DELETE " +
-                            "FROM User " +
+                            "FROM Users " +
                             "WHERE id = @ID";
 
-            using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@ID", id);
+            using (SqlConnection connection = new SqlConnection(DBConfig.ConnectionString)) {
+            connection.Open();
+            using (SqlCommand command = new SqlCommand(query, connection)) {
+                command.Parameters.AddWithValue("@ID", id);
 
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
+                command.ExecuteNonQuery();
+            }
             }
         }
     }

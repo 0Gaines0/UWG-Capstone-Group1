@@ -5,14 +5,16 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ticket_system_winforms.DAL;
 using ticket_system_winforms.Model;
+using ticket_system_winforms.View.Dialogs;
 
 namespace ticket_system_winforms.ViewModel
 {
     internal class UserUpdateViewModel : INotifyPropertyChanged
     {
-        private UserDAL db = new UserDAL();
+        private UsersDAL db = new UsersDAL();
 
         private int id;
         private string currentUserId;
@@ -128,10 +130,15 @@ namespace ticket_system_winforms.ViewModel
                 this.db.UpdateUser(this.id, this.NewUserID, this.NewUsername, this.NewPassword);
                 return true;
             }
+            catch (ArgumentNullException ex)
+            {
+                this.ErrMsg = "Please fill in all data.";
+                return false;
+            }
             catch (Exception ex)
             {
-                this.ErrMsg = ex.Message;
-                this.ErrMsg = this.id + this.NewUserID + this.NewUsername + this.NewPassword; //TODO remove this
+                Form alert = new AlertDialog("Error", ex.ToString());
+                alert.ShowDialog();
                 return false;
             }
         }
