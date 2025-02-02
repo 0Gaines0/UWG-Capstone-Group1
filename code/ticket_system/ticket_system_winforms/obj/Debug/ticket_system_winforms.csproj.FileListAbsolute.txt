@@ -1,0 +1,14 @@
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\bin\Debug\ticket_system_winforms.exe.config
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\bin\Debug\ticket_system_winforms.exe
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\bin\Debug\ticket_system_winforms.pdb
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.csproj.AssemblyReference.cache
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.Properties.Resources.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.csproj.GenerateResource.cache
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.csproj.CoreCompileInputs.cache
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.exe
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.pdb
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.PrivacyForm.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.HomeForm.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UsersForm.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UserCreateForm.resources
+C:\Users\jacob\Documents\GitHub\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\ticket_system_winforms.View.UserCRUD.UserUpdateForm.resources
