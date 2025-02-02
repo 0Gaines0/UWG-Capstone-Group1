@@ -7,28 +7,8 @@
       "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\data\\ticketsystemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\data\\ticketsystemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\migrations\\20250201202541_initcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\migrations\\20250201202541_initcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,81 +18,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "ticket_system_web_app\\Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "ticket_system_web_app\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T20:29:52.805Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "ticket_system_web_app\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "ticket_system_web_app\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAABOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-01T20:26:42.349Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "20250201202541_InitCreate.cs",
-              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Migrations\\20250201202541_InitCreate.cs",
-              "RelativeDocumentMoniker": "ticket_system_web_app\\Migrations\\20250201202541_InitCreate.cs",
-              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Migrations\\20250201202541_InitCreate.cs",
-              "RelativeToolTip": "ticket_system_web_app\\Migrations\\20250201202541_InitCreate.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T20:25:41.377Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TicketSystemDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Data\\TicketSystemDbContext.cs",
-              "RelativeDocumentMoniker": "ticket_system_web_app\\Data\\TicketSystemDbContext.cs",
-              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Data\\TicketSystemDbContext.cs",
-              "RelativeToolTip": "ticket_system_web_app\\Data\\TicketSystemDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T20:10:03.427Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Models\\User.cs",
-              "RelativeDocumentMoniker": "ticket_system_web_app\\Models\\User.cs",
-              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Models\\User.cs",
-              "RelativeToolTip": "ticket_system_web_app\\Models\\User.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAA1wBoAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T19:57:37.174Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
-              "RelativeDocumentMoniker": "ticket_system_web_app\\appsettings.json",
-              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
-              "RelativeToolTip": "ticket_system_web_app\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-02-01T19:50:17.736Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -121,9 +28,22 @@
               "RelativeDocumentMoniker": "ticket_system_web_app\\Program.cs",
               "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Program.cs",
               "RelativeToolTip": "ticket_system_web_app\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAACfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-01T19:45:16.692Z",
+              "WhenOpened": "2025-02-02T03:41:41.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
+              "RelativeDocumentMoniker": "ticket_system_web_app\\appsettings.json",
+              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
+              "RelativeToolTip": "ticket_system_web_app\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-02-02T03:40:56.1Z",
               "EditorCaption": ""
             }
           ]
