@@ -97,9 +97,9 @@ namespace ticket_system_winforms.ViewModel
         /// <summary>
         /// Initializes a new instance of the <see cref="UserUpdateViewModel"/> class.
         /// </summary>
-        /// <param name="user">The current user.</param>
         /// <precondition>User != null && user.ID > 0</precondition>
         /// <postcondition>this.CurrentUserID == user.ID && this.CurrentUsername == user.Username && this.CurrentPassword == user.Password</postcondition>
+        /// <param name="user">The current user.</param>
         public UserUpdateViewModel(User user)
         {
             if (user == null) {
@@ -131,7 +131,7 @@ namespace ticket_system_winforms.ViewModel
             catch (Exception ex)
             {
                 this.ErrMsg = ex.Message;
-                this.ErrMsg = this.id + this.NewUserID + this.NewUsername + this.NewPassword;
+                this.ErrMsg = this.id + this.NewUserID + this.NewUsername + this.NewPassword; //TODO remove this
                 return false;
             }
         }

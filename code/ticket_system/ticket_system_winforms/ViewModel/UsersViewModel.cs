@@ -53,14 +53,18 @@ namespace ticket_system_winforms.ViewModel
             try
             {
                 this.Users = this.db.RetrieveAllUsers();
-                this.SelectedUser = this.Users[0];
             }
             catch (Exception ex)
             {
+                //TODO remove this
                 this.Users = new List<User>();
                 this.users.Add(new User(1, "User1ID", "Username1", "Password1"));
                 this.users.Add(new User(2, "User2ID", "Username2", "Password2"));
                 this.users.Add(new User(3, "User3ID", "Username3", "Password3"));
+            }
+            finally
+            {
+                //TODO remove this
                 this.SelectedUser = this.Users[0];
             }
         }

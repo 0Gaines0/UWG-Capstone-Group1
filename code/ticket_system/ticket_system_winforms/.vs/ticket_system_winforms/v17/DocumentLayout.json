@@ -3,20 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|c:\\users\\jacob\\documents\\github\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_winforms\\viewmodel\\usercrud\\usercreateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|solutionrelative:viewmodel\\usercrud\\usercreateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\viewmodel\\usercrud\\userupdateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|solutionrelative:viewmodel\\usercrud\\userupdateviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\view\\usercrud\\usercreateform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|solutionrelative:view\\usercrud\\usercreateform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\view\\privacyform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|solutionrelative:view\\privacyform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|c:\\users\\jacob\\documents\\github\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_winforms\\model\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46FDC6B6-E836-4A01-870A-E880174F4A3C}|ticket_system_winforms.csproj|solutionrelative:model\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,8 +14,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 19,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\Model\\User.cs",
+              "RelativeDocumentMoniker": "Model\\User.cs",
+              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\Model\\User.cs",
+              "RelativeToolTip": "Model\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-02T16:45:22.869Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -103,54 +104,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:135:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UserCreateViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ViewModel\\UserCRUD\\UserCreateViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\UserCRUD\\UserCreateViewModel.cs",
-              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ViewModel\\UserCRUD\\UserCreateViewModel.cs",
-              "RelativeToolTip": "ViewModel\\UserCRUD\\UserCreateViewModel.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAIwE0AAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T07:45:45.815Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserUpdateViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ViewModel\\UserCRUD\\UserUpdateViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModel\\UserCRUD\\UserUpdateViewModel.cs",
-              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ViewModel\\UserCRUD\\UserUpdateViewModel.cs",
-              "RelativeToolTip": "ViewModel\\UserCRUD\\UserUpdateViewModel.cs",
-              "ViewState": "AgIAAGgAAAAAAAAAAAAAAIUAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T07:45:24.682Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserCreateForm.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\View\\UserCRUD\\UserCreateForm.cs",
-              "RelativeDocumentMoniker": "View\\UserCRUD\\UserCreateForm.cs",
-              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\View\\UserCRUD\\UserCreateForm.cs [Design]",
-              "RelativeToolTip": "View\\UserCRUD\\UserCreateForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T07:44:39.741Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PrivacyForm.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\View\\PrivacyForm.Designer.cs",
-              "RelativeDocumentMoniker": "View\\PrivacyForm.Designer.cs",
-              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\View\\PrivacyForm.Designer.cs",
-              "RelativeToolTip": "View\\PrivacyForm.Designer.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAD8AAABSAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-02T07:38:39.333Z"
             }
           ]
         },

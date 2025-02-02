@@ -70,12 +70,13 @@ namespace ticket_system_winforms
             try
             {
                 this.db.CreateUser(this.UserID, this.Username, this.Password);
-                this.ErrMsg = "Success";
+                this.ErrMsg = "Success"; //TODO remove this
                 return true;
             }
             catch (Exception ex)
             {
-                this.ErrMsg = this.UserID + this.Username + this.Password;
+                this.errMsg = ex.Message;
+                this.ErrMsg = this.UserID + this.Username + this.Password; //TODO remove this
                 return false;
             }
         }

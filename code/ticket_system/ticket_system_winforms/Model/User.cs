@@ -15,6 +15,15 @@ namespace ticket_system_winforms.Model
         public string Username { get; set; }
         public string Password { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="User"/> class.
+        /// </summary>
+        /// <precondition>userId != null && username != null && password != null</precondition>
+        /// <postcondition>this.ID == id && this.UserID == userId && this.Username == username && this.Password == password</postcondition>
+        /// <param name="id">The id.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
         public User(int id, string userId, string username, string password)
         {
             this.ID = id;
