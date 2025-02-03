@@ -1,13 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\",
+  "WorkspaceRootPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jacob\\documents\\github\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\ticket_system_web_app.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jacob\\documents\\github\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|c:\\users\\jgain\\documents\\dev\\uwg-capstone-group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{3173442D-F16C-4305-AEAB-EF47F6899848}|ticket_system_web_app\\ticket_system_web_app.csproj|solutionrelative:ticket_system_web_app\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
@@ -99,23 +103,36 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ticket_system_web_app",
+              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
+              "RelativeDocumentMoniker": "ticket_system_web_app\\ticket_system_web_app.csproj",
+              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
+              "RelativeToolTip": "ticket_system_web_app\\ticket_system_web_app.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-02-03T03:40:57.368Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Program.cs",
               "RelativeDocumentMoniker": "ticket_system_web_app\\Program.cs",
-              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Program.cs",
+              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\Program.cs",
               "RelativeToolTip": "ticket_system_web_app\\Program.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-02T03:41:41.885Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
               "RelativeDocumentMoniker": "ticket_system_web_app\\appsettings.json",
-              "ToolTip": "C:\\Users\\jacob\\Documents\\GitHub\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
+              "ToolTip": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\appsettings.json",
               "RelativeToolTip": "ticket_system_web_app\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
