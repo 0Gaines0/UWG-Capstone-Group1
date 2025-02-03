@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj": {}
+    "C:\\Users\\sremsha1\\source\\repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj": {
+    "C:\\Users\\sremsha1\\source\\repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
+        "projectUniqueName": "C:\\Users\\sremsha1\\source\\repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
         "projectName": "ticket_system_web_app",
-        "projectPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
-        "packagesPath": "C:\\Users\\Jgain\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\obj\\",
+        "projectPath": "C:\\Users\\sremsha1\\source\\repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
+        "packagesPath": "C:\\Users\\sremsha1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sremsha1\\source\\repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Jgain\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\sremsha1\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -43,8 +43,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -88,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.307/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
