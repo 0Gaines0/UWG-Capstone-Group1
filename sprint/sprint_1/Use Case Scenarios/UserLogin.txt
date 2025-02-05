@@ -1,0 +1,17 @@
+Context - User has existing login to system, User has ability to access database and application
+
+Primary Flow (WebApp & DesktopApp)
+1 - User lauches application
+2 - System presents login screen
+3 - User inputs given username and password
+4 - System verifies entered credentials against database
+5 - If valid credentials, system authenticates user and grants access to application
+7 - User is redirected to respective landing page
+
+Alternate Flow(s)
+INVALID USER CREDENTIALS
+a1 - User inputs invalid username or password
+a2 - System attemtps to verify credentials, finds them as invalid
+a3 - System displays error message, informing user of invalid credentials
+a4 - System prompts user to re-enter credentials
+return to step 3s
