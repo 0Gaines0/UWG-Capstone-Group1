@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="ticket_system_database.dll" />
-			<Metadata Name="FileName" Value="C:\USERS\JGAIN\DOCUMENTS\DEV\UWG-CAPSTONE-GROUP1\CODE\TICKET_SYSTEM\TICKET_SYSTEM_DATABASE\OBJ\DEBUG\TICKET_SYSTEM_DATABASE.DLL" />
+			<Metadata Name="FileName" Value="C:\USERS\SREMSHA1\SOURCE\REPOS\UWG-CAPSTONE-GROUP1\CODE\TICKET_SYSTEM\TICKET_SYSTEM_DATABASE\OBJ\DEBUG\TICKET_SYSTEM_DATABASE.DLL" />
 			<Metadata Name="AssemblyName" Value="ticket_system_database" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>
@@ -50,7 +50,7 @@
 					<Element Type="SqlIndexedColumnSpecification">
 						<Relationship Name="Column">
 							<Entry>
-								<References Name="[dbo].[user].[Id]" />
+								<References Name="[dbo].[users].[Id]" />
 							</Entry>
 						</Relationship>
 					</Element>
@@ -58,7 +58,7 @@
 			</Relationship>
 			<Relationship Name="DefiningTable">
 				<Entry>
-					<References Name="[dbo].[user]" />
+					<References Name="[dbo].[users]" />
 				</Entry>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="3" />
@@ -69,7 +69,7 @@
 					<Element Type="SqlIndexedColumnSpecification">
 						<Relationship Name="Column">
 							<Entry>
-								<References Name="[dbo].[user].[user_id]" />
+								<References Name="[dbo].[users].[userId]" />
 							</Entry>
 						</Relationship>
 					</Element>
@@ -77,16 +77,16 @@
 			</Relationship>
 			<Relationship Name="DefiningTable">
 				<Entry>
-					<References Name="[dbo].[user]" />
+					<References Name="[dbo].[users]" />
 				</Entry>
 			</Relationship>
 			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="4" />
 		</Element>
-		<Element Type="SqlTable" Name="[dbo].[user]">
+		<Element Type="SqlTable" Name="[dbo].[users]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
 			<Relationship Name="Columns">
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[user].[Id]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[Id]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -102,7 +102,7 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[user].[user_id]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[userId]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -119,7 +119,7 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[user].[username]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[username]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -136,7 +136,7 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[user].[password]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[users].[password]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>

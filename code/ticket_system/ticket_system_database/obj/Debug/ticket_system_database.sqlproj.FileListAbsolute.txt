@@ -20,3 +20,13 @@ C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_syste
 C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\predeploy.sql
 C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
 C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dacpac
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dll
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.pdb
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.sqlproj.AssemblyReference.cache
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\Model.xml
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\refactor.xml
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\postdeploy.sql
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\predeploy.sql
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
+C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb
