@@ -1,0 +1,229 @@
+﻿@{
+    Layout = null; // Set your layout here if applicable
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #608272, #29543d);
+            color: #ffffff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .sidebar {
+            flex: 0.15;
+            background-color: #0f1e13;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 35px 35px 35px 35px;
+            margin-left: 20px;
+            margin-top:10px;
+            margin-bottom: 10px;       }
+
+        .sidebar img {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar h2 {
+            margin: 0px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align:center;
+            border-bottom: 2px solid #ffffff; 
+            padding-bottom: 5px;
+            width: 100%;
+            }
+
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .project-item {
+            display: grid; 
+            align-items: center; 
+            background-color: #9f7aea;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            gap: 2px; 
+            text-align: center; 
+        }
+
+            .project-item:hover {
+                background-color: #b794f4; 
+            }
+
+            .project-item img {
+                width: 20px; 
+                height: 20px; 
+                object-fit: contain; 
+            }
+
+            .project-item span {
+                font-size: 1rem; 
+                color: #ffffff; 
+            }
+
+        .main-content {
+            flex: 0.7;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .greeting-container {
+            width:95%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            gap: 200px;
+        }
+
+        .greeting {
+            flex: 1; 
+        }
+
+        .logout-button {
+            width: auto; 
+            padding: 10px 20px;
+            background-color: #9f7aea;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .logout-button:hover {
+                background-color: #b794f4; 
+            }
+
+        .task-monitoring-container {
+            width: 95%;
+            margin: 20px;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .task-monitoring-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: -10px;
+            text-align: left;
+        }
+
+        .task-monitoring {
+            margin-top: 20px;
+            width: 95%;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .task-card {
+            background-color: #9f7aea;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 150px;
+            height: 100px
+        }
+
+        .task-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            margin-top: -10px;
+            margin-left: -5px;
+            text-align: left;
+        }
+
+        .task-card p {
+            font-size: 2.5rem;
+            text-align:left;
+    
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img src="~/assets/ticket_system_logo.png" alt="Logo">
+            <h2>Projects</h2>
+            <div class="project-list">
+                <div class="project-item">
+                    <img src="~/assets/project_bookmark_img.png" alt="Bookmark">
+                    <span>Project Alpha</span>
+                </div>
+                <div class="project-item">
+                    <img src="~/assets/project_bookmark_img.png" alt="Bookmark">
+                    <span>Project Beta</span>
+                </div>
+                <div class="project-item">
+                    <img src="~/assets/project_bookmark_img.png" alt="Bookmark">
+                    <span>Project Charlie</span>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="greeting-container">
+                <div class="greeting">
+                    Good Day, [Employee Name]!
+                </div>
+                <form asp-action="LogOut" method="post" style="margin: 0;">
+                    <button type="submit" class="logout-button">Log Out</button>
+                </form>
+            </div>
+            <div class="task-monitoring-container">
+                <h2 class="task-monitoring-title">Task Monitoring</h2>
+                <div class="task-monitoring">
+                    <div class="task-card">
+                        <h3>Assigned Tasks</h3>
+                        <p>0</p>
+                    </div>
+                    <div class="task-card">
+                        <h3>Completed Tasks</h3>
+                        <p>0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</body>
+</html>
