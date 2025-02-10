@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ticket_system_winforms")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39d9d55bdd53422a3d45f121585533b48e3b6be5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+554cd3b877017bbc636281d02cd86e17b50648cd")]
 [assembly: System.Reflection.AssemblyProductAttribute("ticket_system_winforms")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ticket_system_winforms")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

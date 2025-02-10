@@ -40,3 +40,13 @@ C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system
 C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\refactor.xml
 C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\postdeploy.sql
 C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\predeploy.sql
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dacpac
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dll
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.pdb
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.sqlproj.AssemblyReference.cache
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\Model.xml
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\refactor.xml
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\postdeploy.sql
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\predeploy.sql
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
+C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb

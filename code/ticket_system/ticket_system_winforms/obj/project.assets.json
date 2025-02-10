@@ -1827,23 +1827,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\steve\\.nuget\\packages\\": {},
+    "C:\\Users\\jg00242\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\steve\\Source\\Repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj",
+      "projectUniqueName": "C:\\Users\\jg00242\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj",
       "projectName": "ticket_system_winforms",
-      "projectPath": "C:\\Users\\steve\\Source\\Repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj",
-      "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\steve\\Source\\Repos\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\obj\\",
+      "projectPath": "C:\\Users\\jg00242\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj",
+      "packagesPath": "C:\\Users\\jg00242\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jg00242\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\steve\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jg00242\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1869,8 +1869,7 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+      }
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -1904,7 +1903,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.307/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

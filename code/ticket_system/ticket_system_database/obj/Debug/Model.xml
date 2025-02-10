@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="ticket_system_database.dll" />
-			<Metadata Name="FileName" Value="C:\USERS\STEVE\SOURCE\REPOS\UWG-CAPSTONE-GROUP1\CODE\TICKET_SYSTEM\TICKET_SYSTEM_DATABASE\OBJ\DEBUG\TICKET_SYSTEM_DATABASE.DLL" />
+			<Metadata Name="FileName" Value="C:\USERS\JG00242\DOCUMENTS\DEV\UWG-CAPSTONE-GROUP1\CODE\TICKET_SYSTEM\TICKET_SYSTEM_DATABASE\OBJ\DEBUG\TICKET_SYSTEM_DATABASE.DLL" />
 			<Metadata Name="AssemblyName" Value="ticket_system_database" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>
