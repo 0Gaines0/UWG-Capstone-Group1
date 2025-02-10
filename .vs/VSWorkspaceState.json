@@ -1,14 +1,5 @@
 {
-  "ExpandedNodes": [
-    "",
-    "\\code",
-    "\\code\\ticket_system",
-    "\\code\\ticket_system\\database",
-    "\\code\\ticket_system\\ticket_system_database",
-    "\\code\\ticket_system\\ticket_system_database\\dbo",
-    "\\code\\ticket_system\\ticket_system_database\\dbo\\Tables",
-    "\\code\\ticket_system\\ticket_system_web_app"
-  ],
-  "SelectedNode": "\\code\\ticket_system\\ticket_system_database\\dbo\\Tables\\users.sql",
+  "ExpandedNodes": [],
+  "SelectedNode": "\\ticket_system.sln",
   "PreviewInSolutionExplorer": false
 }

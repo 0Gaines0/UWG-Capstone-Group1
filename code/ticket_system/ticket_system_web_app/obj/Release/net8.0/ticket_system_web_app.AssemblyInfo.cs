@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ticket_system_web_app")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c709a837ab7e4a94f8a9feb2a1891ae8d36f8146")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39d9d55bdd53422a3d45f121585533b48e3b6be5")]
 [assembly: System.Reflection.AssemblyProductAttribute("ticket_system_web_app")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ticket_system_web_app")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
