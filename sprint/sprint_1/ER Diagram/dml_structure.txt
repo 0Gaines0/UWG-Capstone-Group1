@@ -9,9 +9,9 @@ Table employee {
   l_name varchar(255)
   username varchar(255)
   hashed_password varchar(255)
-  is_active boolean
-  is_manager boolean
-  is_admin boolean
+  is_active bit
+  is_manager bit
+  is_admin bit
 }
 
 table group_member {
@@ -26,6 +26,7 @@ table group_member {
 
 table group {
   g_id integer pk 
+  manager_id integer [ref: > employee.e_id]
   g_name varchar(255)
   g_description text
 }

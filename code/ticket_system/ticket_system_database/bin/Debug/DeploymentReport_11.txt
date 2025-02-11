@@ -1,0 +1,32 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       [dbo].[users]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Recreate table
+       [dbo].[users] (Table)
+     Create
+       [dbo].[employee] (Table)
+       [dbo].[group] (Table)
+       [dbo].[group_member] (Table)
+       [dbo].[project] (Table)
+       [dbo].[project_group] (Table)
+       [dbo].[FK_group_To_employee] (Foreign Key)
+       [dbo].[FK_group_member_To_group] (Foreign Key)
+       [dbo].[FK_group_member_To_employee] (Foreign Key)
+       [dbo].[FK_project_To_employee] (Foreign Key)
+       [dbo].[FK_project_group_To_project] (Foreign Key)
+       [dbo].[FK_project_group_To_group] (Foreign Key)
+
+** Supporting actions
+
+The column password on table [dbo].[users] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column userId on table [dbo].[users] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column username on table [dbo].[users] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

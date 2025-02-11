@@ -1,0 +1,26 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Create
+       [dbo].[employee] (Table)
+       [dbo].[group] (Table)
+       [dbo].[group_member] (Table)
+       [dbo].[project] (Table)
+       [dbo].[project_group] (Table)
+       [dbo].[users] (Table)
+       [dbo].[FK_group_To_employee] (Foreign Key)
+       [dbo].[FK_group_member_To_group] (Foreign Key)
+       [dbo].[FK_group_member_To_employee] (Foreign Key)
+       [dbo].[FK_project_To_employee] (Foreign Key)
+       [dbo].[FK_project_group_To_project] (Foreign Key)
+       [dbo].[FK_project_group_To_group] (Foreign Key)
+
+** Supporting actions
