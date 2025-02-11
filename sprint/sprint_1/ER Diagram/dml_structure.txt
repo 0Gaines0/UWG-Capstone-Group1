@@ -1,0 +1,47 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+// https://dbdiagram.io/d/67aac3f6263d6cf9a0b41bb6
+
+Table employee {
+  e_id integer pk
+  f_name varchar(255)
+  l_name varchar(255)
+  username varchar(255)
+  hashed_password varchar(255)
+  is_active boolean
+  is_manager boolean
+  is_admin boolean
+}
+
+table group_member {
+  g_id integer [ref: > group.g_id]
+  e_id integer [ref: > employee.e_id]
+  
+  indexes {
+    (g_id, e_id) [pk]
+  }
+  
+}
+
+table group {
+  g_id integer pk 
+  g_name varchar(255)
+  g_description text
+}
+
+table project {
+  p_id integer pk
+  project_lead_id integer [ref: > employee.e_id]
+  p_title varchar(255)
+  p_description text
+}
+
+table project_group {
+  p_id integer [ref: > project.p_id]
+  g_id integer [ref: > group.g_id]
+
+  indexes {
+    (p_id, g_id) [pk]
+  }
+}
