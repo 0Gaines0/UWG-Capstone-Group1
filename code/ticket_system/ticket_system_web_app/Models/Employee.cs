@@ -30,6 +30,9 @@ namespace ticket_system_web_app.Models
         [Column("is_admin")]
         public bool? IsAdmin { get; set; }
 
+        [Column("email")]
+        public string? Email { get; set; }
+
         public ICollection<Group> GroupsExistingIn {  get; set; } = new List<Group>();
 
         public Employee()
@@ -38,8 +41,20 @@ namespace ticket_system_web_app.Models
             this.LName = string.Empty;
             this.Username = string.Empty;
             this.HashedPassword = string.Empty;
+            this.Email = string.Empty;
         }
-    
-    
+
+        public Employee(int eId, string? fName, string? lName, string? username, string? hashedPassword, bool? isActive, bool? isManager, bool? isAdmin, string? email)
+        {
+            this.EId = eId;
+            this.FName = fName;
+            this.LName = lName;
+            this.Username = username;
+            this.HashedPassword = hashedPassword;
+            this.IsActive = isActive;
+            this.IsManager = isManager;
+            this.IsAdmin = isAdmin;
+            this.Email = email;
+        }
     }
 }

@@ -46,3 +46,9 @@ C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_syste
 C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.sqlproj.AssemblyReference.cache
 C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
 C:\Users\Jgain\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dacpac
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dll
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.pdb
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.sqlproj.AssemblyReference.cache
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb

@@ -2540,7 +2540,14 @@
           }
         }
       },
-      "System.Security.Cryptography.ProtectedData/8.0.0": {},
+      "System.Security.Cryptography.ProtectedData/8.0.0": {
+        "runtime": {
+          "lib/net8.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
       "System.Security.Principal.Windows/5.0.0": {},
       "System.Text.Encodings.Web/9.0.1": {
         "runtime": {
@@ -2580,10 +2587,7 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "9.0.0"
         },
         "runtime": {
-          "ticket_system_web_app.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "ticket_system_web_app.dll": {}
         }
       },
       "ticket_system_winforms/1.0.0": {
@@ -2592,10 +2596,7 @@
           "System.Data.SqlClient": "4.9.0"
         },
         "runtime": {
-          "ticket_system_winforms.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "ticket_system_winforms.dll": {}
         }
       }
     }

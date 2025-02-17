@@ -1,0 +1,46 @@
+﻿** Highlights
+     Tables that will be recreated with data migrated
+       [dbo].[users]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The table [dbo].[group_member] is being dropped and re-created since all non-computed columns within the table have been
+         redefined.
+       The table [dbo].[project_group] is being dropped and re-created since all non-computed columns within the table have
+         been redefined.
+
+** User actions
+     Drop
+       [dbo].[FK_group_member_Employees_EmployeesEId] (Foreign Key)
+       [dbo].[FK_group_member_Groups_GroupsExistingInGId] (Foreign Key)
+       [dbo].[FK_project_group_Groups_AssignedGroupsGId] (Foreign Key)
+       [dbo].[FK_project_group_Projects_AssignedProjectsPId] (Foreign Key)
+       [dbo].[group_member].[IX_group_member_GroupsExistingInGId] (Index)
+       [dbo].[group_member] (Table)
+       [dbo].[project_group].[IX_project_group_AssignedProjectsPId] (Index)
+       [dbo].[project_group] (Table)
+     Create
+       [dbo].[group_member] (Table)
+       [dbo].[project_group] (Table)
+       [dbo].[employee] (Table)
+       [dbo].[group] (Table)
+       [dbo].[project] (Table)
+       [dbo].[FK_group_member_To_group] (Foreign Key)
+       [dbo].[FK_group_member_To_employee] (Foreign Key)
+       [dbo].[FK_project_group_To_project] (Foreign Key)
+       [dbo].[FK_project_group_To_group] (Foreign Key)
+       [dbo].[FK_group_To_employee] (Foreign Key)
+       [dbo].[FK_project_To_employee] (Foreign Key)
+     Recreate table
+       [dbo].[users] (Table)
+
+** Supporting actions
+
+The table [dbo].[group_member] is being dropped and re-created since all non-computed columns within the table have been redefined.
+The table [dbo].[project_group] is being dropped and re-created since all non-computed columns within the table have been redefined.
+The column password on table [dbo].[users] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column userId on table [dbo].[users] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column username on table [dbo].[users] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

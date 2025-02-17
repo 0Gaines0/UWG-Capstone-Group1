@@ -7,5 +7,6 @@
 	[hashed_password] VARCHAR(MAX) NOT NULL,
 	[is_active] BIT NOT NULL,
 	[is_manager] BIT NOT NULL,
-	[is_admin] BIT NOT NULL
+	[is_admin] BIT NOT NULL,
+	[email] VARCHAR(MAX) NOT NULL
 )
