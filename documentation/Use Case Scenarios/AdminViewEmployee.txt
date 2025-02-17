@@ -1,0 +1,6 @@
+Context - User is logged in as an admin account
+
+Primary Flow
+1 - Admin navigates to View/Create/Edit/Delete Employee Page on WebApp
+2 - System navigates admin to View/Create/Edit/Delete with in application 
+3 - Admin views all employees

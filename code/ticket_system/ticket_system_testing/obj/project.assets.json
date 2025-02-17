@@ -8667,11 +8667,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_testing\\ticket_system_testing.csproj",
+      "projectUniqueName": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_testing\\ticket_system_testing.csproj",
       "projectName": "ticket_system_testing",
-      "projectPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_testing\\ticket_system_testing.csproj",
+      "projectPath": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_testing\\ticket_system_testing.csproj",
       "packagesPath": "C:\\Users\\Jgain\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_testing\\obj\\",
+      "outputPath": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_testing\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -8692,11 +8692,11 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj": {
-              "projectPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj"
+            "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj": {
+              "projectPath": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj"
             },
-            "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj": {
-              "projectPath": "C:\\Users\\Jgain\\Documents\\dev\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj"
+            "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj": {
+              "projectPath": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj"
             }
           }
         }
@@ -8705,13 +8705,7 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+      }
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -8758,7 +8752,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
