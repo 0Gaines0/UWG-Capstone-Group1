@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ticket_system_testing")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b571603431cf5ef60ce94ce9fc147a44127279db")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9772903ae260daa52b3d03c6cbbb3a0824d9a7a9")]
 [assembly: System.Reflection.AssemblyProductAttribute("ticket_system_testing")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ticket_system_testing")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

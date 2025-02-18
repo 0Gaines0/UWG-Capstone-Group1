@@ -1,19 +1,18 @@
 ﻿namespace ticket_system_web_app.Models
 {
-    public class ActiveEmployee
+    public static class ActiveEmployee
     {
         public static Employee? Employee { get; set; }
 
-        public ActiveEmployee(Employee employee)
+        public static void LogInEmployee(Employee employee)
         {
             if (employee == null)
             {
-                throw new ArgumentNullException(nameof(employee), "the parameter must not be null");
+                throw new ArgumentNullException(nameof(employee), "input must not be null");
             }
             Employee = employee;
         }
-
-        public void LogoutCurrentEmployee()
+        public static void LogoutCurrentEmployee()
         {
             Employee = null;
         }

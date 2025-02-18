@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ticket_system_web_app.Data;
+using ticket_system_web_app.Models;
 
 namespace ticket_system_web_app.Controllers
 {
@@ -50,17 +51,15 @@ namespace ticket_system_web_app.Controllers
             }
 
             TempData["EnteredUsername"] = string.Empty;
+            ActiveEmployee.LogInEmployee(user);
             return RedirectToAction("Index", "LandingPage");
-
-
-
-
-
         }
 
         private bool verifyCorrectPassword(string passwordEntered, string hashedPassword) 
         {
             return BCrypt.Net.BCrypt.Verify(passwordEntered, hashedPassword);
         }
+
+
     }
 }
