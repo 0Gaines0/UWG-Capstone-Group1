@@ -1,0 +1,42 @@
+Context - User is logged in as admin account, has navigated to the Projects page, and has clicked the button to create a new project. Project lead selector control and creation confirmation control are disabled on page load.
+
+Primary flow:
+1 - User adds one or more groups to collaborate on the project.
+2 - System enables project lead selector control.
+3 - User selects a group from the list of collaborating groups whose manager should be the project lead.
+4 - User enters additional information about the project (name, description, etc.).
+5 - System enables creation confirmation control.
+6 - User selects creation confirmation control to create group.
+7 - System validates information and adds project to server.
+8 - System redirects user to Projects page.
+
+Alternative flows
+NO COLLABORATORS HAVE BEEN ADDED
+a1 - User does not add groups, or removes all groups.
+a2 - System does not enable project lead selector control.
+a3 - Skip to primary flow step 4.
+a4 - No collaborators have been added. System does not enable creation confirmation button.
+a5 - System shows error message detailing missing information.
+a6 - User returns to primary flow step 1.
+
+NO PROJECT LEAD HAS BEEN SELECTED
+a1 - Start at primary flow step 3.
+a2 - User does not select a group whose manager should be the project leader.
+a3 - Skip to primary flow step 5.
+a4 - No project lead has been added. System does not enable creation confirmation button.
+a5 - System shows error message detailing missing information.
+a6 - User returns to primary flow step 2.
+
+USER HAS NOT ADDED ADDITIONAL INFORMATION
+a1 - Start at primary flow step 4.
+a2 - User does not enter required information. System does not enable creation confirmation button.
+a3 - System shows error message detailing missing information.
+a4 - User returns to primary flow step 4.
+
+USER HAS ENTERED INVALID INFORMATION
+a1 - Start at primary flow step 7.
+a2 - Data validation finds an error in the data. System does not add project to server.
+a3 - System shows error message detailing invalid information.
+a4 - System disables creation confirmation control.
+a5 - User returns to primary flow step 4.
+ 
