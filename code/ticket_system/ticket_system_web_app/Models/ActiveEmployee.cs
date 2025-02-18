@@ -8,7 +8,7 @@
         {
             if (employee == null)
             {
-                throw new ArgumentNullException("employee", "the parameter must not be null");
+                throw new ArgumentNullException(nameof(employee), "the parameter must not be null");
             }
             Employee = employee;
         }

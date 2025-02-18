@@ -1983,3 +1983,4 @@ C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\
 C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_web_app\obj\Debug\net8.0\ticket_system_web_app.pdb
 C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_web_app\obj\Debug\net8.0\ticket_system_web_app.genruntimeconfig.cache
 C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_web_app\obj\Debug\net8.0\ref\ticket_system_web_app.dll
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_web_app\bin\Debug\net8.0\BCrypt.Net-Next.dll

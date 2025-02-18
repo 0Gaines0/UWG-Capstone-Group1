@@ -327,3 +327,4 @@ C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\
 C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\net8.0-windows\ticket_system_winforms.pdb
 C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\net8.0-windows\ticket_system_winforms.genruntimeconfig.cache
 C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\obj\Debug\net8.0-windows\ref\ticket_system_winforms.dll
+C:\Users\Jgain\OneDrive\Documents\School\UWG-Capstone-Group1\code\ticket_system\ticket_system_winforms\bin\Debug\net8.0-windows\BCrypt.Net-Next.dll

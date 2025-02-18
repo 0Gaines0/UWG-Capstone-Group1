@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "K2jmG7WPQcZJbtNeA3vRBULfAmTxbZ4uXeG+OqvYArPdqP/74qI+QxECY701yIqvXxk5SZrmbCEsmQhK6uAK2g==",
+  "dgSpecHash": "hd93zS2TSsFNteZ2i8TFpcsD6labF5lEoqJKRz4wMSI3bzb75XQ03ZrGf75NLx2CTGeasmExe2/6XE6QmNPJCg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_web_app\\ticket_system_web_app.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jgain\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\Jgain\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\humanizer.core.af\\2.14.1\\humanizer.core.af.2.14.1.nupkg.sha512",

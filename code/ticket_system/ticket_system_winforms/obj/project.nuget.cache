@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Hqgyhy6r88j9fLhCOGc5GLsuHJyTeHHl5BW1RjKxxLQRMmU2tJiVM/G134JZ1usDrTIXKz6VmWkj3xkvKJWxWw==",
+  "dgSpecHash": "5HqgQxKFptaTjrnJIxsNdsomo3XooL8ATfukMCNN0kbS+sMF0V8T29er4suVuHaNZPfrQxTW9H590nfvkVVyGA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Jgain\\OneDrive\\Documents\\School\\UWG-Capstone-Group1\\code\\ticket_system\\ticket_system_winforms\\ticket_system_winforms.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Jgain\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\Jgain\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\microsoft.bcl.cryptography\\8.0.0\\microsoft.bcl.cryptography.8.0.0.nupkg.sha512",
     "C:\\Users\\Jgain\\.nuget\\packages\\microsoft.data.sqlclient\\6.0.1\\microsoft.data.sqlclient.6.0.1.nupkg.sha512",
