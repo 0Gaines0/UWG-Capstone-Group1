@@ -20,16 +20,6 @@ C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_sys
 C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\predeploy.sql
 C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
 C:\Users\sremsha1\source\repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dacpac
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dll
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.pdb
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.sqlproj.AssemblyReference.cache
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.dll
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\ticket_system_database.pdb
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\Model.xml
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\refactor.xml
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\postdeploy.sql
-C:\Users\steve\Source\Repos\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\obj\Debug\predeploy.sql
 C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dacpac
 C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.dll
 C:\Users\jg00242\Documents\dev\UWG-Capstone-Group1\code\ticket_system\ticket_system_database\bin\Debug\ticket_system_database.pdb
