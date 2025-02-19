@@ -22,7 +22,6 @@ namespace ticket_system_web_app.Data
             modelBuilder.Entity<Employee>().HasMany(employee => employee.GroupsExistingIn).WithMany(group => group.Employees).UsingEntity(join => join.ToTable("group_member"));
             modelBuilder.Entity<Project>().HasMany(project => project.AssignedGroups).WithMany(group => group.AssignedProjects).UsingEntity(join => join.ToTable("project_group"));
 
-            //modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
             modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
 
         }

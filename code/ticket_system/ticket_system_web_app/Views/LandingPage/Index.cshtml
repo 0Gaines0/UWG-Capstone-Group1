@@ -24,6 +24,8 @@
             width: 100vw;
         }
 
+        
+
         .sidebar {
             flex: 0.15;
             background-color: #0f1e13;
@@ -31,24 +33,25 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            border-radius: 35px 35px 35px 35px;
+            border-radius: 10px 10px 10px 10px;
             margin-left: 20px;
-            margin-top:10px;
-            margin-bottom: 10px;       }
-
-        .sidebar img {
-            max-width: 100px;
-            margin-bottom: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
-        .sidebar h2 {
-            margin: 0px;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            text-align:center;
-            border-bottom: 2px solid #ffffff; 
-            padding-bottom: 5px;
-            width: 100%;
+            .sidebar img {
+                max-width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .sidebar h2 {
+                margin: 0px;
+                margin-bottom: 20px;
+                font-size: 1.5rem;
+                text-align: center;
+                border-bottom: 2px solid #ffffff;
+                padding-bottom: 5px;
+                width: 100%;
             }
 
         .project-list {
@@ -59,30 +62,30 @@
         }
 
         .project-item {
-            display: grid; 
-            align-items: center; 
+            display: grid;
+            align-items: center;
             background-color: #9f7aea;
             padding: 10px 15px;
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            gap: 2px; 
-            text-align: center; 
+            gap: 2px;
+            text-align: center;
         }
 
             .project-item:hover {
-                background-color: #b794f4; 
+                background-color: #b794f4;
             }
 
             .project-item img {
-                width: 20px; 
-                height: 20px; 
-                object-fit: contain; 
+                width: 20px;
+                height: 20px;
+                object-fit: contain;
             }
 
             .project-item span {
-                font-size: 1rem; 
-                color: #ffffff; 
+                font-size: 1rem;
+                color: #ffffff;
             }
 
         .main-content {
@@ -94,7 +97,7 @@
         }
 
         .greeting-container {
-            width:95%;
+            width: 95%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -109,11 +112,11 @@
         }
 
         .greeting {
-            flex: 1; 
+            flex: 1;
         }
 
         .logout-button {
-            width: auto; 
+            width: auto;
             padding: 10px 20px;
             background-color: #9f7aea;
             color: #ffffff;
@@ -124,8 +127,10 @@
         }
 
             .logout-button:hover {
-                background-color: #b794f4; 
+                background-color: #b794f4;
             }
+
+        
 
         .task-monitoring-container {
             width: 95%;
@@ -165,20 +170,83 @@
             height: 100px
         }
 
-        .task-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            margin-top: -10px;
-            margin-left: -5px;
-            text-align: left;
+            .task-card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+                margin-top: -10px;
+                margin-left: -5px;
+                text-align: left;
+            }
+
+            .task-card p {
+                font-size: 2.5rem;
+                text-align: left;
+            }
+
+        .nav_container {
+            flex: 0.125;
+            margin: 20px;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 0;
+            height: 97%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+
         }
 
-        .task-card p {
-            font-size: 2.5rem;
-            text-align:left;
-    
-            
+        .nav_image {
+            width: 125px;
+            height: auto;
+            margin-top: 10px;
         }
+
+        .nav_top {
+            width: 95%;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 2px solid #ffffff;
+        }
+
+     
+            .nav_top p {
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .nav_list {
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav_item {
+            width: 80%;
+            padding: 10px;
+            text-align: center;
+            background-color: #9f7aea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+            .nav_item:hover {
+                background-color: #b794f4;
+            }
+
     </style>
 </head>
 <body>
@@ -224,6 +292,16 @@
                 </div>
             </div>
         </div>
+        <div class="nav_container">
+            <div class="nav_top">
+                <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+            </div>
+            <ul class="nav_list">
+                <li class="nav_item">Projects</li>
+                <li class="nav_item">Groups</li>
+                <li class="nav_item">Users</li>
+            </ul>
         </div>
+    </div>
 </body>
 </html>
