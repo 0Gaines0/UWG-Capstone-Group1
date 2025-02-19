@@ -1,0 +1,22 @@
+# Ignore Visual Studio files
+.vs/
+*.suo
+*.user
+*.cache
+
+# Ignore build outputs
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.dbmdl
+*.dacpac
+
+# Ignore NuGet and dependency caches
+*.nuget.cache
+*.nuget.dgspec.json
+project.assets.json
+
+# Ignore logs and user-specific settings
+*.log

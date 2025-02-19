@@ -1,0 +1,10 @@
+Context - User is logged in as admin, has navigated to the Projects page. View button is disabled on page load.
+
+Primary flow:
+1 - User selects a project from the list.
+2 - System enables View button.
+3 - User clicks View button.
+4 - System redirects user to the view page.
+5 - User views information.
+6 - User clicks back button.
+7 - System returns user to Projects page.

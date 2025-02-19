@@ -14,4 +14,4 @@ a1 - User inputs invalid username or password
 a2 - System attemtps to verify credentials, finds them as invalid
 a3 - System displays error message, informing user of invalid credentials
 a4 - System prompts user to re-enter credentials
-return to step 3s
+return to step 3

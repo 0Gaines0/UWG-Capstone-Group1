@@ -1,0 +1,19 @@
+Context - User is logged in as admin, has navigated to the Projects page. Delete button is disabled on page load.
+
+Primary flow:
+1 - User selects a project from the list.
+2 - System enables Delete button.
+3 - User clicks Delete button.
+4 - System prompts user for confirmation (via popup).
+5 - User provides confirmation.
+6 - System deletes project.
+7 - System displays confirmation that deletion was successful.
+8 - System updates to reflect changes.
+9 - System disables Delete button.
+
+Alternative flow
+USER CANCELS DELETION
+a1 - Start at primary flow step 5.
+a2 - User selects cancel button.
+a3 - System does not delete project.
+a4 - Return to primary flow step 1.

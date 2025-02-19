@@ -1,0 +1,20 @@
+Context - User is logged in as admin account, has navigated to the Projects page, and has clicked the Edit button with a project selected.
+
+Primary flow:
+1 - User edits one or more fields.
+2 - User selects confirm button to confirm changes.
+3 - System validates information and edits selected project on the server.
+4 - System redirects user to Projects page.
+
+Alternative flows
+INVALID DATA
+a1 - Start at primary flow step 1.
+a2 - User inputs invalid data or removes necessary data.
+a3 - Skip to primary flow step 3.
+a4 - Data validation catches invalid or missing data. System does not update project data.
+a5 - System shows error message detailing missing information.
+a6 - User returns to primary flow step 1.
+
+USER DOES NOT EDIT INFORMATION
+a1 - User does not edit any fields.
+a2 - Return to primary flow step 2.
