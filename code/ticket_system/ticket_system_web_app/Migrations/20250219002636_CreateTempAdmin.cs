@@ -5,7 +5,7 @@
 namespace ticket_system_web_app.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTempAdminLogin : Migration
+    public partial class CreateTempAdmin : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
