@@ -30,7 +30,12 @@ namespace ticket_system_web_app.Models
         [Column("is_admin")]
         public bool? IsAdmin { get; set; }
 
+        [Column("email")]
+        public string? Email { get; set; }
+
         public ICollection<Group> GroupsExistingIn {  get; set; } = new List<Group>();
+
+        private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";
 
         public Employee()
         {
@@ -38,8 +43,73 @@ namespace ticket_system_web_app.Models
             this.LName = string.Empty;
             this.Username = string.Empty;
             this.HashedPassword = string.Empty;
+            this.Email = string.Empty;
         }
-    
-    
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Employee"/> class.
+        /// </summary>
+        /// <param name="eId">The e identifier.</param>
+        /// <param name="fName">Name of the f.</param>
+        /// <param name="lName">Name of the l.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="hashedPassword">The hashed password.</param>
+        /// <param name="isActive">The is active.</param>
+        /// <param name="isManager">The is manager.</param>
+        /// <param name="isAdmin">The is admin.</param>
+        /// <param name="email">The email.</param>
+        public Employee(int eId, string? fName, string? lName, string? username, string? hashedPassword, bool? isActive, bool? isManager, bool? isAdmin, string? email)
+        {
+            this.handleValidationOfConstructorInputs(eId, fName, lName, username, hashedPassword, isActive, isManager, isAdmin, email);
+            this.EId = eId;
+            this.FName = fName;
+            this.LName = lName;
+            this.Username = username;
+            this.HashedPassword = hashedPassword;
+            this.IsActive = isActive;
+            this.IsManager = isManager;
+            this.IsAdmin = isAdmin;
+            this.Email = email;
+        }
+
+        private void handleValidationOfConstructorInputs(int eId, string? fName, string? lName, string? username, string? hashedPassword, bool? isActive, bool? isManager, bool? isAdmin, string? email)
+        {
+            if (eId < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(eId), "Parameter must not be negative");
+            }
+            if (string.IsNullOrEmpty(fName))
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(fName));
+            }
+            if (string.IsNullOrEmpty(lName))
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(lName));
+            }
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(username));
+            }
+            if (string.IsNullOrEmpty(hashedPassword))
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(hashedPassword));
+            }
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(email));
+            }
+            if (isActive == null)
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(isActive));
+            }
+            if (isManager == null)
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(isManager));
+            }
+            if (isAdmin == null)
+            {
+                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(isAdmin));
+            }
+        }
     }
 }

@@ -21,6 +21,27 @@ namespace ticket_system_web_app.Data
         {
             modelBuilder.Entity<Employee>().HasMany(employee => employee.GroupsExistingIn).WithMany(group => group.Employees).UsingEntity(join => join.ToTable("group_member"));
             modelBuilder.Entity<Project>().HasMany(project => project.AssignedGroups).WithMany(group => group.AssignedProjects).UsingEntity(join => join.ToTable("project_group"));
+
+            //modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
+            modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
+
+        }
+
+        private static Employee tempAdminCreation()
+        {
+            var password = "$2a$11$tqFhRcVPxPe/F7g4i2.9c.tms9AlneY5RDZb1SipsY1FQtMcaaecu";
+            return new Employee
+            {
+                EId = 1,
+                Email = "admin@temp.com",
+                FName = "admin",
+                HashedPassword = password,
+                IsActive = true,
+                IsAdmin = true,
+                IsManager = true,
+                LName = "admin",
+                Username = "tempAdmin"
+            };
         }
 
         // Parameterless constructor for design-time migrations
