@@ -55,10 +55,7 @@ function fetchUserGroups() {
 
 async function fetchAllAvailableManagers() {
     try {
-        const response = await fetch('/Groups/GetAllManagersNames');
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetch('/Groups/GetAllManagers');
         const data = await response.json();
         return data || [];
     } catch (error) {
@@ -69,14 +66,11 @@ async function fetchAllAvailableManagers() {
 
 async function fetchAllEmployees() {
     try {
-        const response = await fetch('/Groups/GetAllEmployeeNames');
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetch('/Groups/GetAllEmployees');
         const data = await response.json();
         return data || [];
     } catch (error) {
-        console.error('Error fetching Available Managers:', error);
+        console.error('Error fetching Available Employees:', error);
         return [];
     }
 }
@@ -151,35 +145,34 @@ function createGroup() {
 
 function populateLists() {
     document.getElementById("employeeList").innerHTML = allEmployees
-        .map(employee => `<p>${employee} <button class="select-btn" onclick="addMember('${employee}')">+</button></p>`)
+        .map(employee => `<p>${employee.name} <button class="select-btn" onclick="addMember(${employee.id}, '${employee.name}')">+</button></p>`)
         .join("");
 
     document.getElementById("selectedEmployees").innerHTML = selectedMembers.length
-        ? selectedMembers.map(member => `<p>${member} <button class="remove-btn" onclick="removeMember('${member}')">-</button></p>`).join("")
+        ? selectedMembers.map(member => `<p>${member.name} <button class="remove-btn" onclick="removeMember(${member.id})">-</button></p>`).join("")
         : "<p>No members added</p>";
 }
 
-function selectManager(name) {
-    if (selectedManager !== "") {
+function selectManager(id, name) {
+    if (selectedManager) {
         allManagers.push(selectedManager); 
     }
 
-    selectedManager = name;
-    document.getElementById("managerSelect").innerHTML = `<option value="${name}">${name}</option>`;
-    document.getElementById("removeManagerBtn").style.display = "inline-block"; 
+    selectedManager = { id, name };
+    document.getElementById("managerSelect").innerHTML = `<option value="${id}">${name}</option>`;
 
-    allManagers = allManagers.filter(m => m !== name);
+    allManagers = allManagers.filter(m => m.id !== id);
     populateManagerLists();
 }
+
 
 
 function removeManager() {
     if (selectedManager) {
         allManagers.push(selectedManager); 
-        selectedManager = "";
+        selectedManager = null;
         document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`;
-        document.getElementById("removeManagerBtn").style.display = "none"; 
-        populateManagerLists();
+        populateManagerLists(); 
     }
 }
 
@@ -192,28 +185,32 @@ function populateManagerLists() {
     managerList.innerHTML = "";
 
     allManagers.forEach(manager => {
-        managerDropdown.innerHTML += `<option value="${manager}">${manager}</option>`;
-        managerList.innerHTML += `<p>${manager} 
-            <button class="select-btn" onclick="selectManager('${manager}')">+</button>
+        managerDropdown.innerHTML += `<option value="${manager.id}">${manager.name}</option>`;
+        managerList.innerHTML += `<p>${manager.name} 
+            <button class="select-btn" onclick="selectManager(${manager.id}, '${manager.name}')">+</button>
         </p>`;
     });
 
     if (selectedManager) {
-        managerDropdown.innerHTML = `<option value="${selectedManager}">${selectedManager}</option>`;
+        managerDropdown.innerHTML = `<option value="${selectedManager.id}">${selectedManager.name}</option>`;
     }
 }
 
-function addMember(name) {
-    if (!selectedMembers.includes(name)) {
-        selectedMembers.push(name);
-        allEmployees = allEmployees.filter(e => e !== name);
+
+
+
+function addMember(id, name) {
+    if (!selectedMembers.some(m => m.id === id)) {
+        selectedMembers.push({ id, name });
+        allEmployees = allEmployees.filter(e => e.id !== id);
         populateLists();
     }
 }
 
-function removeMember(name) {
-    selectedMembers = selectedMembers.filter(m => m !== name);
-    allEmployees.push(name);
+function removeMember(id) {
+    let member = selectedMembers.find(m => m.id === id);
+    selectedMembers = selectedMembers.filter(m => m.id !== id);
+    if (member) allEmployees.push(member); // Restore removed member
     populateLists();
 }
 

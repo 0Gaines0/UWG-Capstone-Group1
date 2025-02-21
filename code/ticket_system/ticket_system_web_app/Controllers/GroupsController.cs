@@ -49,25 +49,30 @@ namespace ticket_system_web_app.Controllers
             return Json(userGroups);
         }
 
-        // TODO move this to the EmployeeController
         [HttpGet]
-        public async Task<JsonResult> GetAllManagersNames()
+        public async Task<JsonResult> GetAllManagers()
         {
-            var managerNames = await this.context.Employees
-                .Where(employee => (employee.IsManager ?? false) || (employee.IsAdmin ?? false))
-                .Select(employee => employee.FName + " " + employee.LName)
+            
+
+            var allManagers = this.context.Employees.Where(e => (e.IsManager ?? false) || (e.IsAdmin ?? false));
+            var getNeededData = await allManagers.Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).ToListAsync();
+
+            return Json(getNeededData);
+        }
+
+        // TODO: Move this to EmployeeController
+        [HttpGet]
+        public async Task<JsonResult> GetAllEmployees()
+        {
+            var employees = await this.context.Employees
+                .Select(employee => new { Id = employee.EId, Name = $"{employee.FName} {employee.LName}" }) // Standardized Id
+                .AsNoTracking()
                 .ToListAsync();
 
-            return Json(managerNames);
+            return Json(employees);
         }
 
-        // TODO move this to the EmployeeController
-        [HttpGet]
-        public async Task<JsonResult> GetAllEmployeeNames()
-        {
-            var employeeNames = await this.context.Employees.Select(employee => employee.FName + " " + employee.LName).ToListAsync();
-            return Json(employeeNames);
-        }
+
 
         private async Task<List<object>> constructGroups()
         {
