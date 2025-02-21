@@ -21,6 +21,11 @@ namespace ticket_system_web_app.Controllers
             return View(groups);
         }
 
+        public IActionResult CreateGroupModal()
+        {
+            return PartialView("_CreateGroupModal");
+        }
+
         [HttpGet]
         public async Task<JsonResult> GetAllGroups()
         {
@@ -39,9 +44,29 @@ namespace ticket_system_web_app.Controllers
 
             var managedGroups = this.context.Groups.Where(group => group.ManagerId == activeEmployeeId);
             var memberGroups = this.context.Groups.Where(group => group.Employees.Any(employ => employ.EId == activeEmployeeId));
-            var userGroups = await managedGroups.Union(memberGroups).Distinct().ToListAsync();
+            var userGroups = await managedGroups.Union(memberGroups).Distinct().Select(group => group.GName).ToListAsync();
 
             return Json(userGroups);
+        }
+
+        // TODO move this to the EmployeeController
+        [HttpGet]
+        public async Task<JsonResult> GetAllManagersNames()
+        {
+            var managerNames = await this.context.Employees
+                .Where(employee => (employee.IsManager ?? false) || (employee.IsAdmin ?? false))
+                .Select(employee => employee.FName + " " + employee.LName)
+                .ToListAsync();
+
+            return Json(managerNames);
+        }
+
+        // TODO move this to the EmployeeController
+        [HttpGet]
+        public async Task<JsonResult> GetAllEmployeeNames()
+        {
+            var employeeNames = await this.context.Employees.Select(employee => employee.FName + " " + employee.LName).ToListAsync();
+            return Json(employeeNames);
         }
 
         private async Task<List<object>> constructGroups()

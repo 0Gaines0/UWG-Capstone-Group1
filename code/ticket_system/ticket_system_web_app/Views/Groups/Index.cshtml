@@ -2,6 +2,8 @@
     Layout = null; // Set your layout here if applicable
 }
 
+<partial name="_CreateGroupModal" />
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -291,7 +293,7 @@
                     </div>
 
                     <div class="button-container">
-                        <button class="btn">+ Add New Group</button>
+                        <button class="btn" onclick="openCreateModal()">+ Add New Group</button>
                         <button class="btn">Edit Group</button>
                         <button class="btn">- Remove Group</button>
                     </div>
@@ -324,48 +326,7 @@
             </ul>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            fetch('@Url.Action("GetAllGroups", "Groups")')
-                .then(response => response.json())
-                .then(data => {
-                    let tableBody = document.getElementById('groupTableBody');
-                    tableBody.innerHTML = '';
-
-                    data.forEach(group => {
-                        let row = `
-                            <tr>
-                                <td>${group.gName}</td>
-                                <td>${group.managerName || 'Not Assigned'}</td>
-                                <td>${group.membersCount}</td>
-                                <td>${group.gDescription}</td>
-                            </tr>`;
-                        tableBody.innerHTML += row;
-                    });
-                }).catch(error => console.error('Error fetching groups:', error));
-        });
-    </script>
-    <script>
-            document.addEventListener('DOMContentLoaded', function () {
-            fetch('@Url.Action("GetActiveUserGroups", "Groups")') 
-                .then(response => response.json())
-                .then(data => {
-                    let list = document.getElementById('myGroupItem');
-                    list.innerHTML = '';
-
-                    data.forEach(group => {
-                        let subItem = `
-                            <div class='my-groups-item'>
-                                <img src='/assets/groups_icon_img.png' alt='Group Icon'>
-                                <span>${group.gName}</span> 
-                            </div>`;
-                        list.innerHTML += subItem;
-                    });
-                })
-                .catch(error => console.error('Error fetching my groups:', error));
-        });
-    </script>
+    <script src="~/js/groupModal.js"></script>
 </body>
 </html>
 
