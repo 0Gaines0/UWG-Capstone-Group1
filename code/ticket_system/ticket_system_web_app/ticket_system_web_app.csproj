@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\Projects\Projects.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\assets\login_img.png" />
     <None Include="wwwroot\assets\ticket_system_logo.png" />
-    <None Include="wwwroot\css\Projects.css" />
+    <None Include="wwwroot\css\Projects\Projects.css" />
   </ItemGroup>
 
   <ItemGroup>

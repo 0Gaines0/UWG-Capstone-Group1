@@ -4,44 +4,84 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/css/MainPages.css">
+        <link rel="stylesheet" href="/css/Projects/Projects.css">
+        <link rel="stylesheet" href="/css/Projects/Index.css">
+    </head>
+    <body>
+    <h1>Projects</h1>
+    <hr />
+    <div class="container">
+        <div class="content-block projects-list">
+            <form asp-action="Create" method="get" class="form-group">
+                <button type="submit" class="btn">Create New Project</button>
+            </form>
+            <div class="scrollable">
+            <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProjectLeadId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PDescription)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectLeadId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PDescription)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.PId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.PId">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="content-block project-info-display">
+            <div class="form-group">
+                <!--asp-for="PTitle"-->
+                <input class="form-control" placeholder="Project title" disabled="true" /> <br />
+                <!--asp-for="PDescription"-->
+                <textarea class="form-control" placeholder="Project description" disabled="true"></textarea>
+                <p>TODO: list of groups, setting project leads, etc.</p>
+            </div>
+        </div>
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }
+    </div>
+    <div class="nav_container">
+        <div class="nav_top">
+            <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+        </div>
+        <ul class="nav_list">
+            <li class="nav_item">Projects</li>
+            <li class="nav_item">Groups</li>
+            <li class="nav_item">Users</li>
+        </ul>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProjectLeadId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PDescription)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProjectLeadId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PDescription)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</body>
+</html>

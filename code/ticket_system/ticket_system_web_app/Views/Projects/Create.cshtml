@@ -7,41 +7,53 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Landing Page</title>
-        <link rel="stylesheet" href="/css/Projects.css">
+        <link rel="stylesheet" href="/css/MainPages.css">
+        <link rel="stylesheet" href="/css/Projects/Projects.css">
+        <link rel="stylesheet" href="/css/Projects/Create.css">
     </head>
     <body>
         <h1>New Project</h1>
         <hr />
-
         <div class="container">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for="PTitle" class="form-control" placeholder="Enter project title..." />
-                    <span asp-validation-for="PTitle" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <textarea asp-for="PDescription" class="form-control" placeholder="Enter project description..."> </textarea>
-                    <span asp-validation-for="PDescription" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="ProjectLeadId" class="form-control" placeholder=""/>
-                    <span asp-validation-for="ProjectLeadId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <p>TODO: list of groups, setting project leads, etc.</p>
-                </div>
+            <div class="content-block">
+                <form asp-action="Create" class="form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="PTitle" class="form-control" placeholder="Enter project title..." /> <br />
+                        <span asp-validation-for="PTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <textarea asp-for="PDescription" class="form-control" placeholder="Enter project description..."> </textarea>
+                        <span asp-validation-for="PDescription" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="ProjectLeadId" class="form-control" placeholder=""/>
+                        <span asp-validation-for="ProjectLeadId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <p>TODO: list of groups, setting project leads, etc.</p>
+                    </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                    <input type="button" value="Cancel" class="btn" onclick="location.href='@Url.Action("Index")';"/>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="button" value="Cancel" class="btn" onclick="location.href='@Url.Action("Index")';"/>
+                    </div>
+                </form>
+            </div>
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
         </div>
-        @section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        }
+        <div class="nav_container">
+            <div class="nav_top">
+                <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+            </div>
+            <ul class="nav_list">
+                <li class="nav_item">Projects</li>
+                <li class="nav_item">Groups</li>
+                <li class="nav_item">Users</li>
+            </ul>
+        </div>
+            
     </body>
 </html>

@@ -1,0 +1,86 @@
+:root {
+    --background-color-container: #0f1e13;
+    --button-color-normal: #9f7aea;
+    --button-color-hover: #b794f4;
+    --button-border-weight: 3px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    background-color: var(--background-color-container);
+    border: 0px solid #ffffff;
+    border-radius: 0.5em;
+    margin: 0px;
+    padding: 1%;
+}
+
+hr {
+    color: white;
+    background-color: white;
+}
+
+textarea {
+    resize: vertical;
+}
+
+table {
+    border-collapse: separate;
+    border-radius: 1em;
+    border-spacing: 0px;
+    overflow: hidden;
+    width: 100%;
+}
+    th {
+        background-color: var(--button-color-normal);
+    }
+
+    th, td {
+        border: 3px solid white;
+        padding: 5px;
+        text-align: center;
+    }
+        th:first-child {
+            border-radius: 1em 0 0 0;
+        }
+        th:last-child {
+            border-radius: 0 1em 0 0;
+        }
+    tr {
+        background-color: #608272;
+    }
+        tr:nth-child(2n+1) {
+            background-color: #29543d;
+        }
+        tr:last-child td:first-child {
+            border-radius: 0 0 0 1em;
+        }
+        tr:last-child td:last-child {
+            border-radius: 0 0 1em 0;
+        }
+
+.form-group {
+            margin-bottom: 0.5em;
+            padding: 0px;
+            width: calc(100% - 1em);
+        }
+
+.form-control {
+    background-color: #2e2e2e;
+    color: #ffffff;
+    margin: auto;
+    padding: 0.5em;
+    width: 100%;
+}
+
+.btn {
+    background-color: var(--button-color-normal);
+    border: var(--button-border-weight) solid white;
+    border-radius: 10px;
+    padding: 1em;
+}
+    .btn:hover {
+        background-color: var(--button-color-hover);
+    }
+
+.text-danger {
+    color: #ff0000;
+}
