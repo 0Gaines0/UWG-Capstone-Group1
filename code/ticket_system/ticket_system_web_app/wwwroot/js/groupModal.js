@@ -162,6 +162,9 @@ function selectManager(id, name) {
     document.getElementById("managerSelect").innerHTML = `<option value="${id}">${name}</option>`;
 
     allManagers = allManagers.filter(m => m.id !== id);
+
+    document.getElementById("removeManagerBtn").style.display = "inline-block";
+
     populateManagerLists();
 }
 
@@ -171,7 +174,8 @@ function removeManager() {
     if (selectedManager) {
         allManagers.push(selectedManager); 
         selectedManager = null;
-        document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`;
+        document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`; 
+        document.getElementById("removeManagerBtn").style.display = "none"; 
         populateManagerLists(); 
     }
 }
