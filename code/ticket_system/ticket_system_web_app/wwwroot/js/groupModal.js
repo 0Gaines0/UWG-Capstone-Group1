@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     fetchGroups();
     fetchUserGroups();
     await resetModal();
+
+    document.getElementById("managerSearch").addEventListener("input", filterManagers);
+    document.getElementById("employeeSearch").addEventListener("input", filterEmployees);
 });
 
 let allManagers = [];
@@ -214,6 +217,33 @@ function removeMember(name) {
     populateLists();
 }
 
+function filterManagers() {
+    let searchValue = document.getElementById("managerSearch").value.toLowerCase();
+    let managerItems = document.querySelectorAll("#managerList p");
+
+    managerItems.forEach((item) => {
+        let managerName = item.textContent.toLowerCase();
+        if (managerName.includes(searchValue)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function filterEmployees() {
+    let searchValue = document.getElementById("employeeSearch").value.toLowerCase();
+    let employeeItems = document.querySelectorAll("#employeeList p");
+
+    employeeItems.forEach((item) => {
+        let employeeName = item.textContent.toLowerCase();
+        if (employeeName.includes(searchValue)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
 
 
 
