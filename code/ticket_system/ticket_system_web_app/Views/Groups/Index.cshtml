@@ -1,8 +1,19 @@
 ﻿@{
     Layout = null; // Set your layout here if applicable
+    var notLogin = ActiveEmployee.Employee == null;
+    var hasManagerPerms = (ActiveEmployee.Employee?.IsAdmin ?? false) || (ActiveEmployee.Employee?.IsManager ?? false);
+    
+    if (notLogin)
+    {
+        Context.Response.StatusCode = 404;
+        return;
+    }
+
 }
 
 <partial name="_CreateGroupModal" />
+<partial name="_RemoveGroupModal" />
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -289,14 +300,17 @@
                 <div class="search-buttons-container">
                     <div class="search-bar">
                         <img src="~/assets/search_icon_img.png" alt="Search">
-                        <input type="text" placeholder="Search Groups...">
+                        <input type="text" id="groupSearch" placeholder="Search Groups..." oninput="filterGroups()">
                     </div>
 
-                    <div class="button-container">
-                        <button class="btn" onclick="openCreateModal()">+ Add New Group</button>
-                        <button class="btn">Edit Group</button>
-                        <button class="btn">- Remove Group</button>
-                    </div>
+                    @if (hasManagerPerms)
+                    {
+                        <div class="button-container">
+                            <button class="btn" onclick="openCreateModal()">+ Add New Group</button>
+                            <button class="btn">Edit Group</button>
+                            <button class="btn" onclick="openRemoveModal()">- Remove Group</button>
+                        </div>
+                    }
                 </div>
                 <div class="table-container">
                     <table class="group-list">

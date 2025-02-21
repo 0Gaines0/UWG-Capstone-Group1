@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
+using ticket_system_web_app.Models.RequestObj;
 
 namespace ticket_system_web_app.Controllers
 {
@@ -49,6 +50,79 @@ namespace ticket_system_web_app.Controllers
             return Json(userGroups);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest jsonRequest)
+        {
+            if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.GroupName) || jsonRequest.ManagerId == 0)
+            {
+                return BadRequest(new { message = "Invalid request data" });
+            }
+
+            if (this.context.Groups.Where(group => group.GName == jsonRequest.GroupName).Any())
+            {
+                return BadRequest(new { message = $"Group name, {jsonRequest.GroupName}, already exists. Try Again." });
+            }
+
+            var newGroup = new Group(jsonRequest.ManagerId, jsonRequest.GroupName, jsonRequest.GroupDescription);
+
+            if (jsonRequest.MemberIds != null && jsonRequest.MemberIds.Any())
+            {
+                var groupEmployees = await this.context.Employees.Where(employee => jsonRequest.MemberIds.Contains(employee.EId)).ToListAsync();
+                newGroup.Employees = groupEmployees;
+            }
+
+            this.context.Groups.Add(newGroup);
+            await this.context.SaveChangesAsync();
+
+            return Ok(new { message = "Group created successfully", groupId = newGroup.GId });
+
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveGroup([FromBody] RemoveGroupRequest request)
+        {
+            var groupName = request.GroupName;
+            if (string.IsNullOrWhiteSpace(groupName))
+            {
+                return BadRequest(new { success = false, message = "Group name is required." });
+            }
+            if (!this.context.Groups.Where(group => group.GName ==  groupName).Any())
+            {
+                return BadRequest(new { success = false, message = "Group name does not exist." });
+
+            }
+
+            bool isRemoved = await this.removeGroupFromDb(groupName);
+
+            if (isRemoved)
+            {
+                return Ok(new { success = true });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = "Failed to remove group." });
+            }
+        }
+
+        private async Task<bool> removeGroupFromDb(string groupName)
+        {
+            try
+            {
+                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
+                this.context.Groups.Remove(group);
+                await this.context.SaveChangesAsync();
+                return true;
+                
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
+        // TODO: Move this to EmployeeController
         [HttpGet]
         public async Task<JsonResult> GetAllManagers()
         {
@@ -71,6 +145,8 @@ namespace ticket_system_web_app.Controllers
 
             return Json(employees);
         }
+
+        
 
 
 

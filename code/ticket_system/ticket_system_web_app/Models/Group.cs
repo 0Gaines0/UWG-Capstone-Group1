@@ -32,21 +32,25 @@ namespace ticket_system_web_app.Models
 
         }
 
-        public Group (int gId, int managerId, string? gName, string? gDescription)
+        public Group(int managerId, string? gName, string? gDescription)
         {
-            this.handleValidationOfConstructorInputs(gId, managerId, gName, gDescription);
-            this.GId = gId;
+            this.handleValidationOfConstructorInputs(managerId, gName, gDescription);
             this.ManagerId = managerId;
             this.GName = gName;
-            this.GDescription= gDescription;
+            this.GDescription = gDescription;
         }
 
-        private void handleValidationOfConstructorInputs(int gId, int managerId, string? gName, string? gDescription)
+        public Group (int gId, int managerId, string? gName, string? gDescription) : this(managerId, gName, gDescription) 
         {
             if (gId < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(gId), VALID_NUM_ERROR_MESSAGE);
             }
+            this.GId = gId;
+        }
+
+        private void handleValidationOfConstructorInputs(int managerId, string? gName, string? gDescription)
+        {
             if (managerId < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(managerId), VALID_NUM_ERROR_MESSAGE);

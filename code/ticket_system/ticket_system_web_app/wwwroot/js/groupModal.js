@@ -38,6 +38,11 @@ function fetchUserGroups() {
     fetch('/Groups/GetActiveUserGroups')
         .then(response => response.json())
         .then(data => {
+            if (!data || !Array.isArray(data)) { 
+                console.error("Error: Received invalid group data", data);
+                return;
+            }
+
             let list = document.getElementById('myGroupItem');
             list.innerHTML = '';
 
@@ -137,9 +142,39 @@ function clearErrors() {
     });
 }
 
-function createGroup() {
-    if (validateForm()) {
-        closeCreateModal();
+async function createGroup() {
+    if (!validateForm()) return;
+  
+    const groupData = {
+        groupName: document.getElementById("groupName").value.trim(),
+        groupDescription: document.getElementById("groupDescription").value.trim(),
+        managerId: selectedManager ? selectedManager.id : 0,
+        memberIds: selectedMembers.map(member => member.id)
+    };
+
+    console.log("Sending Group Data:", groupData);
+
+    try {
+        const response = await fetch("/Groups/CreateGroup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(groupData)
+        });
+
+        const result = await response.json();
+
+        console.log("Response Received:", result);
+        if (response.ok) {
+            alert("Group created successfully!");
+            closeCreateModal();
+            fetchUserGroups();
+            fetchGroups();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Error creating group:", error);
+        alert("An error occurred while creating the group.");
     }
 }
 
@@ -155,31 +190,32 @@ function populateLists() {
 
 function selectManager(id, name) {
     if (selectedManager) {
-        allManagers.push(selectedManager); 
+        allManagers.push(selectedManager);
     }
 
     selectedManager = { id, name };
-    document.getElementById("managerSelect").innerHTML = `<option value="${id}">${name}</option>`;
+
+    document.getElementById("managerSelect").innerHTML = `
+        <option value="">Select a Manager</option>
+        <option value="${id}" selected>${name}</option>
+    `;
 
     allManagers = allManagers.filter(m => m.id !== id);
-
     document.getElementById("removeManagerBtn").style.display = "inline-block";
-
     populateManagerLists();
 }
 
-
-
 function removeManager() {
     if (selectedManager) {
-        allManagers.push(selectedManager); 
+        allManagers.push(selectedManager);
         selectedManager = null;
-        document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`; 
-        document.getElementById("removeManagerBtn").style.display = "none"; 
-        populateManagerLists(); 
+
+        document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`;
+
+        document.getElementById("removeManagerBtn").style.display = "none";
+        populateManagerLists();
     }
 }
-
 
 function populateManagerLists() {
     let managerDropdown = document.getElementById("managerSelect");
@@ -189,7 +225,6 @@ function populateManagerLists() {
     managerList.innerHTML = "";
 
     allManagers.forEach(manager => {
-        managerDropdown.innerHTML += `<option value="${manager.id}">${manager.name}</option>`;
         managerList.innerHTML += `<p>${manager.name} 
             <button class="select-btn" onclick="selectManager(${manager.id}, '${manager.name}')">+</button>
         </p>`;
@@ -199,9 +234,6 @@ function populateManagerLists() {
         managerDropdown.innerHTML = `<option value="${selectedManager.id}">${selectedManager.name}</option>`;
     }
 }
-
-
-
 
 function addMember(id, name) {
     if (!selectedMembers.some(m => m.id === id)) {
@@ -246,5 +278,73 @@ function filterEmployees() {
     });
 }
 
+function openRemoveModal() {
+    document.getElementById("removeGroupModal").style.display = "flex";
+}
+
+function closeRemoveModal() {
+    document.getElementById("removeGroupModal").style.display = "none";
+    document.getElementById("removeGroupName").value = "";
+    document.getElementById("removeGroupNameError").style.display = "none";
+    document.getElementById("removeGroupBtn").disabled = true;
+}
+
+function validateRemoveGroup() {
+    const groupNameInput = document.getElementById("removeGroupName").value.trim();
+    const errorLabel = document.getElementById("removeGroupNameError");
+    const removeBtn = document.getElementById("removeGroupBtn");
+
+    if (groupNameInput === "") {
+        errorLabel.style.display = "block";
+        removeBtn.disabled = true;
+    } else {
+        errorLabel.style.display = "none";
+        removeBtn.disabled = false;
+    }
+}
+
+function removeGroup() {
+    const groupName = document.getElementById("removeGroupName").value.trim();
+
+    if (groupName === "") {
+        alert("Please enter a valid group name.");
+        return;
+    }
+
+    fetch("/Groups/RemoveGroup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ groupName })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Group removed successfully!");
+                closeRemoveModal();
+                fetchUserGroups();
+                fetchGroups();
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error removing group:", error);
+            alert("An error occurred.");
+        });
+}
+
+function filterGroups() {
+    let searchValue = document.getElementById("groupSearch").value.toLowerCase();
+    let rows = document.querySelectorAll("#groupTableBody tr");
+
+    rows.forEach(row => {
+        let groupName = row.querySelector("td:first-child").textContent.toLowerCase();
+        if (groupName.includes(searchValue)) {
+            row.style.display = ""; // Show row
+        } else {
+            row.style.display = "none"; // Hide row
+        }
+    });
+}
 
 
