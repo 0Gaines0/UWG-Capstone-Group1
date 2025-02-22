@@ -1,0 +1,131 @@
+﻿<style>
+    .removal-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .remove-modal-content {
+        background: #0f1e13;
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .remove-container {
+        width: 100%;
+        max-width: 90%;
+        background: #608272;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+    }
+
+    }
+
+    .remove-title {
+        margin-bottom: 10px;
+        margin-left: 10px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        border-bottom: 1px solid white;
+        padding-bottom: 5px;
+    }
+
+    .remove-left-item {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        background: #2d4a3d;
+        color: white;
+    }
+
+    .remove-button-container {
+        display: flex;
+        justify-content: flex-end; 
+        width: 100%;
+        margin-top: 10px;
+        gap: 10px; 
+    }
+
+
+    .remove-cancel-btn {
+        background: #ff4c4c;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .remove-modal-btn {
+        background: #9f7aea;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+        .remove-modal-btn:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        display: none;
+    }
+</style>
+
+<div id="removeGroupModal" class="removal-modal-overlay">
+    <div class="remove-modal-content">
+        <div class="modal-header">
+            <h2>Remove Group</h2>
+        </div>
+
+        <div class="remove-container">
+            <h3 class="remove-title">Group Details</h3>
+            <div class="remove-left-item">
+                <label for="removeGroupName">Name</label>
+                <input type="text" id="removeGroupName" placeholder="Group name" oninput="validateRemoveGroup()">
+                <span id="removeGroupNameError" class="error-message">Name must be valid</span>
+            </div>
+        </div>
+        <div class="remove-button-container">
+            <button class="remove-cancel-btn" onclick="closeRemoveModal()">Cancel</button>
+            <button id="removeGroupBtn" class="remove-modal-btn" onclick="removeGroup()" disabled>- Remove</button>
+        </div>
+    </div>
+    
+</div>
+
+<script src="~/js/groupModal.js"></script>

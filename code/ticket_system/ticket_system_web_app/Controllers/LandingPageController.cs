@@ -15,5 +15,10 @@ namespace ticket_system_web_app.Controllers
             ActiveEmployee.LogoutCurrentEmployee();
             return RedirectToAction("Index", "Login");
         }
+
+        public IActionResult RedirectToGroupIndex()
+        {
+            return RedirectToAction("Index", "Groups");
+        }
     }
 }
