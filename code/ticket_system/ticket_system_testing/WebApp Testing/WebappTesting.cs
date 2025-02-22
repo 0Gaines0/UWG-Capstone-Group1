@@ -14,7 +14,7 @@ namespace ticket_system_testing
 
         // dotnet test --collect:"xplat code coverage" --settings coverlet.runsettings
         // add specific filename ex. 6299b382-8b19-4328-be79-2faf3349a1f0.
-        // reportgenerator -reports:"testresults\5ec82b4c-8e17-44e7-aa9c-2b9efa1600bf\coverage.cobertura.xml" -targetdir:"coverageresults" -reporttypes:html
+        // reportgenerator -reports:"testresults\ae68638f-3e2b-4cf9-ab6a-2af3bc2cde9b\coverage.cobertura.xml" -targetdir:"coverageresults" -reporttypes:html
 
         [Test]
         public void testConstructor()

@@ -186,6 +186,37 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         }
 
         [Test]
+        public async Task TestCreateGroupValidRequestWithMembers()
+        {
+            var manager = new Employee { EId = 1, FName = "Manager", LName = "User" };
+            this.context.Employees.Add(manager);
+            var member1 = new Employee { EId = 2, FName = "Alice", LName = "Smith" };
+            var member2 = new Employee { EId = 3, FName = "Bob", LName = "Jones" };
+            this.context.Employees.AddRange(member1, member2);
+            await this.context.SaveChangesAsync();
+
+            var request = new CreateGroupRequest
+            {
+                GroupName = "TestGroupWithMembers",
+                ManagerId = manager.EId,
+                GroupDescription = "A test group with members",
+                MemberIds = new List<int> { member1.EId, member2.EId }
+            };
+
+            var result = await this.controller.CreateGroup(request);
+
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            var okResult = result as OkObjectResult;
+            ClassicAssert.IsNotNull(okResult?.Value);
+            var createdGroup = await this.context.Groups.FirstOrDefaultAsync(g => g.GName == request.GroupName);
+            ClassicAssert.IsNotNull(createdGroup);
+            Assert.That(createdGroup.ManagerId, Is.EqualTo(manager.EId));
+            ClassicAssert.IsNotNull(createdGroup.Employees);
+            var memberIds = createdGroup.Employees.Select(e => e.EId).ToList();
+            Assert.That(memberIds, Is.EquivalentTo(request.MemberIds));
+        }
+
+        [Test]
         public async Task TestRemoveGroupInvalidRequestReturnsBadRequest()
         {
             // Arrange: Prepare a request with an empty (whitespace) group name.
@@ -211,6 +242,9 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
 
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(result);
         }
+
+
+
 
         [Test]
         public async Task TestRemoveGroupValidRequestReturnsOk()
