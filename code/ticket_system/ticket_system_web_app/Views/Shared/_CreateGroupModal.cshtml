@@ -1,0 +1,235 @@
+﻿<style>
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: #0f1e13;
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        width: 900px;
+        max-height: 85vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            text-align: left;
+        }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .cancel-btn, .create-btn {
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .cancel-btn {
+        background: #ff4c4c;
+        color: white;
+    }
+
+    .create-btn {
+        background: #9f7aea;
+        color: white;
+    }
+
+    .group-create-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+        height: 70vh;
+    }
+
+    .group-left, .group-right {
+        flex: 1;
+        background: #608272;
+        padding: 15px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        height: 95%;
+        overflow: hidden;
+    }
+
+    .group-left-item {
+        padding-bottom: 15px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        background: #2d4a3d;
+        color: white;
+    }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+    select {
+        cursor: pointer;
+    }
+
+    .list-container {
+        margin-top: 10px;
+        background: #3d5b47;
+        padding: 10px;
+        border-radius: 8px;
+        height: 150px;
+        overflow-y: auto;
+    }
+
+        .list-container p {
+            display: flex;
+            justify-content: space-between;
+            background: #4a6c57;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+    .select-btn {
+        background: #9f7aea;
+        color: white;
+        padding: 6px 12px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+    .manager-container, .employee-container {
+        background: #1d3a2b;
+        padding: 15px;
+        border-radius: 12px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .manager-container {
+        margin-bottom: 10px;
+    }
+    .remove-btn {
+        background: #ff4c4c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        padding: 3px 7px;
+        margin-left: 10px;
+    }
+
+    .remove-manager-btn {
+        background: #ff4c4c;
+        color: white;
+        padding: 6px 12px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+    }
+</style>
+<div id="createGroupModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Create Group</h2>
+            <div class="button-container">
+                <button class="cancel-btn" onclick="closeCreateModal()">Cancel</button>
+                <button class="create-btn" onclick="createGroup()">+ Create</button>
+            </div>
+        </div>
+
+        <div class="group-create-container">
+            <div class="group-left">
+                <h3>Group Details</h3>
+                <div class="group-left-item">
+                    <label>Name</label>
+                    <input type="text" id="groupName" placeholder="Group name">
+                    <span id="groupNameError" class="error-message"></span> 
+                </div>
+
+                <div class="group-left-item">
+                    <label>Description</label>
+                    <input type="text" id="groupDescription" placeholder="Group description">
+                    <span id="groupDescriptionError" class="error-message"></span> 
+                </div>
+
+                <div class="group-left-item">
+                    <label>Manager</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="managerSelect">
+                            <option value="">Select a Manager</option>
+                        </select>
+                        <button id="removeManagerBtn" class="remove-manager-btn" onclick="removeManager()" style="display: none;">-</button>
+                    </div>
+                    <span id="managerSelectError" class="error-message"></span>
+                </div>
+                <div class="group-left-item">
+                    <h4>Members</h4>
+                    <div id="selectedEmployees" class="list-container">
+                        <p>No members added</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-right">
+                <div class="manager-container">
+                    <h3>Available Managers</h3>
+                <input type="text" id="managerSearch" placeholder="Search">
+                <div id="managerList" class="list-container"></div>
+                </div>
+
+                <div class="employee-container">
+                    <h3>Available Employees</h3>
+                    <input type="text" id="employeeSearch" placeholder="Search">
+                    <div id="employeeList" class="list-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/groupModal.js"></script>
