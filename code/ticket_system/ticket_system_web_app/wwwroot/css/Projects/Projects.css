@@ -22,6 +22,11 @@ textarea {
     resize: vertical;
 }
 
+form {
+    margin: 0 auto;
+    width: 50%;
+}
+
 table {
     border-collapse: separate;
     border-radius: 1em;
@@ -44,6 +49,9 @@ table {
         th:last-child {
             border-radius: 0 1em 0 0;
         }
+        th:only-child {
+            border-radius: 1em 1em 0 0;
+        }
     tr {
         background-color: #608272;
     }
@@ -55,6 +63,9 @@ table {
         }
         tr:last-child td:last-child {
             border-radius: 0 0 1em 0;
+        }
+        tr:last-child td:only-child{
+            border-radius: 0 0 1em 1em;
         }
 
 .form-group {

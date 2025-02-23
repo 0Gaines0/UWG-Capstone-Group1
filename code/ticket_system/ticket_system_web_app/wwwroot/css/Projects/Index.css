@@ -1,1 +1,24 @@
-﻿
+﻿.form-group:last-child {
+    height: 100%;
+}
+
+.form-control {
+    margin: 0.5em 0;
+}
+
+textarea {
+    max-height: 20em;
+    height: 10em;
+}
+
+
+
+
+
+
+
+.scrollable {
+    margin: 0.5em auto;
+    height: 50%;
+    width: calc(100% + 1em);
+}

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
 
@@ -19,6 +20,35 @@ namespace ticket_system_web_app.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Gets the list of all collaborators on the project with the specified ID. If no such project exists, returns null.
+        /// </summary>
+        /// <precondition>true</precondition>
+        /// <postcondition>true</postcondition>
+        /// <param name="id">The project ID.</param>
+        /// <returns>The list of collaborators.</returns>
+        public IEnumerable<Group>? GetCollaboratorsOn(int? id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+
+            IEnumerable<Group> result = new List<Group>();
+            foreach (var g in _context.Groups)
+            {
+                foreach (var p in g.AssignedProjects)
+                {
+                    if (p.PId == id)
+                    {
+                        result.Append(g);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public IActionResult Back() {
             return RedirectToAction(nameof(Index));
         }
@@ -26,25 +56,9 @@ namespace ticket_system_web_app.Controllers
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projects.ToListAsync());
-        }
+            var projects = await _context.Projects.ToListAsync();
 
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects
-                .FirstOrDefaultAsync(m => m.PId == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return View(project);
+            return View(projects);
         }
 
         // GET: Projects/Create
@@ -66,6 +80,9 @@ namespace ticket_system_web_app.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            IEnumerable<Group> groups = await _context.Groups.ToListAsync();
+            ViewData["Groups"] = groups;
             return View(project);
         }
 
