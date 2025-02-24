@@ -88,14 +88,14 @@ function fetchEmployees() {
 //    }
 //}
 
-//function openCreateModal() {
-//    document.getElementById("createGroupModal").style.display = "flex";
-//}
+function openCreateModal() {
+    document.getElementById("createEmployeeModal").style.display = "flex";
+}
 
-//function closeCreateModal() {
-//    document.getElementById("createGroupModal").style.display = "none";
-//    resetModal();
-//}
+function closeCreateModal() {
+    document.getElementById("createEmployeeModal").style.display = "none";
+    //resetModal();
+}
 
 //async function resetModal() {
 //    document.getElementById("groupName").value = "";
@@ -150,41 +150,43 @@ function fetchEmployees() {
 //    });
 //}
 
-//async function createGroup() {
-//    if (!validateForm()) return;
+async function createEmployee() {
+    //TODO
+    //if (!validateForm()) return;
 
-//    const groupData = {
-//        groupName: document.getElementById("groupName").value.trim(),
-//        groupDescription: document.getElementById("groupDescription").value.trim(),
-//        managerId: selectedManager ? selectedManager.id : 0,
-//        memberIds: selectedMembers.map(member => member.id)
-//    };
+    const employeeData = {
+        FirstName: document.getElementById("firstName").value.trim(),
+        LastName: document.getElementById("lastName").value.trim(),
+        UserName: document.getElementById("username").value.trim(),
+        Password: document.getElementById("password").value.trim(),
+        Email: document.getElementById("email").value.trim(),
+        IsAdmin: document.getElementById("isAdmin").checked
+    };
 
-//    console.log("Sending Group Data:", groupData);
+    console.log("Sending Employee Data:", employeeData);
 
-//    try {
-//        const response = await fetch("/Groups/CreateGroup", {
-//            method: "POST",
-//            headers: { "Content-Type": "application/json" },
-//            body: JSON.stringify(groupData)
-//        });
+    try {
+        const response = await fetch("/Employees/CreateEmployee", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(employeeData)
+        });
 
-//        const result = await response.json();
+        const result = await response.json();
 
-//        console.log("Response Received:", result);
-//        if (response.ok) {
-//            alert("Group created successfully!");
-//            closeCreateModal();
-//            fetchUserGroups();
-//            fetchGroups();
-//        } else {
-//            alert(`Error: ${result.message}`);
-//        }
-//    } catch (error) {
-//        console.error("Error creating group:", error);
-//        alert("An error occurred while creating the group.");
-//    }
-//}
+        console.log("Response Received:", result);
+        if (response.ok) {
+            alert("Employee created successfully!");
+            closeCreateModal();
+            fetchEmployees();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Error creating employee:", error);
+        alert("An error occurred while creating the employee.");
+    }
+}
 
 //function populateLists() {
 //    document.getElementById("employeeList").innerHTML = allEmployees

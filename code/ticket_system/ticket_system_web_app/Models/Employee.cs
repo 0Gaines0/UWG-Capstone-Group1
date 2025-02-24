@@ -6,6 +6,7 @@ namespace ticket_system_web_app.Models
     public class Employee
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("e_id")] 
         public int EId { get; set; }
 
@@ -58,10 +59,13 @@ namespace ticket_system_web_app.Models
         /// <param name="isManager">The is manager.</param>
         /// <param name="isAdmin">The is admin.</param>
         /// <param name="email">The email.</param>
-        public Employee(int eId, string? fName, string? lName, string? username, string? hashedPassword, bool? isActive, bool? isManager, bool? isAdmin, string? email)
+        public Employee(int eId = 0, string? fName = "", string? lName = "", string? username = "", string? hashedPassword = "", bool? isActive = false, bool? isManager = false, bool? isAdmin = false, string? email = "")
         {
             this.handleValidationOfConstructorInputs(eId, fName, lName, username, hashedPassword, isActive, isManager, isAdmin, email);
-            this.EId = eId;
+            if (eId != 0)
+            {
+                EId = eId;
+            }
             this.FName = fName;
             this.LName = lName;
             this.Username = username;

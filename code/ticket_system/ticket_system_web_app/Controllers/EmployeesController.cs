@@ -23,10 +23,10 @@ namespace ticket_system_web_app.Controllers
             return View(employees);
         }
 
-        //public IActionResult CreateGroupModal()
-        //{
-        //    return PartialView("_CreateGroupModal");
-        //}
+        public IActionResult CreateEmployeeModal()
+        {
+            return PartialView("_CreateEmployeeModal");
+        }
 
         [HttpGet]
         public async Task<JsonResult> GetAllEmployees()
@@ -41,34 +41,27 @@ namespace ticket_system_web_app.Controllers
             //return Json(employees);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest jsonRequest)
-        //{
-        //    if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.GroupName) || jsonRequest.ManagerId == 0)
-        //    {
-        //        return BadRequest(new { message = "Invalid request data" });
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest jsonRequest)
+        {
+            if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.FirstName) || string.IsNullOrWhiteSpace(jsonRequest.LastName) ||
+                string.IsNullOrWhiteSpace(jsonRequest.Username) || string.IsNullOrWhiteSpace(jsonRequest.Password) || string.IsNullOrWhiteSpace(jsonRequest.Email))
+            {
+                return BadRequest(new { message = "Invalid request data" });
+            }
 
-        //    if (this.context.Groups.Where(group => group.GName == jsonRequest.GroupName).Any())
-        //    {
-        //        return BadRequest(new { message = $"Group name, {jsonRequest.GroupName}, already exists. Try Again." });
-        //    }
+            if (this.context.Employees.Where(employee => employee.Username == jsonRequest.Username).Any())
+            {
+                return BadRequest(new { message = $"Username, {jsonRequest.Username}, already exists. Try Again." });
+            }
 
-        //    var newGroup = new Group(jsonRequest.ManagerId, jsonRequest.GroupName, jsonRequest.GroupDescription);
+            var newUser = new Employee(fName: jsonRequest.FirstName, lName: jsonRequest.LastName, username: jsonRequest.Username, hashedPassword: jsonRequest.Password, email: jsonRequest.Email, isAdmin: jsonRequest.IsAdmin, isActive: true);
 
-        //    if (jsonRequest.MemberIds != null && jsonRequest.MemberIds.Any())
-        //    {
-        //        var groupEmployees = await this.context.Employees.Where(employee => jsonRequest.MemberIds.Contains(employee.EId)).ToListAsync();
-        //        newGroup.Employees = groupEmployees;
-        //    }
+            this.context.Employees.Add(newUser);
+            await this.context.SaveChangesAsync();
 
-        //    this.context.Groups.Add(newGroup);
-        //    await this.context.SaveChangesAsync();
-
-        //    return Ok(new { message = "Group created successfully", groupId = newGroup.GId });
-
-
-        //}
+            return Ok(new { message = "Employee created successfully", employeeId = newUser.EId });
+        }
 
         [HttpPost]
         public async Task<IActionResult> RemoveEmployee([FromBody] RemoveEmployeeRequest request)
