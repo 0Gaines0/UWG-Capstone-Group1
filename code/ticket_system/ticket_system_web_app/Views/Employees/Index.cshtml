@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null; // Set your layout here if applicable
     var notLogin = ActiveEmployee.Employee == null;
-    var hasManagerPerms = (ActiveEmployee.Employee?.IsAdmin ?? false) || (ActiveEmployee.Employee?.IsManager ?? false);
+    var hasAdminPerms = (ActiveEmployee.Employee?.IsAdmin ?? false);
     
     if (notLogin)
     {
@@ -11,6 +11,8 @@
     }
 
 }
+
+<partial name="_CreateEmployeeModal" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -298,7 +300,7 @@
                         <input type="text" id="employeeSearch" placeholder="Search Employees..." oninput="filterEmployees()">
                     </div>
 
-                    @if (hasManagerPerms)
+                    @if (hasAdminPerms)
                     {
                         <div class="button-container">
                             <button class="btn" onclick="openCreateModal()">+ Add New Employee</button>
