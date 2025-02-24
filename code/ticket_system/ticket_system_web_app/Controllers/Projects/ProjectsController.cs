@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
+using ticket_system_web_app.Models.RequestObj;
 
-namespace ticket_system_web_app.Controllers
+namespace ticket_system_web_app.Controllers.Projects
 {
     public class ProjectsController : Controller
     {
@@ -49,7 +50,8 @@ namespace ticket_system_web_app.Controllers
             return result;
         }
 
-        public IActionResult Back() {
+        public IActionResult Back()
+        {
             return RedirectToAction(nameof(Index));
         }
 
@@ -84,6 +86,39 @@ namespace ticket_system_web_app.Controllers
             IEnumerable<Group> groups = await _context.Groups.ToListAsync();
             ViewData["Groups"] = groups;
             return View(project);
+        }
+
+        /// <summary>
+        /// Creates a project from the specified json request.
+        /// </summary>
+        /// <param name="jsonRequest">The json request.</param>
+        /// <returns>OK if successful; BadRequest otherwise.</returns>
+        [HttpPost]
+        public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest jsonRequest)
+        {
+            if (jsonRequest == null)
+            {
+                return BadRequest(new { message = "Invalid request data" });
+            }
+
+            if (jsonRequest.PLeadId == 0 || string.IsNullOrWhiteSpace(jsonRequest.PTitle) || string.IsNullOrWhiteSpace(jsonRequest.PDescription))
+            {
+                return BadRequest(new { message = "Invalid project data" });
+            }
+
+            //Apparently this is enough to make the project appear on the server; _context.Projects.Add(project); is unnecessary.
+            var project = new Project(jsonRequest.PLeadId, jsonRequest.PTitle, jsonRequest.PDescription);
+
+            if (!jsonRequest.CollaboratingGroupIDs.IsNullOrEmpty())
+            {
+                var groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
+                project.AssignedGroups = groups;
+            }
+
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Project created successfully", projectID = project.PId });
         }
 
         // GET: Projects/Edit/5

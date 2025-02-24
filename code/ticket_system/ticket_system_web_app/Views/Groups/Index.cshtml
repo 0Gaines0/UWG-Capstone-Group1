@@ -335,7 +335,7 @@
             </div>
             <ul class="nav_list">
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToProjectsIndex", "LandingPage")';">Projects</li>
+                <a asp-action="Index" asp-controller="Projects" class="nav_item"><li>Projects</li></a>
                 <li class="nav_item">Users</li>
             </ul>
         </div>
