@@ -1,0 +1,113 @@
+﻿@model IEnumerable<ticket_system_web_app.Models.Project>
+
+@{
+    ViewData["Title"] = "Index";
+
+    if (ActiveEmployee.Employee == null)
+    {
+        Context.Response.StatusCode = 404;
+        return;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/css/MainPages.css">
+        <link rel="stylesheet" href="/css/Projects/Projects.css">
+        <link rel="stylesheet" href="/css/Projects/Index.css">
+        <script src="~/js/Projects/Index.js"></script>
+    </head>
+    <body>
+    <h1>Projects</h1>
+    <hr />
+    <div class="container">
+        <div class="content-block projects-list">
+            <form asp-action="Create" method="get" class="form-group">
+                <button type="submit" class="btn">Create New Project</button>
+            </form>
+            <div class="scrollable">
+            <table>
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).ProjectLeadId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PDescription)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectLeadId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PDescription)
+                    </td>
+                    <td>
+                        <a class="btn" asp-action="Edit"   asp-route-id="@item.PId">Edit</a> |
+                        <a class="btn" asp-action="Delete" asp-route-id="@item.PId">Delete</a> |
+                        <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="content-block project-info-display">
+            <div class="form-group">
+                <input id="projectTitle" class="form-control" placeholder="Project title" disabled="true" />
+                <textarea id="projectDescription" class="form-control" placeholder="Project description" disabled="true"></textarea>
+                <input id="projectLead" class="form-control" placeholder="Project lead" disabled="true" />
+                <div class="scrollable">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Collaborators
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectCollaborators">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }
+    </div>
+    <div class="nav_container">
+        <div class="nav_top">
+            <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+        </div>
+        <ul class="nav_list">
+            <a asp-action="Index" asp-controller="LandingPage" class="nav_item"><li>Home</li></a>
+            <a asp-action="Index" asp-controller="Groups" class="nav_item"><li>Groups</li></a>
+            <li class="nav_item">Users</li>
+        </ul>
+    </div>
+
+</body>
+</html>

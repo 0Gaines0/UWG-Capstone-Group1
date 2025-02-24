@@ -198,6 +198,7 @@ namespace ticket_system_web_app.Controllers
                 group.GId,
                 group.GName,
                 ManagerName = this.context.Employees.Where(employee => employee.EId == group.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
+                group.ManagerId,
                 MembersCount = group.Employees.Count() + 1,
                 group.GDescription
             }).ToListAsync();

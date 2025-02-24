@@ -1,0 +1,24 @@
+﻿table {
+    margin: auto;
+    width: 100%;
+}
+
+.btn {
+    width: 7em;
+}
+
+.gridpane {
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: 50% 50%;
+    height: 50%;
+    padding: 1em 0px;
+}
+    .gridpane .btn {
+        width: 100%;
+        margin: auto;
+    }
+
+.scrollable {
+    height: 100%;
+}

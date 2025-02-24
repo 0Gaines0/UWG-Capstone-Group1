@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<TicketSystemDbContext>(options =>
-    options.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=ticket_system_database;Integrated Security=True;Pooling=False;Connect Timeout=30"));
+    options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ticket_system_database;Integrated Security=True;Connect Timeout=30"));
 
 
 var app = builder.Build();
