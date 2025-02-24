@@ -305,7 +305,7 @@
                 <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
             </div>
             <ul class="nav_list">
-                <li class="nav_item">Projects</li>
+                <a asp-action="Index" asp-controller="Projects" class="nav_item"><li>Projects</li></a>
                 <li class="nav_item" onclick="location.href='@Url.Action("RedirectToGroupIndex", "LandingPage")';">Groups</li>
                 <li class="nav_item" onclick="location.href='@Url.Action("RedirectToEmployeesIndex", "LandingPage")';">Employees</li>
             </ul>
