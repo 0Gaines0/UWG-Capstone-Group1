@@ -11,8 +11,8 @@ using ticket_system_web_app.Data;
 namespace ticket_system_web_app.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20250211224756_create_database")]
-    partial class create_database
+    [Migration("20250222222454_newMig")]
+    partial class newMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,10 @@ namespace ticket_system_web_app.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EId"));
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("email");
+
                     b.Property<string>("FName")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("f_name");
@@ -94,6 +98,20 @@ namespace ticket_system_web_app.Migrations
                     b.HasKey("EId");
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            EId = 1,
+                            Email = "admin@temp.com",
+                            FName = "admin",
+                            HashedPassword = "$2a$11$tqFhRcVPxPe/F7g4i2.9c.tms9AlneY5RDZb1SipsY1FQtMcaaecu",
+                            IsActive = true,
+                            IsAdmin = true,
+                            IsManager = true,
+                            LName = "admin",
+                            Username = "tempAdmin"
+                        });
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.Group", b =>

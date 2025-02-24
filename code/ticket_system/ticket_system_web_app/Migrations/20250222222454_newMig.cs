@@ -5,7 +5,7 @@
 namespace ticket_system_web_app.Migrations
 {
     /// <inheritdoc />
-    public partial class create_database : Migration
+    public partial class newMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +22,8 @@ namespace ticket_system_web_app.Migrations
                     hashed_password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: true),
                     is_manager = table.Column<bool>(type: "bit", nullable: true),
-                    is_admin = table.Column<bool>(type: "bit", nullable: true)
+                    is_admin = table.Column<bool>(type: "bit", nullable: true),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,6 +58,21 @@ namespace ticket_system_web_app.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.p_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -107,6 +123,11 @@ namespace ticket_system_web_app.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "e_id", "email", "f_name", "hashed_password", "is_active", "is_admin", "is_manager", "l_name", "username" },
+                values: new object[] { 1, "admin@temp.com", "admin", "$2a$11$tqFhRcVPxPe/F7g4i2.9c.tms9AlneY5RDZb1SipsY1FQtMcaaecu", true, true, true, "admin", "tempAdmin" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_group_member_GroupsExistingInGId",
                 table: "group_member",
@@ -126,6 +147,9 @@ namespace ticket_system_web_app.Migrations
 
             migrationBuilder.DropTable(
                 name: "project_group");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Employees");

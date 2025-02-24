@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Include="wwwroot\assets\login_img.png" />
     <None Include="wwwroot\assets\ticket_system_logo.png" />
+    <None Include="wwwroot\css\dataTables.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

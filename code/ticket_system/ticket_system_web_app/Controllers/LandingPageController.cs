@@ -20,5 +20,10 @@ namespace ticket_system_web_app.Controllers
         {
             return RedirectToAction("Index", "Groups");
         }
+
+        public IActionResult RedirectToEmployeesIndex()
+        {
+            return RedirectToAction("Index", "Employees");
+        }
     }
 }

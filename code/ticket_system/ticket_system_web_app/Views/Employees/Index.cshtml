@@ -1,0 +1,342 @@
+﻿@{
+    Layout = null; // Set your layout here if applicable
+    var notLogin = ActiveEmployee.Employee == null;
+    var hasManagerPerms = (ActiveEmployee.Employee?.IsAdmin ?? false) || (ActiveEmployee.Employee?.IsManager ?? false);
+    
+    if (notLogin)
+    {
+        Context.Response.StatusCode = 404;
+        Context.Response.Redirect("/Login/Index");
+        return;
+    }
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #608272, #29543d);
+            color: #ffffff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .sidebar {
+            flex: 0.15;
+            background-color: #0f1e13;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10px 10px 10px 10px;
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+            .sidebar img {
+                max-width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .sidebar h2 {
+                margin: 0px;
+                margin-bottom: 20px;
+                font-size: 1.5rem;
+                text-align: center;
+                border-bottom: 2px solid #ffffff;
+                padding-bottom: 5px;
+                width: 100%;
+            }
+
+        .my-groups-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .my-groups-item {
+            display: grid;
+            align-items: center;
+            background-color: #9f7aea;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            gap: 2px;
+            text-align: center;
+        }
+
+            .my-groups-item:hover {
+                background-color: #b794f4;
+            }
+
+            .my-groups-item img {
+                width: 20px;
+                height: 20px;
+                object-fit: contain;
+            }
+
+            .my-groups-item span {
+                font-size: 1rem;
+                color: #ffffff;
+            }
+
+  
+        .nav_container {
+            flex: 0.15;
+            margin: 20px;
+            margin-left: 50px;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 0;
+            height: 97%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        .nav_image {
+            width: 125px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .nav_top {
+            width: 95%;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 2px solid #ffffff;
+        }
+
+
+            .nav_top p {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+        .nav_list {
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav_item {
+            width: 80%;
+            padding: 10px;
+            text-align: center;
+            background-color: #9f7aea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+            .nav_item:hover {
+                background-color: #b794f4;
+            }
+
+
+        .main-content {
+            flex: 0.8;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .group-management-container {
+            width: 100%;
+            margin: 20px;
+            margin-left: 75px;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .group-management-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-top: -5px;
+            text-align: left;
+        }
+
+        .search-buttons-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #9f7aea;
+            padding: 8px;
+            border-radius: 5px;
+            width: 40%;
+        }
+
+            .search-bar input {
+                width: 100%;
+                border: none;
+                background: #9f7aea;
+                outline: none;
+                padding: 5px;
+                color: #ffffff;
+            }
+
+                .search-bar input::placeholder {
+                    color: #ffffff;
+                    opacity: 1;
+                }
+
+            .search-bar img {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+            }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #608272;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: #b794f4;
+            }
+
+         .table-container {
+             max-height: 750px;
+             overflow-y: auto;
+             overflow-x: auto;
+             border-radius: 5px;
+         } 
+
+         #employeeTable {
+             width: 100%; 
+             border-collapse: collapse; 
+             background: #4B4B4B; 
+             color: #ffffff; 
+             border-radius: 5px; 
+             overflow: hidden; 
+         }
+
+            #employeeTable th {
+                padding: 10px; 
+                 border: 1px solid #FBFBFB; 
+                 text-align: left; 
+             }
+
+            #employeeTable td {
+                padding: 10px; 
+                 border: 1px solid #FBFBFB; 
+             }
+
+            #employeeTable thead {
+                position: sticky; 
+                 top: 0; 
+                 z-index: 2; 
+                 background: #282828;  
+             }
+
+            #employeeTable tr.selected {
+                background-color: #d1e7dd;
+                color: black;
+            }       
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="group-management-container">
+                <h2 class="group-management-title">Employee Management</h2>
+                <div class="search-buttons-container">
+                    <div class="search-bar">
+                        <img src="~/assets/search_icon_img.png" alt="Search">
+                        <input type="text" id="employeeSearch" placeholder="Search Employees..." oninput="filterEmployees()">
+                    </div>
+
+                    @if (hasManagerPerms)
+                    {
+                        <div class="button-container">
+                            <button class="btn" onclick="openCreateModal()">+ Add New Employee</button>
+                            <button class="btn" onclick="removeEmployee()">- Remove Employee</button>
+                        </div>
+                    }
+                </div>
+                <div class="table-container">
+                    <table id="employeeTable" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="nav_container">
+            <div class="nav_top">
+                <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+            </div>
+            <ul class="nav_list">
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
+                <li class="nav_item">Projects</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Groups")';">Groups</li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="~/js/employeeModal.js"></script>
+</body>
+</html>
+

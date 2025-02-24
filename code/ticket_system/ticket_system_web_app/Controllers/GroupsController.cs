@@ -119,36 +119,7 @@ namespace ticket_system_web_app.Controllers
             {
                 return false;
             }
-        }
-
-
-        // TODO: Move this to EmployeeController
-        [HttpGet]
-        public async Task<JsonResult> GetAllManagers()
-        {
-            
-
-            var allManagers = this.context.Employees.Where(e => (e.IsManager ?? false) || (e.IsAdmin ?? false));
-            var getNeededData = await allManagers.Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).ToListAsync();
-
-            return Json(getNeededData);
-        }
-
-        // TODO: Move this to EmployeeController
-        [HttpGet]
-        public async Task<JsonResult> GetAllEmployees()
-        {
-            var employees = await this.context.Employees
-                .Select(employee => new { Id = employee.EId, Name = $"{employee.FName} {employee.LName}" }) // Standardized Id
-                .AsNoTracking()
-                .ToListAsync();
-
-            return Json(employees);
-        }
-
-        
-
-
+        }    
 
         private async Task<List<object>> constructGroups()
         {
