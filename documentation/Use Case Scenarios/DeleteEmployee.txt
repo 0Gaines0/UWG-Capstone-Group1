@@ -1,0 +1,18 @@
+Context - User is logged in as an Admin account
+
+Primary Flow
+1  - User navigates to manage Employee Page on WebApp
+2  - System navigates admin to view of all users with in application 
+3  - User searches and selects employee to delete
+4  - User selects delete employee button
+5  - System reprompts User to ensure deletion of employee
+6  - User verifies deletion of employee
+7  - System deletes employee
+8  - System notifies User of successful deletion of employee
+9  - Return to step 2
+
+Alternate Flow(s)
+ADMIN CANCELS DELETION OF EMPLOYEE
+a1 - Starts at Primary Flow step 5
+a2 - User selects cancel
+a3 - Returns to Primary Flow step 2

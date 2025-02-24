@@ -1,4 +1,4 @@
-Context - User is logged in as admin account, has navigated to the Projects page, and has clicked the Edit button with a project selected.
+Context - User is logged in as Admin/ Manager account, has navigated to the Projects page, and has clicked the Edit button with a project selected.
 
 Primary flow:
 1 - User edits one or more fields.
@@ -16,5 +16,12 @@ a5 - System shows error message detailing missing information.
 a6 - User returns to primary flow step 1.
 
 USER DOES NOT EDIT INFORMATION
-a1 - User does not edit any fields.
-a2 - Return to primary flow step 2.
+b1 - User does not edit any fields.
+b2 - Return to primary flow step 2.
+
+USER IS MANAGE AND SELECTS PROJECT THEY DO NOT LEAD OR ARE NOT APART OF
+Context - User is logged in as manager account, has navigated to the Projects page
+c1 - User selects project they do not lead or are not apart of
+c2 - User selects edit button
+c3 - System notifies User that they do not have permissions to edit this project
+c4 - Return to Context

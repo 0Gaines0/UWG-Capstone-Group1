@@ -1,0 +1,6 @@
+Context - User is logged in as an Admin account
+
+Primary Flow
+1 - User navigates to manage Employee Page on WebApp
+2 - System navigates User to manage with in application 
+3 - User views all employees
