@@ -2,6 +2,7 @@
 {
     public class CreateGroupRequest
     {
+        public int GroupId { get; set; }
         public string? GroupName { get; set; }
         public string? GroupDescription { get; set; }
         public int ManagerId { get; set; }
