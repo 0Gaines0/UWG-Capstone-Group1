@@ -31,6 +31,9 @@
             <thead>
                 <tr>
                     <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PId)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).ProjectLeadId)
                     </th>
                     <th>
@@ -46,6 +49,9 @@
             @foreach (var item in Model) {
                 <tr>
                     <td>
+                        @Html.DisplayFor(modelItem => item.PId)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.ProjectLeadId)
                     </td>
                     <td>
@@ -55,8 +61,8 @@
                         @Html.DisplayFor(modelItem => item.PDescription)
                     </td>
                     <td>
-                        <button type="button" class="btn" asp-action="Edit"   asp-route-id="@item.PId">Edit</button> |
-                        <button type="button" class="btn" asp-action="Delete" asp-route-id="@item.PId">Delete</button> |
+                        <a class="btn" asp-action="Edit"   asp-route-id="@item.PId">Edit</a> |
+                        <a class="btn" asp-action="Delete" asp-route-id="@item.PId">Delete</a> |
                         <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
                     </td>
                 </tr>

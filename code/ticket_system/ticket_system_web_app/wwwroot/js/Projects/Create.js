@@ -81,7 +81,7 @@ function addCollaborator(id) {
 function removeCollaborator(id) {
     unselectedGroups[id] = selectedGroups[id];
     delete selectedGroups[id];
-    selectedManagerCount[selectedGroups[id].managerId]--;
+    selectedManagerCount[unselectedGroups[id].managerId]--;
 
     populateTables();
 }

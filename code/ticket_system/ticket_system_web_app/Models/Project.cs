@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ticket_system_web_app.Models
 {
@@ -7,6 +8,7 @@ namespace ticket_system_web_app.Models
     {
         [Key]
         [Column("p_id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PId { get; set; }
 
         [Column("project_lead_id")]
@@ -42,7 +44,7 @@ namespace ticket_system_web_app.Models
         /// or
         /// Description cannot be null or blank.
         /// </exception>
-        public Project(int pLeadID, string pTitle, string pDesc)
+        public Project(int pLeadID, string pTitle, string pDesc, ICollection<Group> assignedGroups)
         {
             if (pLeadID <= 0)
             {
@@ -56,10 +58,15 @@ namespace ticket_system_web_app.Models
             {
                 throw new ArgumentException("Description cannot be null or blank.");
             }
+            if (assignedGroups.IsNullOrEmpty())
+            {
+                throw new ArgumentException("Must have at least one assigned group.");
+            }
 
             this.ProjectLeadId = pLeadID;
             this.PTitle = pTitle;
             this.PDescription = pDesc;
+            this.AssignedGroups = assignedGroups;
         }
 
 

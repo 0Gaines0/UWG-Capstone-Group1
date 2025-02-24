@@ -106,17 +106,16 @@ namespace ticket_system_web_app.Controllers.Projects
                 return BadRequest(new { message = "Invalid project data" });
             }
 
-            //Apparently this is enough to make the project appear on the server; _context.Projects.Add(project); is unnecessary.
-            var project = new Project(jsonRequest.PLeadId, jsonRequest.PTitle, jsonRequest.PDescription);
-
+            ICollection<Group> groups = new List<Group>();
             if (!jsonRequest.CollaboratingGroupIDs.IsNullOrEmpty())
             {
-                var groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
-                project.AssignedGroups = groups;
+                groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
             }
 
+            var project = new Project(jsonRequest.PLeadId, jsonRequest.PTitle, jsonRequest.PDescription, groups);
 
-            await _context.SaveChangesAsync();
+            this._context.Add(project);
+            await this._context.SaveChangesAsync();
 
             return Ok(new { message = "Project created successfully", projectID = project.PId });
         }
@@ -212,19 +211,21 @@ namespace ticket_system_web_app.Controllers.Projects
         /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
         public async Task<JsonResult?> Details(int id)
         {
-            var project = await this._context.Projects.FindAsync(id);
-            if (project == null)
+            var project = await this._context.Projects.Include(project => project.AssignedGroups).Select(project => new
             {
-                return null;
-            }
-            var result = new
-            {
+                project.PId,
                 project.PTitle,
                 project.PDescription,
                 ProjectLeadName = this._context.Employees.Where(employee => employee.EId == project.ProjectLeadId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
                 project.AssignedGroups
-            };
-            return Json(result);
+            }).FirstOrDefaultAsync(project => project.PId == id);
+            
+            if (project == null)
+            {
+                return null;
+            }
+            
+            return Json(project);
         }
 
         private bool ProjectExists(int id)

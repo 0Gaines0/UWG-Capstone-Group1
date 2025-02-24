@@ -14,4 +14,13 @@ textarea {
 .scrollable {
     margin: 0.5em auto;
     width: calc(100% + 1em);
+    overflow-x: scroll;
+}
+
+tr td:last-child {
+    white-space: nowrap;
+}
+
+.content-block {
+    width: 50%
 }
