@@ -50,6 +50,25 @@ namespace ticket_system_web_app.Controllers
             return Json(userGroups);
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetGroupById(int id)
+        {
+            var group = await this.context.Groups.Where(g => g.GId == id).Select(g => new
+            {
+                g.GId,
+                g.GName,
+                Manager = new { Name = this.context.Employees.Where(employee => employee.EId == g.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(), ID = this.context.Employees.Where(employee => employee.EId == g.ManagerId).Select(employee => employee.EId).FirstOrDefault() },
+                Members = g.Employees
+                    .Select(e => new {
+                        eId = e.EId,
+                        name = e.FName + " " + e.LName
+                    })
+                    .ToArray(),
+                g.GDescription
+            }).ToListAsync();
+            return Json(group);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest jsonRequest)
         {
@@ -121,6 +140,31 @@ namespace ticket_system_web_app.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SaveGroupEdits([FromBody] CreateGroupRequest jsonRequest)
+        {
+            var group = await this.context.Groups.Include(g => g.Employees).FirstOrDefaultAsync(g => g.GId == jsonRequest.GroupId);
+            var duplicateGroup = await this.context.Groups.FirstOrDefaultAsync(g => g.GName == jsonRequest.GroupName && g.GId != jsonRequest.GroupId);
+            if (duplicateGroup != null)
+            {
+                return Json(new { success = false, message = "A group with the same name already exists." });
+            }
+            group.GName = jsonRequest.GroupName;
+            group.GDescription = jsonRequest.GroupDescription;
+            group.ManagerId = jsonRequest.ManagerId;
+            group.Employees.Clear();
+
+            foreach (var memberId in jsonRequest.MemberIds)
+            {
+                var employee = await this.context.Employees.FindAsync(memberId);
+                if (employee != null)
+                {
+                    group.Employees.Add(employee);
+                }
+            }
+            await this.context.SaveChangesAsync();
+            return Json(new { success = true, message = "Group updated successfully." });
+        }
 
         // TODO: Move this to EmployeeController
         [HttpGet]
@@ -146,10 +190,7 @@ namespace ticket_system_web_app.Controllers
             return Json(employees);
         }
 
-        
-
-
-
+       
         private async Task<List<object>> constructGroups()
         {
             var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
