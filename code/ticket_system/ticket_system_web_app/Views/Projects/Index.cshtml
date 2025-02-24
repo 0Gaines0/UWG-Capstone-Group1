@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="/css/MainPages.css">
         <link rel="stylesheet" href="/css/Projects/Projects.css">
         <link rel="stylesheet" href="/css/Projects/Index.css">
+        <script src="~/js/Projects/Index.js"></script>
     </head>
     <body>
     <h1>Projects</h1>
@@ -54,8 +55,9 @@
                         @Html.DisplayFor(modelItem => item.PDescription)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.PId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.PId">Delete</a>
+                        <button type="button" class="btn" asp-action="Edit"   asp-route-id="@item.PId">Edit</button> |
+                        <button type="button" class="btn" asp-action="Delete" asp-route-id="@item.PId">Delete</button> |
+                        <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
                     </td>
                 </tr>
             }
@@ -65,9 +67,9 @@
         </div>
         <div class="content-block project-info-display">
             <div class="form-group">
-                <input class="form-control" placeholder="Project title" disabled="true" />
-                <textarea class="form-control" placeholder="Project description" disabled="true"></textarea>
-                <input class="form-control" placeholder="Project lead" disabled="true" />
+                <input id="projectTitle" class="form-control" placeholder="Project title" disabled="true" />
+                <textarea id="projectDescription" class="form-control" placeholder="Project description" disabled="true"></textarea>
+                <input id="projectLead" class="form-control" placeholder="Project lead" disabled="true" />
                 <div class="scrollable">
                     <table class="table">
                         <thead>
@@ -77,7 +79,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="projectCollaborators">
                             
                         </tbody>
                     </table>

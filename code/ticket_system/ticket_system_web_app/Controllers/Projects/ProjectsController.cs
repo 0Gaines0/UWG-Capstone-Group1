@@ -205,6 +205,28 @@ namespace ticket_system_web_app.Controllers.Projects
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Returns the details of the project with the specified id.
+        /// </summary>
+        /// <param name="id">The desired project's ID.</param>
+        /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
+        public async Task<JsonResult?> Details(int id)
+        {
+            var project = await this._context.Projects.FindAsync(id);
+            if (project == null)
+            {
+                return null;
+            }
+            var result = new
+            {
+                project.PTitle,
+                project.PDescription,
+                ProjectLeadName = this._context.Employees.Where(employee => employee.EId == project.ProjectLeadId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
+                project.AssignedGroups
+            };
+            return Json(result);
+        }
+
         private bool ProjectExists(int id)
         {
             return _context.Projects.Any(e => e.PId == id);
