@@ -138,7 +138,7 @@ namespace ticket_system_web_app.Controllers
             {
                 return false;
             }
-        }
+        }    
 
         [HttpPost]
         public async Task<IActionResult> SaveGroupEdits([FromBody] CreateGroupRequest jsonRequest)

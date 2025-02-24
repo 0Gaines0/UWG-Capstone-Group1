@@ -7,16 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Styles\**" />
-    <Content Remove="Styles\**" />
-    <EmbeddedResource Remove="Styles\**" />
-    <None Remove="Styles\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\assets\login_img.png" />
     <None Include="wwwroot\assets\ticket_system_logo.png" />
-    <None Include="wwwroot\css\Projects\Projects.css" />
+    <None Include="wwwroot\css\dataTables.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +20,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
