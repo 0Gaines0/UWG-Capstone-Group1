@@ -221,15 +221,24 @@ var assemblies = [
   {
     "name": "ticket_system_web_app",
     "classes": [
-      { "name": "ticket_system_web_app.Controllers.HomeController", "rp": "ticket_system_web_app_HomeController.html", "cl": 0, "ucl": 13, "cal": 13, "tl": 32, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Controllers.LandingPageController", "rp": "ticket_system_web_app_LandingPageController.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Controllers.LoginController", "rp": "ticket_system_web_app_LoginController.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.GroupsController", "rp": "ticket_system_web_app_GroupsController.html", "cl": 85, "ucl": 5, "cal": 90, "tl": 168, "cb": 20, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.HomeController", "rp": "ticket_system_web_app_HomeController.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 32, "cb": 3, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.LandingPageController", "rp": "ticket_system_web_app_LandingPageController.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.LoginController", "rp": "ticket_system_web_app_LoginController.html", "cl": 35, "ucl": 2, "cal": 37, "tl": 65, "cb": 10, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "ticket_system_web_app.Controllers.UsersController", "rp": "ticket_system_web_app_UsersController.html", "cl": 0, "ucl": 82, "cal": 82, "tl": 157, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Data.TicketSystemDbContext", "rp": "ticket_system_web_app_TicketSystemDbContext.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Data.TicketSystemDbContext", "rp": "ticket_system_web_app_TicketSystemDbContext.html", "cl": 27, "ucl": 1, "cal": 28, "tl": 50, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.AddEmployeeEmail", "rp": "ticket_system_web_app_AddEmployeeEmail.html", "cl": 0, "ucl": 190, "cal": 190, "tl": 237, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.AddTempAdminLogin", "rp": "ticket_system_web_app_AddTempAdminLogin.html", "cl": 0, "ucl": 206, "cal": 206, "tl": 253, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.create_database", "rp": "ticket_system_web_app_create_database.html", "cl": 0, "ucl": 288, "cal": 288, "tl": 345, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "ticket_system_web_app.Migrations.InitCreate", "rp": "ticket_system_web_app_InitCreate.html", "cl": 0, "ucl": 47, "cal": 47, "tl": 87, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.InitialCreate", "rp": "ticket_system_web_app_InitialCreate.html", "cl": 0, "ucl": 31, "cal": 31, "tl": 73, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.TicketSystemDbContextModelSnapshot", "rp": "ticket_system_web_app_TicketSystemDbContextModelSnapshot.html", "cl": 0, "ucl": 27, "cal": 27, "tl": 48, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.ErrorViewModel", "rp": "ticket_system_web_app_ErrorViewModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.TicketSystemDbContextModelSnapshot", "rp": "ticket_system_web_app_TicketSystemDbContextModelSnapshot.html", "cl": 0, "ucl": 192, "cal": 192, "tl": 220, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.ActiveEmployee", "rp": "ticket_system_web_app_ActiveEmployee.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 21, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.Employee", "rp": "ticket_system_web_app_Employee.html", "cl": 19, "ucl": 42, "cal": 61, "tl": 115, "cb": 0, "tb": 18, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.ErrorViewModel", "rp": "ticket_system_web_app_ErrorViewModel.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.Group", "rp": "ticket_system_web_app_Group.html", "cl": 38, "ucl": 0, "cal": 38, "tl": 70, "cb": 8, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.Project", "rp": "ticket_system_web_app_Project.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 32, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.CreateGroupRequest", "rp": "ticket_system_web_app_CreateGroupRequest.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.RemoveGroupRequest", "rp": "ticket_system_web_app_RemoveGroupRequest.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "ticket_system_web_app.Models.User", "rp": "ticket_system_web_app_User.html", "cl": 29, "ucl": 0, "cal": 29, "tl": 42, "cb": 14, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
@@ -263,6 +272,12 @@ var riskHotspotMetrics = [
 ];
 
 var riskHotspots = [
+  {
+    "assembly": "ticket_system_web_app", "class": "ticket_system_web_app.Models.Employee", "reportPath": "ticket_system_web_app_Employee.html", "methodName": "handleValidationOfConstructorInputs(System.Int32,System.String,System.String,System.String,System.String,System.Nullable`1<System.Boolean>,System.Nullable`1<System.Boolean>,System.Nullable`1<System.Boolean>,System.String)", "methodShortName": "handleValidationOfConstructorInputs(...)", "fileIndex": 0, "line": 76,
+    "metrics": [
+      { "value": 342, "exceeded": true },
+      { "value": 18, "exceeded": true },
+    ]},
   {
     "assembly": "ticket_system_web_app", "class": "ticket_system_web_app.Controllers.UsersController", "reportPath": "ticket_system_web_app_UsersController.html", "methodName": "Edit()", "methodShortName": "Edit()", "fileIndex": 0, "line": 90,
     "metrics": [

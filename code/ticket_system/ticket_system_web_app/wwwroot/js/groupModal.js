@@ -1,16 +1,42 @@
 document.addEventListener('DOMContentLoaded', async function () {
+   
+
     fetchGroups();
     fetchUserGroups();
     await resetModal();
 
     document.getElementById("managerSearch").addEventListener("input", filterManagers);
     document.getElementById("employeeSearch").addEventListener("input", filterEmployees);
+
+    document.getElementById("editManagerSearch").addEventListener("input", filterEditManagers);
+    document.getElementById("editEmployeeSearch").addEventListener("input", filterEditEmployees);
+
+  
+
+    document.addEventListener("click", function (event) {
+        let table = document.getElementById("groupTableBody");
+
+        if (table && !table.contains(event.target)) {
+            console.log("Clicked outside the table, deselecting row.");
+            document.querySelectorAll("#groupTableBody tr").forEach(r => r.classList.remove("selected-row"));
+
+            selectedGroupId = null;
+        }
+    });
 });
 
 let allManagers = [];
 let allEmployees = [];
 let selectedManager = "";
 let selectedMembers = [];
+let selectedGroupId = null;
+let modalGroupId = null;
+
+let allEditManagers = [];
+let allEditEmployees = [];
+let selectedEditManager = "";
+let selectedEditMembers = [];
+let selectedEditGroupId = null;
 
 
 function fetchGroups() {
@@ -21,14 +47,19 @@ function fetchGroups() {
             tableBody.innerHTML = '';
 
             data.forEach(group => {
-                let row = `
-                    <tr>
-                        <td>${group.gName}</td>
-                        <td>${group.managerName || 'Not Assigned'}</td>
-                        <td>${group.membersCount}</td>
-                        <td>${group.gDescription}</td>
-                    </tr>`;
-                tableBody.innerHTML += row;
+                let row = document.createElement('tr');
+                row.setAttribute('data-group-id', group.gId); 
+                row.setAttribute('onclick', 'selectGroup(this)'); 
+
+                row.innerHTML = `
+                    <td>${group.gName}</td>
+                    <td>${group.managerName || 'Not Assigned'}</td>
+                    <td>${group.membersCount}</td>
+                    <td>${group.gDescription}</td>
+                `;
+
+                tableBody.appendChild(row);
+
             });
         })
         .catch(error => console.error('Error fetching groups:', error));
@@ -82,6 +113,7 @@ async function fetchAllEmployees() {
 
 function openCreateModal() {
     document.getElementById("createGroupModal").style.display = "flex";
+    console.log(document.activeElement)
 }
 
 function closeCreateModal() {
@@ -165,16 +197,17 @@ async function createGroup() {
 
         console.log("Response Received:", result);
         if (response.ok) {
-            alert("Group created successfully!");
+            showToast("Group created successfully!");
             closeCreateModal();
             fetchUserGroups();
             fetchGroups();
         } else {
-            alert(`Error: ${result.message}`);
+            showToast(`Error: ${result.message}`);
+
         }
     } catch (error) {
         console.error("Error creating group:", error);
-        alert("An error occurred while creating the group.");
+        showToast("An error occurred while creating the group.");
     }
 }
 
@@ -246,7 +279,7 @@ function addMember(id, name) {
 function removeMember(id) {
     let member = selectedMembers.find(m => m.id === id);
     selectedMembers = selectedMembers.filter(m => m.id !== id);
-    if (member) allEmployees.push(member); // Restore removed member
+    if (member) allEmployees.push(member); 
     populateLists();
 }
 
@@ -307,7 +340,7 @@ function removeGroup() {
     const groupName = document.getElementById("removeGroupName").value.trim();
 
     if (groupName === "") {
-        alert("Please enter a valid group name.");
+        showToast("Please enter a valid group name.");
         return;
     }
 
@@ -319,17 +352,17 @@ function removeGroup() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert("Group removed successfully!");
+                showToast("Group removed successfully!");
                 closeRemoveModal();
                 fetchUserGroups();
                 fetchGroups();
             } else {
-                alert("Error: " + data.message);
+                showToast("Error: " + data.message);
             }
         })
         .catch(error => {
             console.error("Error removing group:", error);
-            alert("An error occurred.");
+            showToast("An error occurred.");
         });
 }
 
@@ -347,4 +380,280 @@ function filterGroups() {
     });
 }
 
+function selectGroup(row) {
+    if (!row) return;
+    document.querySelectorAll("#groupTableBody tr").forEach(r => r.classList.remove("selected-row"));
 
+    row.classList.add("selected-row");
+
+    selectedGroupId = row.getAttribute("data-group-id");
+}
+
+async function openEditModal() {
+    selectedEditGroupId = null;
+    if (!selectedGroupId) {
+        showToast("Please select a group!");
+        return;
+    }
+    try {
+        selectedEditGroupId = selectedGroupId
+        const response = await fetch(`/Groups/GetGroupById/${selectedGroupId}`);
+        const groupDataArray = await response.json();
+        const groupData = groupDataArray[0];
+
+        document.getElementById("editGroupName").value = groupData.gName;
+        document.getElementById("editGroupDescription").value = groupData.gDescription;
+        document.getElementById("editGroupManager").innerHTML = `
+            <option value="">Select a Manager</option>
+            <option value="${groupData.manager.id}" selected>${groupData.manager.name}</option>
+        `;
+        document.getElementById("editSelectedEmployees").innerHTML =
+            groupData.members && groupData.members.length
+                ? groupData.members.map(member =>
+                    `<p>${member.fName} ${member.lName} <button class="remove-btn" onclick="removeMember(${member.eId})">-</button></p>`
+                ).join("")
+                : "<p>No members added</p>";
+
+        await setEditModel(groupData);
+
+        document.getElementById("editGroupModal").style.display = "flex";
+    } catch (error) {
+        console.error("Error fetching group data:", error);
+    }
+}
+
+async function setEditModel(groupData) {
+
+    selectedEditManager = groupData.manager;
+    selectedEditMembers = groupData.members || [];
+
+    allEditManagers = await fetchAllAvailableManagers();
+    allEditEmployees = await fetchAllEmployees();
+    if (groupData.manager && groupData.manager.id) {
+        allEditManagers = allEditManagers.filter(manager => manager.id !== groupData.manager.id);
+    }
+    if (groupData.members && groupData.members.length > 0) {
+        allEditEmployees = allEditEmployees.filter(employee =>
+            !groupData.members.some(member => member.eId === employee.id)
+        );
+    }
+
+    document.getElementById("removeEditManagerBtn").style.display = "inline-block";
+
+
+
+    populateEditManagerLists(); 
+    populateEditLists();        
+}
+
+function selectEditManager(id, name) {
+    if (selectedEditManager) {
+        allEditManagers.push(selectedEditManager);
+    }
+
+    selectedEditManager = { id, name };
+
+    document.getElementById("editGroupManager").innerHTML = `
+        <option value="">Select a Manager</option>
+        <option value="${id}" selected>${name}</option>
+    `;
+
+    allEditManagers = allEditManagers.filter(m => m.id !== id);
+    document.getElementById("removeEditManagerBtn").style.display = "inline-block";
+    populateEditManagerLists();
+}
+
+function addEditMember(id, name) {
+    if (!selectedEditMembers.some(m => m.id === id)) {
+        selectedEditMembers.push({ id, name });
+        allEditEmployees = allEditEmployees.filter(e => e.id !== id);
+        populateEditLists();
+    }
+}
+
+function removeEditMember(id) {
+    let member = selectedEditMembers.find(m => m.id === id);
+    selectedEditMembers = selectedEditMembers.filter(m => m.id !== id);
+    if (member) allEditEmployees.push(member);
+    populateEditLists();
+}
+
+function populateEditLists() {
+    document.getElementById("editEmployeeList").innerHTML = allEditEmployees
+        .map(employee => `<p>${employee.name} <button class="select-btn" onclick="addEditMember(${employee.id}, '${employee.name}')">+</button></p>`)
+        .join("");
+
+    document.getElementById("editSelectedEmployees").innerHTML = selectedEditMembers.length
+        ? selectedEditMembers.map(member => `<p>${member.name}<button class="remove-btn" onclick="removeEditMember(${member.id})">-</button></p>`).join("")
+        : "<p>No members added</p>";
+}
+
+function populateEditManagerLists() {
+    let managerDropdown = document.getElementById("editGroupManager");
+    let managerList = document.getElementById("editManagerList");
+
+    managerDropdown.innerHTML = `<option value="">Select a Manager</option>`;
+    managerList.innerHTML = "";
+
+    allEditManagers.forEach(manager => {
+        managerList.innerHTML += `<p>${manager.name} 
+            <button class="select-btn" onclick="selectEditManager(${manager.id}, '${manager.name}')">+</button>
+        </p>`;
+    });
+
+    if (selectedEditManager) {
+        managerDropdown.innerHTML = `<option value="${selectedEditManager.id}">${selectedEditManager.name}</option>`;
+    }
+}
+
+function removeEditManager() {
+    if (selectedEditManager) {
+        allEditManagers.push(selectedEditManager);
+        selectedEditManager = null;
+
+        document.getElementById("editGroupManager").innerHTML = `<option value="">Select a Manager</option>`;
+
+        document.getElementById("removeEditManagerBtn").style.display = "none";
+        populateEditManagerLists();
+    }
+}
+
+function closeEditModal() {
+    selectedGroupId = null;
+    document.getElementById("editGroupName").value = "";
+    document.getElementById("editGroupManager").value = "";
+    document.getElementById("editSelectedEmployees").value = "";
+    document.getElementById("editGroupDescription").value = "";
+    document.getElementById("editGroupModal").style.display = "none";
+    
+    clearEditErrors();
+
+}
+
+async function saveGroupEdits() {
+    if (!validateEditForm()) return;
+
+    const groupData = {
+        groupId: selectedEditGroupId,
+        groupName: document.getElementById("editGroupName").value.trim(),
+        groupDescription: document.getElementById("editGroupDescription").value.trim(),
+        managerId: selectedEditManager
+            ? selectedEditManager.id
+            : parseInt(document.getElementById("editGroupManager").value) || 0,
+        memberIds: selectedEditMembers.map(member => member.eId)
+    };
+
+    console.log("Sending Edited Group Data:", groupData);
+
+    try {
+        const response = await fetch(`/Groups/SaveGroupEdits`, {
+            method: "POST", 
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(groupData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showToast("Group updated successfully!");
+            closeEditModal();
+            fetchUserGroups();
+            fetchGroups();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Error updating group:", error);
+        alert("An error occurred while updating the group.");
+    }
+}
+
+function validateEditForm() {
+    let isValid = true;
+
+    let nameInput = document.getElementById("editGroupName").value.trim();
+    let descriptionInput = document.getElementById("editGroupDescription").value.trim();
+    let managerInput = document.getElementById("editGroupManager").value.trim();
+
+    clearEditErrors();
+
+    if (nameInput === "") {
+        displayEditError("editGroupNameError", "Group name is required.");
+        isValid = false;
+    }
+
+    if (descriptionInput === "") {
+        displayEditError("editGroupDescriptionError", "Description is required.");
+        isValid = false;
+    }
+
+    if (managerInput === "" || managerInput === "Select a Manager") {
+        displayEditError("editGroupManagerError", "Manager selection is required.");
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function clearEditErrors() {
+    let errors = document.querySelectorAll("#editGroupModal .error-message");
+    errors.forEach(error => {
+        error.style.display = "none";
+        error.textContent = "";
+    });
+}
+
+function filterEditManagers() {
+    let searchValue = document.getElementById("editManagerSearch").value.toLowerCase();
+    let managerItems = document.querySelectorAll("#editManagerList p");
+
+    managerItems.forEach((item) => {
+        let managerName = item.textContent.toLowerCase();
+        if (managerName.includes(searchValue)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function filterEditEmployees() {
+    let searchValue = document.getElementById("editEmployeeSearch").value.toLowerCase();
+    let employeeItems = document.querySelectorAll("#editEmployeeList p");
+
+    employeeItems.forEach((item) => {
+        let employeeName = item.textContent.toLowerCase();
+        if (employeeName.includes(searchValue)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function displayEditError(elementId, message) {
+    let errorElement = document.getElementById(elementId);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = "block";
+    }
+}
+
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    void toast.offsetWidth;
+
+    toast.style.opacity = 1;
+
+    setTimeout(() => {
+        toast.style.opacity = 0;
+        setTimeout(() => {
+            toast.style.display = "none";
+        }, 500); 
+    }, duration);
+}

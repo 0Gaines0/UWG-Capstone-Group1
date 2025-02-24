@@ -1,0 +1,231 @@
+﻿<style>
+    #editGroupModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .edit-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    
+    .edit-modal-content {
+        display: flex;
+        background: #0f1e13;
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        width: 900px;
+        max-height: 85vh;
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .edit-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+        .edit-modal-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            text-align: left;
+        }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .cancel-btn, .save-btn {
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .cancel-btn {
+        background: #ff4c4c;
+        color: white;
+    }
+
+    .save-btn {
+        background: #9f7aea;
+        color: white;
+    }
+
+    .group-edit-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+        height: 70vh;
+    }
+
+    .group-left, .group-right {
+        flex: 1;
+        background: #608272;
+        padding: 15px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        height: 95%;
+        overflow: hidden;
+    }
+
+    .group-left-item {
+        padding-bottom: 15px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        background: #2d4a3d;
+        color: white;
+        outline: none;
+    }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+    textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .list-container {
+        margin-top: 10px;
+        background: #3d5b47;
+        padding: 10px;
+        border-radius: 8px;
+        height: 150px;
+        overflow-y: auto;
+    }
+
+        .list-container p {
+            display: flex;
+            justify-content: space-between;
+            background: #4a6c57;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+    .select-btn {
+        background: #9f7aea;
+        color: white;
+        padding: 6px 12px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .remove-btn {
+        background: #ff4c4c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        padding: 3px 7px;
+        margin-left: 10px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+    }
+
+</style>
+
+<div id="editGroupModal" class="edit-modal-overlay">
+    <div class="edit-modal-content">
+        <div class="edit-modal-header">
+            <h2>Edit Group</h2>
+            <div class="button-container">
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="save-btn" id="editGroupSaveBtn" onclick="saveGroupEdits()">Save Changes</button>
+            </div>
+        </div>
+
+        <div class="group-edit-container">
+            <div class="group-left">
+                <h3>Group Details</h3>
+                <div class="group-left-item">
+                    <label>Name</label>
+                    <input type="text" id="editGroupName" placeholder="Group name">
+                    <span id="editGroupNameError" class="error-message"></span>
+                </div>
+
+                <div class="group-left-item">
+                    <label>Description</label>
+                    <input type="text" id="editGroupDescription" placeholder="Group description">
+                    <span id="editGroupDescriptionError" class="error-message"></span>
+                </div>
+
+                <div class="group-left-item">
+                    <label>Manager</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="editGroupManager">
+                            <option value="">Select a Manager</option>
+                        </select>
+                        <button id="removeEditManagerBtn" class="remove-btn" onclick="removeEditManager()" style="display: none;">-</button>
+                    </div>
+                    <span id="editGroupManagerError" class="error-message"></span>
+                </div>
+                <div class="group-left-item">
+                    <h4>Members</h4>
+                    <div id="editSelectedEmployees" class="list-container">
+                        <p>No members added</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-right">
+                <div class="manager-container">
+                    <h3>Available Managers</h3>
+                    <input type="text" id="editManagerSearch" placeholder="Search">
+                    <div id="editManagerList" class="list-container"></div>
+                </div>
+
+                <div class="employee-container">
+                    <h3>Available Employees</h3>
+                    <input type="text" id="editEmployeeSearch" placeholder="Search">
+                    <div id="editEmployeeList" class="list-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
