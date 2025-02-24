@@ -81,9 +81,10 @@
                 <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
             </div>
             <ul class="nav_list">
-            <a asp-action="Index" asp-controller="LandingPage" class="nav_item"><li>Home</li></a>
-            <a asp-action="Index" asp-controller="Groups" class="nav_item"><li>Groups</li></a>
-                <li class="nav_item">Users</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("RedirectToGroupIndex", "LandingPage")';">Groups</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("RedirectToEmployeesIndex", "LandingPage")';">Employees</li>
+
             </ul>
         </div>
     </body>
