@@ -1,0 +1,6 @@
+Context - User is logging in and User is on the home page
+
+Primary Flow (WebApp & DesktopApp)
+1 - User selects the logout button
+2 - System logs out user and clears credentials
+3 - System navigates user to LoginPage

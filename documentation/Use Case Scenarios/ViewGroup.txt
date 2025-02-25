@@ -1,0 +1,6 @@
+Context - User is logged in as an Admin/ Manager/ Employee account
+
+Primary Flow 
+1 - User navigates to manage Groups Page on WebApp
+2 - User is directed to view of all groups with in application 
+3 - User views all groups with in application 

@@ -1,0 +1,20 @@
+Context - User is logged in as an Admin/Manager account
+
+Primary Flow 
+1 - User navigates to manage Group page on WebApp
+2 - User is directed to view of all groups with in application
+3 - User selects create group button
+4 - System navigates User to create group page
+5 - User inputs group details (Title of group, Description of group, employees to add)
+6 - User selects add/ create group button
+7 - System validates expectations of group details
+8 - System creates group and notifies User of creation of group
+9 - returns back to step 2
+
+Alternate Flow(s)
+USER INPUTS INVALID DETAILS
+a1 - Start at Primary Flow step 4
+a2 - User does not enter all required details or invalid details
+a3 - System notifies User of expected requirements with error label
+a4 - System reprompts user to re-enter required details
+a5 - Back to Primary Flow step 5

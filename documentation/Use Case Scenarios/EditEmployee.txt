@@ -1,0 +1,21 @@
+Context - User is logged in as an Admin account
+
+Primary Flow
+1  - User navigates to manage Employee Page on WebApp
+2  - System navigates User to view of all users with in application 
+3  - User searches and selects employee to edit
+4  - System navigates User to edit employee page
+5  - User inputs edited credentials (username, password, role)
+6  - User select update employee credentials button
+7  - System validates updated credentials
+8  - System updates database with new credentials
+9  - System notifies User of successful editing of existing credentials
+10 - System navigates User back to manage Employee Page 
+
+Alternate Flow(s)
+USER INPUTS INVALID CREDENTIALS 
+a1 - Start at Primary Flow step 4
+a2 - User does not enter all required credentials or invalid credentials
+a3 - System notifies User of expected requirements with error label
+a4 - System reprompts usser to re-enter edited credentials
+a5 - Back to Primary Flow step 5

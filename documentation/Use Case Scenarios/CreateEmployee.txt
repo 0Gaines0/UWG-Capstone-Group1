@@ -1,0 +1,30 @@
+Context - User is logged in as an Admin/ Manager Account
+
+Primary Flow
+1  - User navigates to the Manage Employee Page on WebApp
+2  - User is directed to view of all users with in application 
+3  - User selects add/create employee button
+4  - System navigates User to add/create employee page
+5  - User inputs required credentials ((unique)username, password, role)
+6  - User selects add employee button
+7  - System validates uniqueness of username
+8  - System adds employee credentials to database
+9  - System notifies User of successful creation of employee
+10 - System redirects User to View/Create/Edit/Delete Page on WebApp
+
+Alternate Flow(s)
+NONE UNIQUE USERNAME
+a1 - Start at Primary Flow step 5
+a2 - User inputs none unique username
+a3 - Primary Flow step 6
+a4 - System finds non-unique username in entered credentials
+a5 - System notifies User of failed creation of employee with error label
+a6 - System reprompts User to re-enter required credentials
+a7 - Back to Primary Flow step 5
+
+USER INPUTS INVALID CREDENTIALS 
+b1 - Start at Primary Flow step 4
+b2 - User does not enter all required credentials 
+b3 - System notifies User of expected requirements with error label
+b4 - System reprompts User to re-enter required credentials
+b5 - Back to Primary Flow step 5

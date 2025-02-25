@@ -1,4 +1,4 @@
-Context - User is logged in as admin, has navigated to the Projects page. View button is disabled on page load.
+Context - User is logged in as Admin/Manager/Employee, has navigated to the Projects page. View button is disabled on page load.
 
 Primary flow:
 1 - User selects a project from the list.

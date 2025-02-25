@@ -1,0 +1,23 @@
+Context - User is logged in as an Admin/ Manager account
+
+Primary Flow
+1  - User navigates to manage Group Page on WebApp
+2  - System navigates User to view of all Groups with in application 
+3  - User searches Group to delete
+4  - User selects delete Group button showing delete modal
+5  - User inputs Group name to delete
+6  - User verifies deletion of Group hitting continue
+7  - System deletes Group 
+8  - System notifies User of successful deletion of Group 
+9  - Return to Primary Flow step 2
+
+Alternate Flow(s)
+USER CANCELS DELETION OF GROUP
+a1 - Starts at Primary Flow step 4
+a2 - User selects cancel
+a3 - Returns to Primary Flow step 2
+
+USER IS MANAGER AND INPUTS GROUP NAME THEY DO NOT MANAGER
+b1 - Start at Primary Flow step 6
+b2 - System notifies User that they do not have permissions to remove group inputted
+b3 - Return to Primary Flow step 2

@@ -1,0 +1,27 @@
+Context - User is logged in as an admin/ manager account
+
+Primary Flow
+1  - User navigates to manage Group page on WebApp
+2  - User is directed to view of all groups with in application
+3  - User searches for group and selects group
+4  - User selects edit group button
+5  - System navigates user to Edit group page
+6  - User inputs edited group details
+7  - User selects update group button
+8  - System validates updated group details
+9  - System updates database with new group details
+10 - System notifies User of successful editing of existing group 
+11 - System navigates User back to manage Group page on WebApp
+
+Alternate Flow(s)
+USER INPUTS INVALID GROUP DETAILS
+a1 - Start at Primary Flow step 5
+a2 - User does not enter all required details or invalid details
+a3 - System notifies User of expected requirements with error label
+a4 - System reprompts usser to re-enter edited details
+a5 - Back to Primary Flow step 6
+
+USER IS MANAGER AND SELECTS PROJECT THEY DO NOT OWN
+b1 - Start at Primary Flow step 6
+b2 - System notifies User that they do not have permission to edit this groups
+b3 - Back to Primary Flow step 2
