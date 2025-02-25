@@ -65,6 +65,8 @@ void SeedDatabase(TicketSystemDbContext context)
                 IsManager = false
             };
 
+            
+            
             context.Employees.Add(tempEmployee);
             context.SaveChanges(); 
 
@@ -82,6 +84,23 @@ void SeedDatabase(TicketSystemDbContext context)
             context.SaveChanges();
 
             Console.WriteLine("Temp Employee and Group created successfully!");
+        }
+        if (!context.Employees.Any(e => e.Username == "tempAdmin0")) {
+            var tempAdminTwo = new Employee
+            {
+                FName = "Temp",
+                LName = "Employee",
+                Username = "tempAdmin0",
+                HashedPassword = "$2a$11$tqFhRcVPxPe/F7g4i2.9c.tms9AlneY5RDZb1SipsY1FQtMcaaecu",
+                Email = "admin0@company.com",
+                IsActive = true,
+                IsAdmin = true,
+                IsManager = false
+            };
+            context.Employees.Add(tempAdminTwo);
+            context.SaveChanges();
+            Console.WriteLine("Temp Admin0 added successfully");
+
         }
     }
     catch (Exception ex)
