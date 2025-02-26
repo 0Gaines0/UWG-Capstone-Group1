@@ -8,3 +8,14 @@ How to run project:
     - Run 'update-database' in the Nuget Package Manager
     - Allow the database to update
     - Once updated you can run the project from the green run button in Visual Studio
+
+
+
+Temp Login(s):
+    - Temp Admin:
+        "tempAdmin"
+        "tempPass!!"
+
+    - Temp User:
+        "tempUser"
+        "tempPass!!"
