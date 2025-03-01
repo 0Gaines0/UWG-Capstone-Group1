@@ -55,7 +55,9 @@ namespace ticket_system_web_app.Controllers
                 return BadRequest(new { message = $"Username, {jsonRequest.Username}, already exists. Try Again." });
             }
 
-            var newUser = new Employee(fName: jsonRequest.FirstName, lName: jsonRequest.LastName, username: jsonRequest.Username, hashedPassword: jsonRequest.Password, email: jsonRequest.Email, isAdmin: jsonRequest.IsAdmin, isActive: true);
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(jsonRequest.Password, BCrypt.Net.BCrypt.GenerateSalt());
+
+            var newUser = new Employee(fName: jsonRequest.FirstName, lName: jsonRequest.LastName, username: jsonRequest.Username, hashedPassword: hashedPassword, email: jsonRequest.Email, isAdmin: jsonRequest.IsAdmin, isActive: true);
 
             this.context.Employees.Add(newUser);
             await this.context.SaveChangesAsync();
