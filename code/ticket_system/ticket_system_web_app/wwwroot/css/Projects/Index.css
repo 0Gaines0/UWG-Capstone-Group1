@@ -14,7 +14,7 @@ textarea {
 .scrollable {
     margin: 0.5em auto;
     width: calc(100% + 1em);
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 tr td:last-child {
@@ -23,4 +23,22 @@ tr td:last-child {
 
 .content-block {
     width: 50%
+}
+
+#delete-prompt-content {
+    display: none;
+    flex-direction: column;
+    gap: 1em;
+    padding: 25%;
+    text-align: center;
+    width: 50%;
+}
+
+.projects-list-content {
+    display: block;
+}
+
+.btn-del {
+    background-color: #800000;
+    color: #fff;
 }

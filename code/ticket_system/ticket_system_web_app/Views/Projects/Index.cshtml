@@ -4,21 +4,22 @@
     ViewData["Title"] = "Index";
 
     if (ActiveEmployee.Employee == null)
-    {
+	{
         Context.Response.StatusCode = 404;
-        return;
+        Context.Response.Redirect("/Login/Index");
+		return;
     }
 }
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <link rel="stylesheet" href="/css/MainPages.css">
-        <link rel="stylesheet" href="/css/Projects/Projects.css">
-        <link rel="stylesheet" href="/css/Projects/Index.css">
-        <script src="~/js/Projects/Index.js"></script>
-    </head>
-    <body>
+<head>
+    <link rel="stylesheet" href="/css/MainPages.css">
+    <link rel="stylesheet" href="/css/Projects/Projects.css">
+    <link rel="stylesheet" href="/css/Projects/Index.css">
+    <script src="~/js/Projects/Index.js"></script>
+</head>
+<body>
     <h1>Projects</h1>
     <hr />
     <div class="container">
@@ -27,50 +28,69 @@
                 <button type="submit" class="btn">Create New Project</button>
             </form>
             <div class="scrollable">
-            <table>
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).ProjectLeadId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PTitle)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PDescription)
-                    </th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProjectLeadId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PDescription)
-                    </td>
-                    <td>
-                        <a class="btn" asp-action="Edit"   asp-route-id="@item.PId">Edit</a> |
-                        <a class="btn" asp-action="Delete" asp-route-id="@item.PId">Delete</a> |
-                        <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
-                    </td>
-                </tr>
-            }
-            </tbody>
-            </table>
+                <table id="projects-list-content">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).ProjectLeadId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PTitle)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PDescription)
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProjectLeadId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PTitle)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PDescription)
+                                </td>
+                                <td>
+                                @{
+                                if (ActiveEmployee.Employee.IsAdmin ?? false) {
+                                    <a class="btn" asp-action="Edit" asp-route-id="@item.PId">Edit</a>
+                                    <button type="button" class="btn" onclick="promptDeleteProject(@item.PId);">Delete</button>
+                                    <form asp-action="Delete" method="post" class="hidden">
+                                        <input type="hidden" name="id" value="@item.PId"/>
+                                        <button class="hidden" id="delete-row-@item.PId"></button>
+                                    </form>
+                                }
+                                }
+                                    <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @{
+                if (ActiveEmployee.Employee.IsAdmin ?? false) {
+                    <div id="delete-prompt-content">
+                        <p>Delete this project?</p>
+                        <button type="button" class="btn btn-del" onclick="confirmDeleteProject();">Delete</button>
+                        <button type="button" class="btn" onclick="cancelDeleteProject();">Cancel</button>
+                    </div>
+                }
+                }
             </div>
         </div>
+
         <div class="content-block project-info-display">
             <div class="form-group">
                 <input id="projectTitle" class="form-control" placeholder="Project title" disabled="true" />
@@ -86,7 +106,6 @@
                             </tr>
                         </thead>
                         <tbody id="projectCollaborators">
-                            
                         </tbody>
                     </table>
                 </div>

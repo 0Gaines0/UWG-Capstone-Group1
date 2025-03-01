@@ -3,6 +3,8 @@ let projectDescription = "";
 let projectLead = "";
 let projectCollaborators = [];
 
+let deletingProjectId = -1;
+
 async function viewProject(id) {
     await retrieveProject(id);
     displayProject();
@@ -35,4 +37,21 @@ function displayProject() {
             </tr`;
         tableBody.innerHTML += row;
     });
+}
+
+async function promptDeleteProject(id) {
+    viewProject(id);
+    deletingProjectId = id;
+    document.getElementById("projects-list-content").style.display = "none";
+    document.getElementById("delete-prompt-content").style.display = "flex";
+}
+
+function cancelDeleteProject() {
+    deletingProjectId = -1;
+    document.getElementById("projects-list-content").style.display = "block";
+    document.getElementById("delete-prompt-content").style.display = "none";
+}
+
+function confirmDeleteProject() {
+    document.getElementById(`delete-row-${deletingProjectId}`).click();
 }
