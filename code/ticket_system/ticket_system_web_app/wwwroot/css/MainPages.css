@@ -97,3 +97,7 @@ body {
     overflow-y: auto;
     scrollbar-color: var(--color-button-normal) #29543d;
 }
+
+.hidden {
+    display: none;
+}
