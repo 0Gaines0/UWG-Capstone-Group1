@@ -35,6 +35,7 @@ namespace ticket_system_web_app.Models
         public string? Email { get; set; }
 
         public ICollection<Group> GroupsExistingIn {  get; set; } = new List<Group>();
+        public ICollection<Project> ProjectsLeading { get; set; } = new List<Project>();
 
         private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";
 

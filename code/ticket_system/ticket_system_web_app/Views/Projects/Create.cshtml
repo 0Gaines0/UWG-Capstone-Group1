@@ -3,10 +3,11 @@
 @{
     ViewData["Title"] = "Create";
 
-    if (ActiveEmployee.Employee == null)
-        {
+    if (ActiveEmployee.Employee == null || (!ActiveEmployee.Employee.IsAdmin ?? false))
+    {
         Context.Response.StatusCode = 404;
-    return;
+        Context.Response.Redirect("/Login/Index");
+        return;
     }
 }
 
@@ -23,13 +24,17 @@
         <hr />
         <div class="container">
             <div class="content-block">
+                
                 <form asp-action="Create" class="form">
+                <p>(*) Items with asterisks are required.</p>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
+                        <label asp-for="PTitle">Project title (*)</label>
                         <input id="projectTitle" asp-for="PTitle" class="form-control" placeholder="Enter project title..." />
                         <span id="projectTitleErr" asp-validation-for="PTitle" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="PDescription">Project description (*)</label>
                         <textarea id="projectDescription" asp-for="PDescription" class="form-control" placeholder="Enter project description..."> </textarea>
                         <span id="projectDescriptionErr" asp-validation-for="PDescription" class="text-danger"></span>
                     </div>
@@ -60,6 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label asp-for="ProjectLeadId">Project lead (*)</label>
                         <select id="projectLeadSelect" asp-for="ProjectLeadId" class="form-control">
                             <option selected disabled value="0">Select a project lead</option>
                         </select>
