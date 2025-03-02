@@ -47,3 +47,16 @@ table project_group {
     (p_id, g_id) [pk]
   }
 }
+
+table project_board {
+  board_id integer pk
+  p_id integer [ref: > project.p_id]
+
+}
+
+table board_state {
+  state_id integer pk
+  board_id integer [ref: > project_board.board_id]
+  state_name varchar(255)
+  position integer
+}
