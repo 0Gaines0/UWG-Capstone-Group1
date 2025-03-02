@@ -14,6 +14,9 @@ namespace ticket_system_web_app.Models
         [Column("project_lead_id")]
         public int ProjectLeadId { get; set; }
 
+        [Column("project_lead")]
+        public Employee ProjectLead { get; set; }
+
         [Column("p_title")]
         public string PTitle { get; set; }
 
@@ -34,7 +37,7 @@ namespace ticket_system_web_app.Models
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class with the specified values.
         /// </summary>
-        /// <param name="pLeadID">The project lead identifier.</param>
+        /// <param name="pLead">The project lead.</param>
         /// <param name="pTitle">The project title.</param>
         /// <param name="pDesc">The project desc.</param>
         /// <exception cref="ArgumentException">
@@ -44,11 +47,11 @@ namespace ticket_system_web_app.Models
         /// or
         /// Description cannot be null or blank.
         /// </exception>
-        public Project(int pLeadID, string pTitle, string pDesc, ICollection<Group> assignedGroups)
+        public Project(Employee pLead, string pTitle, string pDesc, ICollection<Group> assignedGroups)
         {
-            if (pLeadID <= 0)
+            if (pLead == null)
             {
-                throw new ArgumentException("Project lead ID must be positive.");
+                throw new ArgumentException("Project lead cannot be null.");
             }
             if (string.IsNullOrWhiteSpace(pTitle))
             {
@@ -63,7 +66,8 @@ namespace ticket_system_web_app.Models
                 throw new ArgumentException("Must have at least one assigned group.");
             }
 
-            this.ProjectLeadId = pLeadID;
+            this.ProjectLead = pLead;
+            this.ProjectLeadId = pLead.EId;
             this.PTitle = pTitle;
             this.PDescription = pDesc;
             this.AssignedGroups = assignedGroups;

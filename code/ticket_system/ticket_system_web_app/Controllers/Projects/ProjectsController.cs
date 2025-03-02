@@ -58,7 +58,7 @@ namespace ticket_system_web_app.Controllers.Projects
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            var projects = await _context.Projects.ToListAsync();
+            var projects = await _context.Projects.Include(project => project.ProjectLead).ToListAsync();
 
             return View(projects);
         }
@@ -101,7 +101,8 @@ namespace ticket_system_web_app.Controllers.Projects
                 return BadRequest(new { message = "Invalid request data" });
             }
 
-            if (jsonRequest.PLeadId == 0 || string.IsNullOrWhiteSpace(jsonRequest.PTitle) || string.IsNullOrWhiteSpace(jsonRequest.PDescription))
+            Employee lead = await _context.Employees.FindAsync(jsonRequest.PLeadId);
+            if (lead == null || string.IsNullOrWhiteSpace(jsonRequest.PTitle) || string.IsNullOrWhiteSpace(jsonRequest.PDescription))
             {
                 return BadRequest(new { message = "Invalid project data" });
             }
@@ -112,7 +113,7 @@ namespace ticket_system_web_app.Controllers.Projects
                 groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
             }
 
-            var project = new Project(jsonRequest.PLeadId, jsonRequest.PTitle, jsonRequest.PDescription, groups);
+            var project = new Project(lead, jsonRequest.PTitle, jsonRequest.PDescription, groups);
 
             this._context.Add(project);
             await this._context.SaveChangesAsync();
