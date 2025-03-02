@@ -68,14 +68,27 @@ namespace ticket_system_web_app.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveEmployee([FromBody] RemoveEmployeeRequest request)
         {
-            int employeeId = request.EmployeeId.GetValueOrDefault();
-            if (!this.context.Employees.Where(employee => employee.EId == employeeId).Any())
+            if (request == null || string.IsNullOrWhiteSpace(request.username)) {
+                return BadRequest(new { message = "Invalid request data" });
+            }
+
+            String userName = request.username;
+            if (!this.context.Employees.Where(employee => employee.Username == userName).Any())
             {
-                return BadRequest(new { success = false, message = "User id does not exist." });
+                return BadRequest(new { success = false, message = "User with username does not exist." });
+
+            }
+            if (ActiveEmployee.Employee == null)
+            {
+                return BadRequest(new { success = false, message = "Not logged in." });
+            }
+            if (userName.Equals(ActiveEmployee.Employee.Username))
+            {
+                return BadRequest(new { success = false, message = "You can't delete yourself." });
 
             }
 
-            bool isRemoved = await this.removeEmployeeFromDb(employeeId);
+            bool isRemoved = await this.removeEmployeeFromDb(userName);
 
             if (isRemoved)
             {
@@ -87,11 +100,11 @@ namespace ticket_system_web_app.Controllers
             }
         }
 
-        private async Task<bool> removeEmployeeFromDb(int employeeId)
+        private async Task<bool> removeEmployeeFromDb(String username)
         {
             try
             {
-                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.EId == employeeId);
+                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
                 this.context.Employees.Remove(employee);
                 await this.context.SaveChangesAsync();
                 return true;

@@ -2,6 +2,6 @@
 {
     public class RemoveEmployeeRequest
     {
-        public int? EmployeeId { get; set; }
+        public string? username { get; set; }
     }
 }

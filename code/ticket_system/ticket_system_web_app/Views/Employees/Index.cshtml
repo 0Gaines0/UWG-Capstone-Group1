@@ -247,6 +247,12 @@
                 background-color: #b794f4;
             }
 
+        #remove-employee-btn:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
          .table-container {
              max-height: 750px;
              overflow-y: auto;
@@ -304,7 +310,7 @@
                     {
                         <div class="button-container">
                             <button class="btn" onclick="openCreateModal()">+ Add New Employee</button>
-                            <button class="btn" onclick="removeEmployee()">- Remove Employee</button>
+                            <button class="btn" id="remove-employee-btn" onclick="removeEmployee()" title="Select an employee to remove them" disabled>- Remove Employee</button>
                         </div>
                     }
                 </div>
@@ -312,7 +318,6 @@
                     <table id="employeeTable" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Id</th>
                                 <th>Name</th>
                                 <th>Username</th>
                                 <th>Email</th>
