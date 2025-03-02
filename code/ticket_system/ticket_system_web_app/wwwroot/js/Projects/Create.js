@@ -114,15 +114,21 @@ async function createProject() {
     let invalidValues = false;
     if (!projectData.PTitle.trim()) {
         invalidValues = true;
-        document.getElementById("projectTitleErr").innerText  = "Please enter a title.";
+        document.getElementById("projectTitleErr").innerText = "Please enter a title.";
+    } else {
+        document.getElementById("projectTitleErr").innerText = "";
     }
     if (!projectData.PDescription.trim()) {
         invalidValues = true;
-        document.getElementById("projectDescriptionErr").innerText  = "Please enter a description.";
+        document.getElementById("projectDescriptionErr").innerText = "Please enter a description.";
+    } else {
+        document.getElementById("projectDescriptionErr").innerText = "";
     }
     if (projectData.PLeadID < 1) {
         invalidValues = true;
         document.getElementById("projectLeadErr").innerText = "Please select a project lead.";
+    } else {
+        document.getElementById("projectLeadErr").innerText = "";
     }
     if (invalidValues) {
         return;
@@ -143,6 +149,6 @@ async function createProject() {
             alert(`Error: ${result.message}`);
         }
     } catch (error) {
-        alert("An error occurred while creating the group.");
+        alert(`An error occurred while creating the group: ${error.message}`);
     }
 }

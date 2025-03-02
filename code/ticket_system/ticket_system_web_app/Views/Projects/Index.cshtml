@@ -3,13 +3,15 @@
 @{
     ViewData["Title"] = "Index";
 
-    bool isAdmin = ActiveEmployee.Employee.IsAdmin ?? false;
+    bool isAdmin = false;
 
     if (ActiveEmployee.Employee == null)
-	{
+    {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");
-		return;
+        return;
+    } else {
+        isAdmin = ActiveEmployee.Employee.IsAdmin ?? false;
     }
 }
 
@@ -20,6 +22,9 @@
     <link rel="stylesheet" href="/css/Projects/Projects.css">
     <link rel="stylesheet" href="/css/Projects/Index.css">
     <script src="~/js/Projects/Index.js"></script>
+    @if (isAdmin) {
+        <script src="~/js/Projects/Index_Admin.js"></script>
+    }
 </head>
 <body>
     <h1>Projects</h1>
@@ -44,11 +49,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
+                        @foreach (var item in Model) {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ProjectLeadId)
+                                    @Html.Raw($"{item.ProjectLead.FName} {item.ProjectLead.LName}")
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.PTitle)
@@ -57,8 +61,7 @@
                                     @Html.DisplayFor(modelItem => item.PDescription)
                                 </td>
                                 <td>
-                                @{
-                                if (ActiveEmployee.Employee.IsAdmin ?? false) {
+                                @if (ActiveEmployee.Employee.IsAdmin ?? false) {
                                     <a class="btn" asp-action="Edit" asp-route-id="@item.PId">Edit</a>
                                     <button type="button" class="btn" onclick="promptDeleteProject(@item.PId);">Delete</button>
                                     <form asp-action="Delete" method="post" class="hidden">
@@ -66,21 +69,18 @@
                                         <button class="hidden" id="delete-row-@item.PId"></button>
                                     </form>
                                 }
-                                }
                                     <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                @{
-                if (ActiveEmployee.Employee.IsAdmin ?? false) {
+                @if (ActiveEmployee.Employee.IsAdmin ?? false) {
                     <div id="delete-prompt-content">
                         <p>Delete this project?</p>
                         <button type="button" class="btn btn-del" onclick="confirmDeleteProject();">Delete</button>
                         <button type="button" class="btn" onclick="cancelDeleteProject();">Cancel</button>
                     </div>
-                }
                 }
             </div>
         </div>
