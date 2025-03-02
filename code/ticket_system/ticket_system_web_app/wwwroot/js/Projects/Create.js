@@ -2,15 +2,15 @@
     fetchAllGroups();
 });
 
-let selectedGroups = {}
-let unselectedGroups = {}
+let selectedGroups = []
+let unselectedGroups = []
 let selectedManagerCount = {}
 let managerNames = {}
 
 async function fetchAllGroups() {
     await fetch("/Groups/GetAllGroups").then(response => response.json()).then(data => {
         data.forEach(group => {
-            unselectedGroups[group.gId] = group;
+            unselectedGroups.push(group);
             selectedManagerCount[group.managerId] = 0;
             managerNames[group.managerId] = group.managerName;
         });
@@ -22,37 +22,43 @@ async function fetchAllGroups() {
 
 
 function populateTables() {
+    sortGroupCollection(unselectedGroups);
+    sortGroupCollection(selectedGroups);
     populateUnselectedTable();
     populateSelectedTable();
     populateManagersList();
+}
+
+function sortGroupCollection(groups) {
+    groups.sort((a, b) => a.gName.localeCompare(b.gName));
 }
 
 function populateUnselectedTable() {
     let unselectedGroupsTableBody = document.getElementById("groupsTableBody");
     unselectedGroupsTableBody.innerHTML = "";
 
-    for (let gid in unselectedGroups) {
+    unselectedGroups.forEach(group => {
         let row = `
                 <tr>
-                    <td>${unselectedGroups[gid].gName}</td>
-                    <td><button class="btn" type="button" onClick="addCollaborator(${gid});">Add</button></td>
+                    <td>${group.gName} ${group.gId}</td>
+                    <td><button class="btn" type="button" onClick="addCollaborator(${group.gId});">Add</button></td>
                 </tr>`;
         unselectedGroupsTableBody.innerHTML += row;
-    }
+    });
 }
 
 function populateSelectedTable() {
     let selectedGroupsTableBody = document.getElementById("collaboratorsTableBody");
     selectedGroupsTableBody.innerHTML = "";
 
-    for (let gid in selectedGroups) {
+    selectedGroups.forEach(group => {
         let row = `
                 <tr>
-                    <td><button class="btn" type="button" onClick="removeCollaborator(${gid});">Remove</button></td>
-                    <td>${selectedGroups[gid].gName}</td>
+                    <td><button class="btn" type="button" onClick="removeCollaborator(${group.gId});">Remove</button></td>
+                    <td>${group.gName}</td>
                 </tr>`;
         selectedGroupsTableBody.innerHTML += row;
-    }
+    });
 }
 
 function populateManagersList() {
@@ -70,18 +76,21 @@ function populateManagersList() {
 
 
 function addCollaborator(id) {
-    selectedGroups[id] = unselectedGroups[id];
-    delete unselectedGroups[id];
+    collaboratorIndex = unselectedGroups.findIndex(group => group.gId == id);
+    selectedGroups.push(unselectedGroups[collaboratorIndex]);
+    unselectedGroups.splice(collaboratorIndex, 1);
 
-    selectedManagerCount[selectedGroups[id].managerId]++;
+    selectedManagerCount[selectedGroups[selectedGroups.length - 1].managerId]++;
 
     populateTables();
 }
 
 function removeCollaborator(id) {
-    unselectedGroups[id] = selectedGroups[id];
-    delete selectedGroups[id];
-    selectedManagerCount[unselectedGroups[id].managerId]--;
+    collaboratorIndex = selectedGroups.findIndex(group => group.gId == id);
+    unselectedGroups.push(selectedGroups[collaboratorIndex]);
+    selectedGroups.splice(collaboratorIndex, 1);
+
+    selectedManagerCount[unselectedGroups[unselectedGroups.length - 1].managerId]--;
 
     populateTables();
 }
@@ -89,12 +98,17 @@ function removeCollaborator(id) {
 
 
 async function createProject() {
+    let collaboratorIDs = []
+    selectedGroups.forEach(group => {
+        collaboratorIDs.push(group.gId);
+    });
+
     let pLeadID = document.getElementById("projectLeadSelect").value;
     const projectData = {
         PTitle: document.getElementById("projectTitle").value.trim(),
         PDescription: document.getElementById("projectDescription").value.trim(),
         PLeadID: pLeadID ? pLeadID : 0,
-        CollaboratingGroupIDs: Object.keys(selectedGroups)
+        CollaboratingGroupIDs: collaboratorIDs
     };
 
     let invalidValues = false;
@@ -126,7 +140,7 @@ async function createProject() {
             alert("Project created successfully!");
             document.getElementById("onCreateCompleteBtn").click();
         } else {
-            alert("Error: ${result.message}");
+            alert(`Error: ${result.message}`);
         }
     } catch (error) {
         alert("An error occurred while creating the group.");

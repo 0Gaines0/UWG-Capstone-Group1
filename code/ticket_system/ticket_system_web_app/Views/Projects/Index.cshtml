@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Index";
 
+    bool isAdmin = ActiveEmployee.Employee.IsAdmin ?? false;
+
     if (ActiveEmployee.Employee == null)
 	{
         Context.Response.StatusCode = 404;
@@ -24,25 +26,20 @@
     <hr />
     <div class="container">
         <div class="content-block projects-list">
-            <form asp-action="Create" method="get" class="form-group">
-                <button type="submit" class="btn">Create New Project</button>
-            </form>
+            @{
+                if (isAdmin) {
+                    <form asp-action="Create" method="get" class="form-group">
+                        <button type="submit" class="btn">Create New Project</button>
+                    </form>
+                }
+            }
             <div class="scrollable">
                 <table id="projects-list-content">
                     <thead>
                         <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PId)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).ProjectLeadId)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PTitle)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.FirstOrDefault(new Project()).PDescription)
-                            </th>
+                            <th>Lead</th>
+                            <th>Title</th>
+                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -50,9 +47,6 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PId)
-                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ProjectLeadId)
                                 </td>
