@@ -1,16 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
     fetchEmployees();
-
-    //await resetModal();
-
-    //document.getElementById("managerSearch").addEventListener("input", filterManagers);
-    //document.getElementById("employeeSearch").addEventListener("input", filterEmployees);
 });
-
-//let allManagers = [];
-//let allEmployees = [];
-//let selectedManager = "";
-//let selectedMembers = [];
 
 document.querySelector('#employeeTableBody').addEventListener('click', function (event) {
     if (event.target.closest('tr')) {
@@ -24,6 +14,13 @@ document.querySelector('#employeeTableBody').addEventListener('click', function 
         });
 
         clickedRow.classList.toggle('selected');
+        if (clickedRow.classList.contains('selected')) {
+            document.getElementById("remove-employee-btn").removeAttribute('disabled');
+            document.getElementById("remove-employee-btn").title = "";
+        } else {
+            document.getElementById("remove-employee-btn").setAttribute('disabled', true);
+            document.getElementById("remove-employee-btn").title = "Select a employee to remove them";
+        }
     }
 });
 
@@ -54,7 +51,6 @@ function fetchEmployees() {
                 let role = employee.isAdmin ? "Admin" : "Employee";
                 let row = `
                     <tr>
-                        <td>${employee.id}</td>
                         <td>${employee.name}</td>
                         <td>${employee.username}</td>
                         <td>${employee.email}</td>
@@ -90,69 +86,74 @@ function fetchEmployees() {
 
 function openCreateModal() {
     document.getElementById("createEmployeeModal").style.display = "flex";
+    resetModal();
 }
 
 function closeCreateModal() {
     document.getElementById("createEmployeeModal").style.display = "none";
-    //resetModal();
 }
 
-//async function resetModal() {
-//    document.getElementById("groupName").value = "";
-//    document.getElementById("groupDescription").value = "";
-//    document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`;
+async function resetModal() {
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("isAdmin").checked = false;
 
-//    clearErrors();
+    clearErrors();
+}
 
-//    selectedManager = "";
-//    selectedMembers = [];
-//    allManagers = await fetchAllAvailableManagers();
-//    allEmployees = await fetchAllEmployees();
-//    populateLists();
-//    populateManagerLists();
-//}
+/**
+ * Returns true if the form is valid, and adds error messages for incorrect inputs.
+ * 
+ * @param {any} formData the data in the form
+ * @returns true if the form is valid and false otherwise
+ */
+function validateForm(formData) {
+    let isValid = true;
 
-//function validateForm() {
-//    let isValid = true;
+    clearErrors();
 
-//    let nameInput = document.getElementById("groupName").value.trim();
-//    let descriptionInput = document.getElementById("groupDescription").value.trim();
-//    let managerInput = document.getElementById("managerSelect").value.trim();
+    if (formData.FirstName === "") {
+        displayError("firstNameError", "First name is required.");
+        isValid = false;
+    }
+    if (formData.LastName === "") {
+        displayError("lastNameError", "Last name is required.");
+        isValid = false;
+    }
+    if (formData.UserName === "") {
+        displayError("usernameError", "Username is required.");
+        isValid = false;
+    }
+    if (formData.Password === "") {
+        displayError("passwordError", "Password is required.");
+        isValid = false;
+    }
+    if (formData.Email === "") {
+        displayError("emailError", "Email is required.");
+        isValid = false;
+    }
 
-//    clearErrors();
+    return isValid;
+}
 
-//    if (nameInput === "") {
-//        displayError("groupNameError", "Group name is required.");
-//        isValid = false;
-//    }
-//    if (descriptionInput === "") {
-//        displayError("groupDescriptionError", "Description is required.");
-//        isValid = false;
-//    }
-//    if (managerInput === "" || managerInput === "Select a Manager") {
-//        displayError("managerSelectError", "Manager selection is required.");
-//        isValid = false;
-//    }
+function displayError(errorId, message) {
+    let errorLabel = document.getElementById(errorId);
+    errorLabel.innerText = message;
+    errorLabel.style.display = "block";
+}
 
-//    return isValid;
-//}
-
-//function displayError(errorId, message) {
-//    let errorLabel = document.getElementById(errorId);
-//    errorLabel.innerText = message;
-//    errorLabel.style.display = "block";
-//}
-
-//function clearErrors() {
-//    document.querySelectorAll(".error-message").forEach(error => {
-//        error.innerText = "";
-//        error.style.display = "none";
-//    });
-//}
+function clearErrors() {
+    document.querySelectorAll(".error-message").forEach(error => {
+        error.innerText = "";
+        error.style.display = "none";
+    });
+}
 
 async function createEmployee() {
     //TODO
-    //if (!validateForm()) return;
 
     const employeeData = {
         FirstName: document.getElementById("firstName").value.trim(),
@@ -162,6 +163,8 @@ async function createEmployee() {
         Email: document.getElementById("email").value.trim(),
         IsAdmin: document.getElementById("isAdmin").checked
     };
+
+    if (!validateForm(employeeData)) return;
 
     console.log("Sending Employee Data:", employeeData);
 
@@ -323,21 +326,23 @@ function removeEmployee() {
         }
     });
     if (selectedRow == null) {
+        alert("No employee selected for removal.");
         return;
-        //TODO: Add error
     }
-    const employeeId = parseInt(selectedRow.cells[0].textContent);
+    const username = selectedRow.cells[1].textContent;
 
     fetch("/Employees/RemoveEmployee", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ employeeId })
+        body: JSON.stringify({ username })
     })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert("User removed successfully!");
                 fetchEmployees();
+                document.getElementById("remove-employee-btn").setAttribute('disabled', true);
+                document.getElementById("remove-employee-btn").title = "Select a employee to remove them";
             } else {
                 alert("Error: " + data.message);
             }
