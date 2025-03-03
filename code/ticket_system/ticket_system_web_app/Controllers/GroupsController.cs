@@ -55,6 +55,8 @@ namespace ticket_system_web_app.Controllers
         {
             var group = await this.context.Groups.Where(g => g.GId == id).Select(g => new
             {
+                ActiveEmployee.Employee.EId,
+                ActiveEmployee.Employee.IsAdmin,
                 g.GId,
                 g.GName,
                 Manager = new { Name = this.context.Employees.Where(employee => employee.EId == g.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(), ID = this.context.Employees.Where(employee => employee.EId == g.ManagerId).Select(employee => employee.EId).FirstOrDefault() },

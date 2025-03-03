@@ -62,11 +62,12 @@
     <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\users.sql" />
     <Build Include="dbo\Tables\employee.sql" />
     <Build Include="dbo\Tables\project.sql" />
     <Build Include="dbo\Tables\project_group.sql" />
     <Build Include="dbo\Tables\group.sql" />
     <Build Include="dbo\Tables\group_member.sql" />
+    <Build Include="dbo\Tables\project_board.sql" />
+    <Build Include="dbo\Tables\board_state.sql" />
   </ItemGroup>
 </Project>

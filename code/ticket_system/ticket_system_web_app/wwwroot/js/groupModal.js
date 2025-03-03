@@ -401,6 +401,11 @@ async function openEditModal() {
         const groupDataArray = await response.json();
         const groupData = groupDataArray[0];
 
+        if (groupData.eId !== groupData.manager.id && !groupData.isAdmin) {
+            showToast("You do not have permissions to edit this group");
+            return;
+        }
+
         document.getElementById("editGroupName").value = groupData.gName;
         document.getElementById("editGroupDescription").value = groupData.gDescription;
         document.getElementById("editGroupManager").innerHTML = `

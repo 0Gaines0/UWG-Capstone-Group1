@@ -65,6 +65,8 @@ void SeedDatabase(TicketSystemDbContext context)
                 IsManager = false
             };
 
+            
+            
             context.Employees.Add(tempEmployee);
             context.SaveChanges(); 
 
