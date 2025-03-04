@@ -1,0 +1,240 @@
+﻿
+@{
+
+    @model ticket_system_web_app.Models.Project
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #608272, #29543d);
+            color: #ffffff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .sidebar {
+            flex: 0.15;
+            background-color: #0f1e13;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10px 10px 10px 10px;
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+            .sidebar img {
+                max-width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .sidebar h2 {
+                margin: 0px;
+                margin-bottom: 20px;
+                font-size: 1.5rem;
+                text-align: center;
+                border-bottom: 2px solid #ffffff;
+                padding-bottom: 5px;
+                width: 100%;
+            }
+
+        .button {
+            background-color: #9f7aea;
+            color: white;
+            padding: 10px 20px;
+            border-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 0.8;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .board {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .column {
+            background-color: #222;
+            flex: 1;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+            .column h3 {
+                text-align: center;
+                background-color: #0f1e13;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+        .task {
+            background-color: #9f7aea;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .navigation {
+            flex: 0.15;
+            margin: 20px;
+            margin-left: 50px;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 0;
+            height: 97%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        .nav_top {
+            width: 95%;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 2px solid #ffffff;
+        }
+
+        .nav-item {
+            background-color: #9f7aea;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            width: 80%;
+        }
+
+        .nav_image {
+            width: 125px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .project-kanban-board {
+            width: 100%;
+            margin: 20px;
+            margin-left: 75px;
+            background-color: #0f1e13;
+            border-radius: 10px;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #9f7aea;
+            padding: 8px;
+            border-radius: 5px;
+            width: 40%;
+        }
+
+            .search-bar input {
+                width: 100%;
+                border: none;
+                background: #9f7aea;
+                outline: none;
+                padding: 5px;
+                color: #ffffff;
+            }
+
+                .search-bar input::placeholder {
+                    color: #ffffff;
+                    opacity: 1;
+                }
+
+            .search-bar img {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+            }
+
+        .nav_list {
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav_item {
+            width: 80%;
+            padding: 10px;
+            text-align: center;
+            background-color: #9f7aea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
+            <h2>@Model.PTitle</h2>
+            <button class="button">Create Task</button>
+            <button class="button">Edit Board</button>
+        </div>
+
+        <div class="main-content">
+            <div class="project-kanban-board">
+                <h1>@Model.PTitle - Kanban Board</h1>
+                <div class="search-bar">
+                    <img src="~/assets/search_icon_img.png" alt="Search">
+                    <input type="text" placeholder="Search Task...">
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="nav_top">
+                <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+            </div>
+            <ul class="nav_list">
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+

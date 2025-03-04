@@ -38,6 +38,12 @@ app.MapControllerRoute(
     name: "login",
     pattern: "{controller=Login}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "board",
+    pattern: "Projects/BoardPage/{pId?}",
+    defaults: new { controller = "Projects", action = "BoardPage" }
+);
+
 app.Run();
 
 void SeedDatabase(TicketSystemDbContext context)

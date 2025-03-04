@@ -63,6 +63,13 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(projects);
         }
 
+        [HttpGet("Projects/BoardPage/{pId}")]
+        public async Task<IActionResult> BoardPage(int pId)
+        {
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.PId == pId);
+            return View("ProjectKanban", project);
+        }
+
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -172,6 +179,8 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
+       
+
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -203,6 +212,22 @@ namespace ticket_system_web_app.Controllers.Projects
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetProjectRelatedToEmployee()
+        {
+            var eId = ActiveEmployee.Employee?.EId;
+            var leadProject = await this._context.Projects.Where(proj => proj.ProjectLeadId == eId).ToListAsync();
+            var groupProject = await this._context.Projects.Where(proj => proj.AssignedGroups.Any(group => group.Employees.Any(employee => employee.EId == eId))).ToListAsync();
+            var allProjects = leadProject.Concat(groupProject).Distinct().ToList();
+
+            var projectData = allProjects.Select(proj => new
+            {
+                PId = proj.PId,
+                PTitle = proj.PTitle
+            }).ToList();
+            return Json(new { success = true, data = projectData });
         }
 
         /// <summary>
