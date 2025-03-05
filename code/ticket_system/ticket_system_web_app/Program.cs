@@ -53,11 +53,23 @@ void SeedDatabase(TicketSystemDbContext context)
         if (!context.Employees.Any(e => e.Username == "tempUser")) 
         {
             var admin = context.Employees.FirstOrDefault(e => e.Username == "tempAdmin");
-            if (admin == null)
+            if (admin != null)
             {
-                Console.WriteLine("Admin not found! Skipping seeding...");
+                Console.WriteLine("Admin found! Skipping seeding...");
                 return;
             }
+
+            var tempAdmin = new Employee
+            {
+                FName = "Temp",
+                LName = "Admin",
+                Username = "tempAdmin",
+                HashedPassword = "$2a$11$tqFhRcVPxPe/F7g4i2.9c.tms9AlneY5RDZb1SipsY1FQtMcaaecu",
+                Email = "temp@company.com",
+                IsActive = true,
+                IsAdmin = true,
+                IsManager = false
+            };
 
             var tempEmployee = new Employee
             {
@@ -71,23 +83,12 @@ void SeedDatabase(TicketSystemDbContext context)
                 IsManager = false
             };
 
-            
-            
+
+            context.Employees.Add(tempAdmin);
             context.Employees.Add(tempEmployee);
-            context.SaveChanges(); 
-
-            var newGroup = new Group
-            {
-                ManagerId = admin.EId,
-                GName = "Temp Group",
-                GDescription = "This is a temporary group for testing."
-            };
-
-            context.Groups.Add(newGroup);
             context.SaveChanges();
 
-            newGroup.Employees.Add(tempEmployee);
-            context.SaveChanges();
+            admin = context.Employees.FirstOrDefault(e => e.Username == "tempAdmin");
 
             Console.WriteLine("Temp Employee and Group created successfully!");
         }

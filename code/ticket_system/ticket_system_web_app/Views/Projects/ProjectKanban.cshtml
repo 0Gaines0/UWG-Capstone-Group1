@@ -2,6 +2,13 @@
 @{
 
     @model ticket_system_web_app.Models.Project
+    var notLogin = ActiveEmployee.Employee == null;
+
+    if (notLogin)
+    {
+        Context.Response.StatusCode = 404;
+        return;
+    }
 
 }
 

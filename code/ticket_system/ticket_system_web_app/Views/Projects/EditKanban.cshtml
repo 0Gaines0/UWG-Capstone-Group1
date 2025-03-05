@@ -1,5 +1,14 @@
 ﻿@{
     @model ticket_system_web_app.Models.ProjectBoard
+    var notLogin = ActiveEmployee.Employee == null;
+    var states = ((List<ticket_system_web_app.Models.BoardState>)ViewBag.ProjectBoard.States).OrderBy(s => s.Position);
+
+
+    if (notLogin)
+    {
+        Context.Response.StatusCode = 404;
+        return;
+    }
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -24,75 +33,190 @@
             width: 100vw;
         }
 
+
         .main-content {
-            flex: 1;
+            flex: 0.85;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .board {
+        .sidebar {
+            flex: 0.10;
+            background-color: #0f1e13;
+            padding: 10px;
             display: flex;
-            gap: 20px;
-            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10px 10px 10px 10px;
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
-        .column {
-            background-color: #222;
-            flex: 1;
-            border-radius: 10px;
+            .sidebar img {
+                max-width: 100px;
+                margin-bottom: 20px;
+            }
+
+            .sidebar h2 {
+                margin: 0px;
+                margin-bottom: 20px;
+                font-size: 1.5rem;
+                text-align: center;
+                border-bottom: 2px solid #ffffff;
+                padding-bottom: 5px;
+                width: 100%;
+            }
+
+        .board {
+            display: flex;
+            gap: 20px; 
+            flex-wrap: nowrap;
+            overflow-x: auto;
             padding: 10px;
         }
 
-            .column h3 {
-                text-align: center;
+    .button {
+        background-color: #9f7aea;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        width: 200px;
+        display: block;
+        text-align: center;
+        border: none;
+        transition: background 0.2s ease-in-out;
+        margin-bottom: 15px; 
+    }
+
+    .button:hover {
+        background-color: #805ad5;
+    }
+
+
+
+       
+
+            .project-kanban-board {
+                width: 100%;
+                margin: 20px;
+                margin-left: 75px;
                 background-color: #0f1e13;
+                border-radius: 10px;
+                padding: 20px;
+                height: 100%;
+            }
+
+             .column {
+                background-color: #9f7aea;
+                flex: 0 1 250px; 
+                border-radius: 5px;
                 padding: 10px;
+                min-width: 150px;
+                max-width: 250px;
+                display: flex;
+                flex-direction: column;
+            }
+
+
+            .column h3 {
+                text-align: left;
+                background-color: #9f7aea;
+                padding: 5px;
                 border-radius: 5px;
             }
+
+            .column-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #9f7aea;
+                padding: 5px;
+                border-radius: 5px;
+            }
+
+            .delete-btn {
+                background:none;
+                border: none;
+                color: white;
+                font-size: 20px;
+                cursor: pointer;
+                transition: color 0.2s ease-in-out;
+            }
+
+            .delete-btn:hover {
+                color: red;
+            }
+
+
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="sidebar">
+            <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
+            <h2>@ViewBag.Board.PTitle</h2>
+            <button class="button" onclick="location.href='/Projects/BoardPage/@ViewBag.Board.PId'">
+                Back to Board
+            </button>
+            <button class="button">
+                + Add State
+            </button>
+             <button class="button">
+                - Remove State
+            </button>
+
+        </div>
         <div class="main-content">
-            <h1>Edit Board</h1>
-            <div id="board" class="board">
-                @foreach (var state in Model.States.OrderBy(s => s.Position))
+            <div class="project-kanban-board">
+                <h1>Edit Kanban Board</h1>
+               <div id="board" class="board">
+                @foreach (var state in states)
                 {
                     <div class="column" id="state-@state.StateId" data-stateid="@state.StateId">
-                        <h3>@state.StateName</h3>
+                        <div class="column-header">
+                            <h3>@state.StateName</h3>
+                            <button class="delete-btn" onclick="removeState(@state.StateId)">✖</button>
+                        </div>
                     </div>
                 }
+        </div>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let board = document.getElementById("board");
+        let board = document.getElementById("board");
+        let addStateButton = document.querySelector(".add-column-btn");
 
-            new Sortable(board, {
-                animation: 150,
-                onEnd: function (evt) {
-                    let stateOrder = [];
-                    document.querySelectorAll('.column').forEach((column, index) => {
-                        stateOrder.push({
-                            stateId: column.getAttribute("data-stateid"),
-                            position: index
-                        });
+        new Sortable(board, {
+            animation: 150,
+            onEnd: function (evt) {
+                let stateOrder = [];
+                document.querySelectorAll('.column:not(.no-drag)').forEach((column, index) => {
+                    stateOrder.push({
+                        stateId: column.getAttribute("data-stateid"),
+                        position: index
                     });
+                });
 
-                    fetch('/Projects/UpdateBoardStateOrder', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(stateOrder)
-                    });
-                }
-            });
+                fetch('/Projects/UpdateBoardStateOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(stateOrder)
+                });
+            }
         });
+    });
     </script>
 </body>
 </html>

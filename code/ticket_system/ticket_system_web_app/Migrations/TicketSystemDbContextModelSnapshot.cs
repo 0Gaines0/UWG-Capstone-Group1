@@ -210,6 +210,8 @@ namespace ticket_system_web_app.Migrations
 
                     b.HasKey("BoardId");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("ProjectBoards");
                 });
 
@@ -267,13 +269,13 @@ namespace ticket_system_web_app.Migrations
 
             modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
                 {
-                    b.HasOne("ticket_system_web_app.Models.ProjectBoard", "Board")
+                    b.HasOne("ticket_system_web_app.Models.ProjectBoard", "ProjectBoard")
                         .WithMany("States")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Board");
+                    b.Navigation("ProjectBoard");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.Project", b =>
@@ -285,6 +287,17 @@ namespace ticket_system_web_app.Migrations
                         .IsRequired();
 
                     b.Navigation("ProjectLead");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.ProjectBoard", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.Employee", b =>

@@ -11,8 +11,8 @@ using ticket_system_web_app.Data;
 namespace ticket_system_web_app.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20250225031351_init")]
-    partial class init
+    [Migration("20250305174641_InitKanban")]
+    partial class InitKanban
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,34 @@ namespace ticket_system_web_app.Migrations
                     b.HasIndex("AssignedProjectsPId");
 
                     b.ToTable("project_group", (string)null);
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
+                {
+                    b.Property<int>("StateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("state_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StateId"));
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int")
+                        .HasColumnName("board_id");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int")
+                        .HasColumnName("position");
+
+                    b.Property<string>("StateName")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("state_name");
+
+                    b.HasKey("StateId");
+
+                    b.HasIndex("BoardId");
+
+                    b.ToTable("BoardStates");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.Employee", b =>
@@ -165,7 +193,29 @@ namespace ticket_system_web_app.Migrations
 
                     b.HasKey("PId");
 
+                    b.HasIndex("ProjectLeadId");
+
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.ProjectBoard", b =>
+                {
+                    b.Property<int>("BoardId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("board_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BoardId"));
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("p_id");
+
+                    b.HasKey("BoardId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectBoards");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.User", b =>
@@ -218,6 +268,49 @@ namespace ticket_system_web_app.Migrations
                         .HasForeignKey("AssignedProjectsPId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.ProjectBoard", "ProjectBoard")
+                        .WithMany("States")
+                        .HasForeignKey("BoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProjectBoard");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.Project", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Employee", "ProjectLead")
+                        .WithMany("ProjectsLeading")
+                        .HasForeignKey("ProjectLeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProjectLead");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.ProjectBoard", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.Employee", b =>
+                {
+                    b.Navigation("ProjectsLeading");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.ProjectBoard", b =>
+                {
+                    b.Navigation("States");
                 });
 #pragma warning restore 612, 618
         }

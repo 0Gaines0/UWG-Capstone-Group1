@@ -75,7 +75,11 @@ namespace ticket_system_web_app.Controllers.Projects
         {
             var board = await _context.Projects.FirstOrDefaultAsync(project => project.PId == pId);
             var project_board = await _context.ProjectBoards.Include(b => b.States).FirstOrDefaultAsync(b => b.ProjectId == pId);
-            return View("EditKanban", project_board);
+
+            ViewBag.Board = board;
+            ViewBag.ProjectBoard = project_board;
+
+            return View("EditKanban");
         }
 
         // GET: Projects/Create
