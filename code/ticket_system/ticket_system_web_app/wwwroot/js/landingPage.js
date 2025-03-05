@@ -25,10 +25,14 @@ function renderProject(projects) {
     projects.forEach(project => {
         const projectItem = document.createElement("div");
         projectItem.classList.add("project-item");
+        projectItem.setAttribute("data-project-id", project.pId);
+        projectItem.onclick = function () {
+            openProjectBoard(this);
+        };
 
         projectItem.innerHTML = `
                 <img src="/assets/project_bookmark_img.png" alt="Bookmark">
-                <span data-project-id="${project.pId}" onclick="openProjectBoard(this)">${project.pTitle}</span>
+                <span>${project.pTitle}</span>
             `;
 
         projectList.appendChild(projectItem);

@@ -213,7 +213,10 @@
             <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
             <h2>@Model.PTitle</h2>
             <button class="button">Create Task</button>
-            <button class="button">Edit Board</button>
+            <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
+                Edit Board
+            </button>
+
         </div>
 
         <div class="main-content">

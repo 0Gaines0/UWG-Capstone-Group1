@@ -70,6 +70,14 @@ namespace ticket_system_web_app.Controllers.Projects
             return View("ProjectKanban", project);
         }
 
+        [HttpGet("Project/EditKanban/{pId}")]
+        public async Task<IActionResult> EditKanban(int pId)
+        {
+            var board = await _context.Projects.FirstOrDefaultAsync(project => project.PId == pId);
+            var project_board = await _context.ProjectBoards.Include(b => b.States).FirstOrDefaultAsync(b => b.ProjectId == pId);
+            return View("EditKanban", project_board);
+        }
+
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -95,6 +103,9 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
+       
+
+
         /// <summary>
         /// Creates a project from the specified json request.
         /// </summary>
@@ -108,24 +119,67 @@ namespace ticket_system_web_app.Controllers.Projects
                 return BadRequest(new { message = "Invalid request data" });
             }
 
-            Employee lead = await _context.Employees.FindAsync(jsonRequest.PLeadId);
-            if (lead == null || string.IsNullOrWhiteSpace(jsonRequest.PTitle) || string.IsNullOrWhiteSpace(jsonRequest.PDescription))
+            try
             {
-                return BadRequest(new { message = "Invalid project data" });
-            }
+                Employee lead = await _context.Employees.FindAsync(jsonRequest.PLeadId);
+                if (lead == null || string.IsNullOrWhiteSpace(jsonRequest.PTitle) || string.IsNullOrWhiteSpace(jsonRequest.PDescription))
+                {
+                    return BadRequest(new { message = "Invalid project data" });
+                }
 
-            ICollection<Group> groups = new List<Group>();
-            if (!jsonRequest.CollaboratingGroupIDs.IsNullOrEmpty())
+                ICollection<Group> groups = new List<Group>();
+                if (!jsonRequest.CollaboratingGroupIDs.IsNullOrEmpty())
+                {
+                    groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
+                }
+
+                var project = new Project(lead, jsonRequest.PTitle, jsonRequest.PDescription, groups);
+
+                await _context.AddAsync(project);
+                await _context.SaveChangesAsync();  
+                await AddProjectBoardAndDefaultStates(project.PId);
+
+                return Ok(new { message = "Project created successfully", projectID = project.PId });
+            }
+            catch (Exception ex)
             {
-                groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
+                return StatusCode(500, new { message = "An error occurred", error = ex.Message });
             }
+        }
 
-            var project = new Project(lead, jsonRequest.PTitle, jsonRequest.PDescription, groups);
+        private async Task AddProjectBoardAndDefaultStates(int projectId)
+        {
+            try
+            {
+                    var board = new ProjectBoard { ProjectId = projectId };
+                    await _context.ProjectBoards.AddAsync(board);
+                    await _context.SaveChangesAsync(); 
 
-            this._context.Add(project);
-            await this._context.SaveChangesAsync();
+                    board = await _context.ProjectBoards.FirstOrDefaultAsync(b => b.ProjectId == projectId);
 
-            return Ok(new { message = "Project created successfully", projectID = project.PId });
+                    if (board == null)
+                    {
+                        Console.Out.WriteLine("Failed to create ProjectBoard.");
+                        return;
+                    }
+
+                    var boardStates = new List<BoardState>
+            {
+                new BoardState { BoardId = board.BoardId, StateName = "To Do", Position = 1, ProjectBoard = board },
+                new BoardState { BoardId = board.BoardId, StateName = "In Progress", Position = 2, ProjectBoard = board },
+                new BoardState { BoardId = board.BoardId, StateName = "Completed", Position = 3, ProjectBoard = board }
+            };
+
+                    await _context.BoardStates.AddRangeAsync(boardStates);
+                    var result = await _context.SaveChangesAsync();
+
+                    Console.Out.WriteLine($"Saved {result} BoardStates successfully.");
+               
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine($"Error in AddProjectBoardAndDefaultStates: {ex.Message}");
+            }
         }
 
         // GET: Projects/Edit/5
