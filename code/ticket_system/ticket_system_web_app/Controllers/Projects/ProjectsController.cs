@@ -107,8 +107,90 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> UpdateStateName([FromBody] UpdateStateNameRequest request)
+        {
+            if (request == null || request.Id <= 0 || string.IsNullOrWhiteSpace(request.Name))
+            {
+                return BadRequest(new { message = "Invalid request data." });
+            }
 
+            try
+            {
+                var state = await this._context.BoardStates.FindAsync(request.Id);
+                if (state == null)
+                {
+                    return NotFound(new { message = "State not found." });
+                }
+                state.StateName = request.Name;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "State name updated successfully.", updatedName = state.StateName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating state name.", error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteState([FromBody] DeleteStateRequest request)
+        {
+            if (request == null || request.Id <= 0)
+            {
+                return BadRequest(new { message = "Invalid request data." });
+            }
+
+            try
+            {
+                var state = await _context.BoardStates.FindAsync(request.Id);
+                if (state == null)
+                {
+                    return NotFound(new { message = "State not found." });
+                }
+
+                _context.BoardStates.Remove(state);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "State deleted successfully.", success = true });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting state.", error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddState([FromBody] AddStateRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Name) || request.BoardId <= 0)
+            {
+                return BadRequest(new { success = false, message = "Invalid request data." });
+            }
+
+            try
+            {
+                int maxPosition = await _context.BoardStates
+                    .Where(s => s.BoardId == request.BoardId)
+                    .MaxAsync(s => (int?)s.Position) ?? 0;
+
+                var newState = new BoardState
+                {
+                    StateName = request.Name,
+                    BoardId = request.BoardId, 
+                    Position = maxPosition + 1 
+                };
+
+                _context.BoardStates.Add(newState);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true, stateId = newState.StateId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Error adding state.", error = ex.Message });
+            }
+        }
 
         /// <summary>
         /// Creates a project from the specified json request.

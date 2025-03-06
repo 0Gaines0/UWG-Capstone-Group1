@@ -16,7 +16,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Board</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -165,7 +164,7 @@
             <button class="button" onclick="location.href='/Projects/BoardPage/@ViewBag.Board.PId'">
                 Back to Board
             </button>
-            <button class="button">
+            <button id="add-state-btn" class="button">
                 + Add State
             </button>
              <button class="button">
@@ -176,7 +175,7 @@
         <div class="main-content">
             <div class="project-kanban-board">
                 <h1>Edit Kanban Board</h1>
-               <div id="board" class="board">
+                <div id="board" class="board" data-boardid="@ViewBag.ProjectBoard.BoardId">
                 @foreach (var state in states)
                 {
                     <div class="column" id="state-@state.StateId" data-stateid="@state.StateId">
@@ -191,32 +190,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-        let board = document.getElementById("board");
-        let addStateButton = document.querySelector(".add-column-btn");
-
-        new Sortable(board, {
-            animation: 150,
-            onEnd: function (evt) {
-                let stateOrder = [];
-                document.querySelectorAll('.column:not(.no-drag)').forEach((column, index) => {
-                    stateOrder.push({
-                        stateId: column.getAttribute("data-stateid"),
-                        position: index
-                    });
-                });
-
-                fetch('/Projects/UpdateBoardStateOrder', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(stateOrder)
-                });
-            }
-        });
-    });
-    </script>
+    <script src="~/js/boardEdit.js"></script>
 </body>
 </html>
