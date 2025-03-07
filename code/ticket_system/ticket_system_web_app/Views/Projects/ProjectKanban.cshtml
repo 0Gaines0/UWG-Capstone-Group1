@@ -3,6 +3,7 @@
 
     @model ticket_system_web_app.Models.Project
     var notLogin = ActiveEmployee.Employee == null;
+    var hasAdminPerms = (ActiveEmployee.Employee?.IsAdmin ?? false);
 
     if (notLogin)
     {
@@ -230,10 +231,13 @@
         <div class="sidebar">
             <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
             <h2>@Model.PTitle</h2>
-            <button class="button">Create Task</button>
-            <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
-                Edit Board
-            </button>
+            @if (hasAdminPerms)
+            {
+                <button class="button">Create Task</button>
+                <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
+                    Edit Board
+                </button>
+            }
 
         </div>
 
