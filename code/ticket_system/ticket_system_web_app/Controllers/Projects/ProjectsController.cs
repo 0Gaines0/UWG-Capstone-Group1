@@ -354,6 +354,40 @@ namespace ticket_system_web_app.Controllers.Projects
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateBoardStateOrder([FromBody] List<UpdateBoardStateOrderRequest> stateOrder)
+        {
+            if (stateOrder == null || !stateOrder.Any())
+            {
+                return BadRequest(new { message = "Invalid request data." });
+            }
+
+            try
+            {
+                var stateIds = stateOrder.Select(s => s.StateId).ToList();
+                var boardStates = await _context.BoardStates
+                    .Where(bs => stateIds.Contains(bs.StateId))
+                    .ToListAsync();
+
+                foreach (var item in stateOrder)
+                {
+                    var state = boardStates.FirstOrDefault(s => s.StateId == item.StateId);
+                    if (state != null)
+                    {
+                        state.Position = item.Position;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Board state order updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error updating board state order.", error = ex.Message });
+            }
+        }
+
+
         [HttpGet]
         public async Task<JsonResult> GetProjectRelatedToEmployee()
         {
