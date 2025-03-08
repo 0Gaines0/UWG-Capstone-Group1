@@ -3,6 +3,10 @@
 
 let deletingProjectId = -1;
 
+function gotoEditProject(id) {
+    document.getElementById(`edit-row-${id}`).click();
+}
+
 function promptDeleteProject(id) {
     viewProject(id);
     deletingProjectId = id;

@@ -2,19 +2,10 @@
     height: 100%;
 }
 
-.form-control {
-    margin: 0.5em 0;
-}
-
-textarea {
-    max-height: 20em;
-    height: 10em;
-}
-
 .scrollable {
     margin: 0.5em auto;
-    width: calc(100% + 1em);
     overflow-x: auto;
+    width: 100%;
 }
 
 tr td:last-child {
