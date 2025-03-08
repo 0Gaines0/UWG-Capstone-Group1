@@ -1,5 +1,4 @@
 ﻿document.addEventListener("DOMContentLoaded", async function () {
-    alert("UWU")
     await fetchAllGroupsInitial();
 });
 
