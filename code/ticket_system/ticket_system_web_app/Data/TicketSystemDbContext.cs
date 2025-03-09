@@ -14,7 +14,11 @@ namespace ticket_system_web_app.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<Group> Groups { get; set; }
 
-        // Constructor for Dependency Injection
+        public DbSet<ProjectBoard> ProjectBoards { get; set; }
+
+        public DbSet<BoardState> BoardStates { get; set; }
+
+
         public TicketSystemDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -45,9 +49,8 @@ namespace ticket_system_web_app.Data
                 Username = "tempAdmin"
             };
         }
-
-        // Parameterless constructor for design-time migrations
         public TicketSystemDbContext() { }
 
+     
     }
 }
