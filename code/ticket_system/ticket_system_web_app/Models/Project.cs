@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
+using System.Net;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ticket_system_web_app.Models
 {
@@ -14,8 +18,9 @@ namespace ticket_system_web_app.Models
         [Column("project_lead_id")]
         public int ProjectLeadId { get; set; }
 
+        [BindNever]
         [Column("project_lead")]
-        public Employee ProjectLead { get; set; }
+        public Employee? ProjectLead { get; set; }
 
         [Column("p_title")]
         public string PTitle { get; set; }

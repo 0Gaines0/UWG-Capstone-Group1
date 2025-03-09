@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -276,7 +277,7 @@ namespace ticket_system_web_app.Controllers.Projects
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.Projects.Include(i => i.ProjectLead).Include(i => i.AssignedGroups).FirstOrDefaultAsync(i => i.PId == id);
             if (project == null)
             {
                 return NotFound();
@@ -289,10 +290,19 @@ namespace ticket_system_web_app.Controllers.Projects
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project, string csvCollabGroups)
         {
             if (id != project.PId)
             {
+                return NotFound();
+            }
+
+            project.AssignedGroups = this.getCollaboratorsFromCSV(csvCollabGroups);
+            project.ProjectLead = await this._context.Employees.FindAsync(project.ProjectLeadId);
+
+            var projectCurrent = await _context.Projects.Include(p => p.ProjectLead).Include(p => p.AssignedGroups).FirstOrDefaultAsync(p => p.PId == id);
+
+            if (projectCurrent == null) { 
                 return NotFound();
             }
 
@@ -300,7 +310,15 @@ namespace ticket_system_web_app.Controllers.Projects
             {
                 try
                 {
-                    _context.Update(project);
+                    projectCurrent.PTitle = project.PTitle;
+                    projectCurrent.PDescription = project.PDescription;
+                    projectCurrent.ProjectLeadId = project.ProjectLeadId;
+                    projectCurrent.ProjectLead = project.ProjectLead;
+
+                    projectCurrent.AssignedGroups.Clear();
+                    _context.Update(projectCurrent);
+                    projectCurrent.AssignedGroups = project.AssignedGroups;
+                    _context.Update(projectCurrent);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -431,6 +449,27 @@ namespace ticket_system_web_app.Controllers.Projects
         private bool ProjectExists(int id)
         {
             return _context.Projects.Any(e => e.PId == id);
+        }
+
+        private ICollection<Group> getCollaboratorsFromCSV(string csv)
+        {
+            ICollection<Group> result = new List<Group>();
+
+            string[] collabIDs = csv.Split(',');
+
+            foreach (string collabID in collabIDs)
+            {
+                if (int.TryParse(collabID, out var collab))
+                {
+                    Group? collaborator = this._context.Groups.FindAsync(collab).Result;
+                    if (collaborator != null)
+                    {
+                        result.Add(collaborator);
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
