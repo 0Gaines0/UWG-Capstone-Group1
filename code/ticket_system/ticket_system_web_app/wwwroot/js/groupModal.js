@@ -140,17 +140,12 @@ function validateForm() {
     let isValid = true;
 
     let nameInput = document.getElementById("groupName").value.trim();
-    let descriptionInput = document.getElementById("groupDescription").value.trim();
     let managerInput = document.getElementById("managerSelect").value.trim();
 
     clearErrors();
 
     if (nameInput === "") {
         displayError("groupNameError", "Group name is required.");
-        isValid = false;
-    }
-    if (descriptionInput === "") {
-        displayError("groupDescriptionError", "Description is required.");
         isValid = false;
     }
     if (managerInput === "" || managerInput === "Select a Manager") {
@@ -579,7 +574,6 @@ function validateEditForm() {
     let isValid = true;
 
     let nameInput = document.getElementById("editGroupName").value.trim();
-    let descriptionInput = document.getElementById("editGroupDescription").value.trim();
     let managerInput = document.getElementById("editGroupManager").value.trim();
 
     clearEditErrors();
@@ -588,12 +582,6 @@ function validateEditForm() {
         displayEditError("editGroupNameError", "Group name is required.");
         isValid = false;
     }
-
-    if (descriptionInput === "") {
-        displayEditError("editGroupDescriptionError", "Description is required.");
-        isValid = false;
-    }
-
     if (managerInput === "" || managerInput === "Select a Manager") {
         displayEditError("editGroupManagerError", "Manager selection is required.");
         isValid = false;

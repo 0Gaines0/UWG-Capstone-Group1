@@ -59,10 +59,6 @@ namespace ticket_system_web_app.Models
             {
                 throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(gName));
             }
-            if (string.IsNullOrEmpty(gDescription))
-            {
-                throw new ArgumentException(VALID_ERROR_MESSAGE, nameof(gDescription));
-            }
         }
 
 
