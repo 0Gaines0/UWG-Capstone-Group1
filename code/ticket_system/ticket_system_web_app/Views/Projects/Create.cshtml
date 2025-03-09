@@ -24,7 +24,6 @@
         <hr />
         <div class="container">
             <div class="content-block">
-                
                 <form asp-action="Create" class="form">
                 <p>(*) Items with asterisks are required.</p>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -78,9 +77,6 @@
                     </div>
                 </form>
             </div>
-            @section Scripts {
-                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-            }
         </div>
         <div class="nav_container">
             <div class="nav_top">
@@ -93,5 +89,8 @@
 
             </ul>
         </div>
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }
     </body>
 </html>
