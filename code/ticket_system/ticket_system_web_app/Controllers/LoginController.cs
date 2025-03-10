@@ -4,12 +4,21 @@ using ticket_system_web_app.Models;
 
 namespace ticket_system_web_app.Controllers
 {
+    /// <summary>
+    /// Login Controller
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class LoginController : Controller
     {
         private static string VALIDATE_PARAMETER_MESSAGE = "input must not be null or empty";
         private static string INVALID_ENTERED_CREDENTIALS = "credentials entered are invalid";
         private readonly TicketSystemDbContext context;
-       
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoginController"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <exception cref="System.ArgumentNullException">context</exception>
         public LoginController(TicketSystemDbContext context)
         {
             if (context == null)
@@ -19,11 +28,21 @@ namespace ticket_system_web_app.Controllers
             this.context = context;
         }
 
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Logins the specified username.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Login(string username, string password)
         {

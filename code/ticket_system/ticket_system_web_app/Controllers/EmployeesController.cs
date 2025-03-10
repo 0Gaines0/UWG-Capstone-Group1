@@ -14,17 +14,29 @@ namespace ticket_system_web_app.Controllers
 
         private readonly TicketSystemDbContext context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmployeesController"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public EmployeesController(TicketSystemDbContext context)
         {
             this.context = context;
         }
 
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var employees = await this.constructEmployees();
             return View(employees);
         }
 
+        /// <summary>
+        /// Creates the employee modal.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateEmployeeModal()
         {
             return PartialView("_CreateEmployeeModal");
@@ -47,7 +59,7 @@ namespace ticket_system_web_app.Controllers
             //return Json(employees);
         }
 
-        /// <summary>
+
         /// Creates the employee with the given information if it doesn't exist already.
         /// </summary>
         /// <param name="jsonRequest">The new employee information</param>
@@ -84,7 +96,7 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Employee created successfully", employeeId = newUser.EId });
         }
 
-        /// <summary>
+
         /// Removes the given employee if they are not the current user and don't manage a group.
         /// </summary>
         /// <param name="request">The employee to be deleted username</param>
