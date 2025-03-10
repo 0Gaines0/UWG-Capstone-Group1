@@ -49,7 +49,7 @@
             gap: 10px;
         }
 
-        #cancel-btn, #create-btn, #edit-btn {
+        .cancel-btn, .create-btn {
             padding: 10px 15px;
             border: none;
             cursor: pointer;
@@ -57,12 +57,12 @@
             font-size: 1rem;
         }
 
-        #cancel-btn {
+        .cancel-btn {
             background: #ff4c4c;
             color: white;
         }
 
-        #create-btn, #edit-btn {
+        .create-btn {
             background: #9f7aea;
             color: white;
         }
@@ -185,18 +185,17 @@
     </style>
 </head>
 <body>
-    <div id="createEmployeeModal" class="modal-overlay">
+    <div id="editEmployeeModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Create Employee</h2>
+                <h2>Edit Employee</h2>
                 <div class="button-container">
-                    <button id="cancel-btn" onclick="closeModal()">Cancel</button>
-                    <button id="create-btn" onclick="createEmployee()">+ Create</button>
-                    <button id="edit-btn" onclick="editEmployee()">+ Save Changes</button>
+                    <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                    <button class="create-btn" onclick="editEmployee()">+ Save Changes</button>
                 </div>
             </div>
 
-            <div class="employee-create-container">
+            <div class="employee-edit-container">
                 <div class="employee-left">
                     <h3>Employee Details</h3>
                     <div class="employee-left-item">
@@ -217,7 +216,7 @@
                         <span id="usernameError" class="error-message"></span> 
                     </div>
 
-                    <div id="passwordField" class="employee-left-item">
+                    <div class="employee-left-item">
                         <label>Password*</label>
                         <input type="text" id="password" placeholder="Password">
                         <span id="passwordError" class="error-message"></span> 

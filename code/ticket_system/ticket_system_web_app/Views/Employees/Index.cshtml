@@ -9,10 +9,10 @@
         Context.Response.Redirect("/Login/Index");
         return;
     }
-
 }
 
 <partial name="_CreateEmployeeModal" />
+@* <partial name="_EditEmployeeModal" /> *@
 
 <!DOCTYPE html>
 <html lang="en">
@@ -247,7 +247,7 @@
                 background-color: #b794f4;
             }
 
-        #remove-employee-btn:disabled {
+        #remove-employee-btn:disabled, #edit-employee-btn:disabled {
             background-color: #cccccc;
             color: #666666;
             cursor: not-allowed;
@@ -310,6 +310,7 @@
                     {
                         <div class="button-container">
                             <button class="btn" onclick="openCreateModal()">+ Add New Employee</button>
+                            <button class="btn" id="edit-employee-btn" onclick="openEditModal()" title="Select an employee to edit them" disabled>+ Edit Employee</button>
                             <button class="btn" id="remove-employee-btn" onclick="removeEmployee()" title="Select an employee to remove them" disabled>- Remove Employee</button>
                         </div>
                     }
