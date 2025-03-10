@@ -13,10 +13,18 @@ using ticket_system_web_app.Models.RequestObj;
 
 namespace ticket_system_web_app.Controllers.Projects
 {
+    /// <summary>
+    /// ProjectsController class
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class ProjectsController : Controller
     {
         private readonly TicketSystemDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectsController"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public ProjectsController(TicketSystemDbContext context)
         {
             _context = context;
@@ -51,12 +59,19 @@ namespace ticket_system_web_app.Controllers.Projects
             return result;
         }
 
+        /// <summary>
+        /// Backs this instance.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Back()
         {
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Projects
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var projects = await _context.Projects.Include(project => project.ProjectLead).ToListAsync();
@@ -64,6 +79,11 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(projects);
         }
 
+        /// <summary>
+        /// Boards the page.
+        /// </summary>
+        /// <param name="pId">The p identifier.</param>
+        /// <returns></returns>
         [HttpGet("Projects/BoardPage/{pId}")]
         public async Task<IActionResult> BoardPage(int pId)
         {
@@ -71,6 +91,11 @@ namespace ticket_system_web_app.Controllers.Projects
             return View("ProjectKanban", project);
         }
 
+        /// <summary>
+        /// Edits the kanban.
+        /// </summary>
+        /// <param name="pId">The p identifier.</param>
+        /// <returns></returns>
         [HttpGet("Project/EditKanban/{pId}")]
         public async Task<IActionResult> EditKanban(int pId)
         {
@@ -83,15 +108,21 @@ namespace ticket_system_web_app.Controllers.Projects
             return View("EditKanban");
         }
 
-        // GET: Projects/Create
+        /// <summary>
+        /// Creates this instance.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        /// <summary>
+        /// Creates the specified project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project)
@@ -108,6 +139,11 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
+        /// <summary>
+        /// Updates the name of the state.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> UpdateStateName([FromBody] UpdateStateNameRequest request)
         {
@@ -134,6 +170,11 @@ namespace ticket_system_web_app.Controllers.Projects
             }
         }
 
+        /// <summary>
+        /// Deletes the state.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> DeleteState([FromBody] DeleteStateRequest request)
         {
@@ -161,6 +202,11 @@ namespace ticket_system_web_app.Controllers.Projects
             }
         }
 
+        /// <summary>
+        /// Adds the state.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddState([FromBody] AddStateRequest request)
         {
@@ -269,7 +315,11 @@ namespace ticket_system_web_app.Controllers.Projects
             }
         }
 
-        // GET: Projects/Edit/5
+        /// <summary>
+        /// Edits the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -285,9 +335,14 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
-        // POST: Projects/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        /// <summary>
+        /// Edits the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="project">The project.</param>
+        /// <param name="csvCollabGroups">The CSV collab groups.</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project, string csvCollabGroups)
@@ -337,9 +392,13 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
-       
 
-        // GET: Projects/Delete/5
+
+        /// <summary>
+        /// Deletes the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -357,7 +416,11 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(project);
         }
 
-        // POST: Projects/Delete/5
+        /// <summary>
+        /// Deletes the confirmed.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -372,6 +435,11 @@ namespace ticket_system_web_app.Controllers.Projects
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        /// Updates the board state order.
+        /// </summary>
+        /// <param name="stateOrder">The state order.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> UpdateBoardStateOrder([FromBody] List<UpdateBoardStateOrderRequest> stateOrder)
         {
@@ -406,6 +474,10 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
 
+        /// <summary>
+        /// Gets the project related to employee.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetProjectRelatedToEmployee()
         {

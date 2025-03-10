@@ -12,22 +12,38 @@ namespace ticket_system_web_app.Controllers
 
         private readonly TicketSystemDbContext context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmployeesController"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public EmployeesController(TicketSystemDbContext context)
         {
             this.context = context;
         }
 
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var employees = await this.constructEmployees();
             return View(employees);
         }
 
+        /// <summary>
+        /// Creates the employee modal.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateEmployeeModal()
         {
             return PartialView("_CreateEmployeeModal");
         }
 
+        /// <summary>
+        /// Gets all employees.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetAllEmployees()
         {
@@ -41,6 +57,11 @@ namespace ticket_system_web_app.Controllers
             //return Json(employees);
         }
 
+        /// <summary>
+        /// Creates the employee.
+        /// </summary>
+        /// <param name="jsonRequest">The json request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest jsonRequest)
         {
@@ -65,6 +86,11 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Employee created successfully", employeeId = newUser.EId });
         }
 
+        /// <summary>
+        /// Removes the employee.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> RemoveEmployee([FromBody] RemoveEmployeeRequest request)
         {

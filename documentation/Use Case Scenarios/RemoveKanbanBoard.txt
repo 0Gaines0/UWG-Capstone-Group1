@@ -1,0 +1,6 @@
+Context - User is logging in as Admin/Manager and Navigated to the EditKanbanBoard Page
+
+Primary flow:
+1 - User selects the remove button on the state
+2 - System removes state updating page and backend order
+3 - System updates screen
