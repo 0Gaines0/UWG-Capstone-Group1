@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
+using System.Reflection.Metadata;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ticket_system_web_app.Models
 {

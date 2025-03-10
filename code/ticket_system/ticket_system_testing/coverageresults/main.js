@@ -219,46 +219,78 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
+    "name": "ticket_system_testing",
+    "classes": [
+      { "name": "ticket_system_testing.UserTests", "rp": "ticket_system_testing_UserTests.html", "cl": 67, "ucl": 0, "cal": 67, "tl": 153, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ControllersTests.FakeTempDataProvider", "rp": "ticket_system_testing_FakeTempDataProvider.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 104, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ControllersTests.TestLandingPageController", "rp": "ticket_system_testing_TestLandingPageController.html", "cl": 28, "ucl": 0, "cal": 28, "tl": 61, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ControllersTests.TestLoginController", "rp": "ticket_system_testing_TestLoginController.html", "cl": 53, "ucl": 0, "cal": 53, "tl": 104, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ControllerTests.TestGroupsController", "rp": "ticket_system_testing_TestGroupsController.html", "cl": 210, "ucl": 0, "cal": 210, "tl": 316, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ModelTests.RequestObjTests.TestCreateGroupRequest", "rp": "ticket_system_testing_TestCreateGroupRequest.html", "cl": 25, "ucl": 0, "cal": 25, "tl": 51, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ModelTests.RequestObjTests.TestRemoveGroupRequest", "rp": "ticket_system_testing_TestRemoveGroupRequest.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 36, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ModelTests.TestActiveEmployee", "rp": "ticket_system_testing_TestActiveEmployee.html", "cl": 20, "ucl": 0, "cal": 20, "tl": 49, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_testing.WebApp_Testing.ModelTests.TestGroup", "rp": "ticket_system_testing_TestGroup.html", "cl": 86, "ucl": 6, "cal": 92, "tl": 141, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.UserTest", "rp": "ticket_system_testing_UserTest.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+    ]},
+  {
     "name": "ticket_system_web_app",
     "classes": [
-      { "name": "ticket_system_web_app.Controllers.GroupsController", "rp": "ticket_system_web_app_GroupsController.html", "cl": 85, "ucl": 5, "cal": 90, "tl": 168, "cb": 20, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Controllers.HomeController", "rp": "ticket_system_web_app_HomeController.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 32, "cb": 3, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Controllers.LandingPageController", "rp": "ticket_system_web_app_LandingPageController.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 24, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Controllers.LoginController", "rp": "ticket_system_web_app_LoginController.html", "cl": 35, "ucl": 2, "cal": 37, "tl": 65, "cb": 10, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Controllers.UsersController", "rp": "ticket_system_web_app_UsersController.html", "cl": 0, "ucl": 82, "cal": 82, "tl": 157, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Data.TicketSystemDbContext", "rp": "ticket_system_web_app_TicketSystemDbContext.html", "cl": 27, "ucl": 1, "cal": 28, "tl": 50, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.AddEmployeeEmail", "rp": "ticket_system_web_app_AddEmployeeEmail.html", "cl": 0, "ucl": 190, "cal": 190, "tl": 237, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.AddTempAdminLogin", "rp": "ticket_system_web_app_AddTempAdminLogin.html", "cl": 0, "ucl": 206, "cal": 206, "tl": 253, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.create_database", "rp": "ticket_system_web_app_create_database.html", "cl": 0, "ucl": 288, "cal": 288, "tl": 345, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.InitCreate", "rp": "ticket_system_web_app_InitCreate.html", "cl": 0, "ucl": 47, "cal": 47, "tl": 87, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Migrations.TicketSystemDbContextModelSnapshot", "rp": "ticket_system_web_app_TicketSystemDbContextModelSnapshot.html", "cl": 0, "ucl": 192, "cal": 192, "tl": 220, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.ActiveEmployee", "rp": "ticket_system_web_app_ActiveEmployee.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 21, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.Employee", "rp": "ticket_system_web_app_Employee.html", "cl": 19, "ucl": 42, "cal": 61, "tl": 115, "cb": 0, "tb": 18, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.ErrorViewModel", "rp": "ticket_system_web_app_ErrorViewModel.html", "cl": 1, "ucl": 1, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.Group", "rp": "ticket_system_web_app_Group.html", "cl": 38, "ucl": 0, "cal": 38, "tl": 70, "cb": 8, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.Project", "rp": "ticket_system_web_app_Project.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 32, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.RequestObj.CreateGroupRequest", "rp": "ticket_system_web_app_CreateGroupRequest.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Employees_Index", "rp": "ticket_system_web_app_Views_Employees_Index.html", "cl": 0, "ucl": 11, "cal": 11, "tl": 349, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Groups_Index", "rp": "ticket_system_web_app_Views_Groups_Index.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 372, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_LandingPage_Index", "rp": "ticket_system_web_app_Views_LandingPage_Index.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 306, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Login_Index", "rp": "ticket_system_web_app_Views_Login_Index.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 164, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Projects_Create", "rp": "ticket_system_web_app_Views_Projects_Create.html", "cl": 0, "ucl": 7, "cal": 7, "tl": 96, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Projects_Edit", "rp": "ticket_system_web_app_Views_Projects_Edit.html", "cl": 0, "ucl": 17, "cal": 17, "tl": 137, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Projects_EditKanban", "rp": "ticket_system_web_app_Views_Projects_EditKanban.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 212, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Projects_Index", "rp": "ticket_system_web_app_Views_Projects_Index.html", "cl": 0, "ucl": 21, "cal": 21, "tl": 121, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Projects_ProjectKanban", "rp": "ticket_system_web_app_Views_Projects_ProjectKanban.html", "cl": 0, "ucl": 9, "cal": 9, "tl": 265, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "AspNetCoreGeneratedDocument.Views_Shared_Error", "rp": "ticket_system_web_app_Views_Shared_Error.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "ticket_system_web_app_Program.html", "cl": 0, "ucl": 71, "cal": 71, "tl": 102, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.EmployeesController", "rp": "ticket_system_web_app_EmployeesController.html", "cl": 0, "ucl": 70, "cal": 70, "tl": 134, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.GroupsController", "rp": "ticket_system_web_app_GroupsController.html", "cl": 86, "ucl": 44, "cal": 130, "tl": 212, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.LandingPageController", "rp": "ticket_system_web_app_LandingPageController.html", "cl": 10, "ucl": 3, "cal": 13, "tl": 29, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.LoginController", "rp": "ticket_system_web_app_LoginController.html", "cl": 35, "ucl": 2, "cal": 37, "tl": 69, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.Projects.CreateProjectRequest", "rp": "ticket_system_web_app_CreateProjectRequest.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Controllers.Projects.ProjectsController", "rp": "ticket_system_web_app_ProjectsController.html", "cl": 0, "ucl": 283, "cal": 283, "tl": 475, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Data.TicketSystemDbContext", "rp": "ticket_system_web_app_TicketSystemDbContext.html", "cl": 30, "ucl": 1, "cal": 31, "tl": 56, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.InitKanban", "rp": "ticket_system_web_app_InitKanban.html", "cl": 0, "ucl": 301, "cal": 301, "tl": 357, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.kanbaninit", "rp": "ticket_system_web_app_kanbaninit.html", "cl": 0, "ucl": 329, "cal": 329, "tl": 389, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Migrations.TicketSystemDbContextModelSnapshot", "rp": "ticket_system_web_app_TicketSystemDbContextModelSnapshot.html", "cl": 0, "ucl": 280, "cal": 280, "tl": 315, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.ActiveEmployee", "rp": "ticket_system_web_app_ActiveEmployee.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 21, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.BoardState", "rp": "ticket_system_web_app_BoardState.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 25, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.Employee", "rp": "ticket_system_web_app_Employee.html", "cl": 20, "ucl": 45, "cal": 65, "tl": 120, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.ErrorViewModel", "rp": "ticket_system_web_app_ErrorViewModel.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.Group", "rp": "ticket_system_web_app_Group.html", "cl": 35, "ucl": 0, "cal": 35, "tl": 68, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.Project", "rp": "ticket_system_web_app_Project.html", "cl": 0, "ucl": 31, "cal": 31, "tl": 83, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.ProjectBoard", "rp": "ticket_system_web_app_ProjectBoard.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.AddStateRequest", "rp": "ticket_system_web_app_AddStateRequest.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.CreateEmployeeRequest", "rp": "ticket_system_web_app_CreateEmployeeRequest.html", "cl": 0, "ucl": 6, "cal": 6, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.CreateGroupRequest", "rp": "ticket_system_web_app_CreateGroupRequest.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 11, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.DeleteStateRequest", "rp": "ticket_system_web_app_DeleteStateRequest.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.RemoveEmployeeRequest", "rp": "ticket_system_web_app_RemoveEmployeeRequest.html", "cl": 0, "ucl": 1, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "ticket_system_web_app.Models.RequestObj.RemoveGroupRequest", "rp": "ticket_system_web_app_RemoveGroupRequest.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_web_app.Models.User", "rp": "ticket_system_web_app_User.html", "cl": 29, "ucl": 0, "cal": 29, "tl": 42, "cb": 14, "tb": 14, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.UpdateBoardStateOrderRequest", "rp": "ticket_system_web_app_UpdateBoardStateOrderRequest.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.RequestObj.UpdateStateNameRequest", "rp": "ticket_system_web_app_UpdateStateNameRequest.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_web_app.Models.User", "rp": "ticket_system_web_app_User.html", "cl": 29, "ucl": 0, "cal": 29, "tl": 42, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "ticket_system_winforms",
     "classes": [
-      { "name": "ticket_system_winforms.DAL.UsersDAL", "rp": "ticket_system_winforms_UsersDAL.html", "cl": 0, "ucl": 115, "cal": 115, "tl": 206, "cb": 0, "tb": 22, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.HomeForm", "rp": "ticket_system_winforms_HomeForm.html", "cl": 0, "ucl": 65, "cal": 65, "tl": 129, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.DAL.UsersDAL", "rp": "ticket_system_winforms_UsersDAL.html", "cl": 0, "ucl": 115, "cal": 115, "tl": 206, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.HomeForm", "rp": "ticket_system_winforms_HomeForm.html", "cl": 0, "ucl": 65, "cal": 65, "tl": 129, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "ticket_system_winforms.Model.User", "rp": "ticket_system_winforms_User.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 35, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.Properties.Resources", "rp": "ticket_system_winforms_Resources.html", "cl": 0, "ucl": 17, "cal": 17, "tl": 71, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.Program", "rp": "ticket_system_winforms_Program.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "ticket_system_winforms.Properties.Settings", "rp": "ticket_system_winforms_Settings.html", "cl": 0, "ucl": 4, "cal": 4, "tl": 30, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.UserCreateViewModel", "rp": "ticket_system_winforms_UserCreateViewModel.html", "cl": 0, "ucl": 38, "cal": 38, "tl": 90, "cb": 0, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.Dialogs.AlertDialog", "rp": "ticket_system_winforms_AlertDialog.html", "cl": 0, "ucl": 58, "cal": 58, "tl": 118, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.Dialogs.ConfirmDialog", "rp": "ticket_system_winforms_ConfirmDialog.html", "cl": 0, "ucl": 70, "cal": 70, "tl": 139, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.PrivacyForm", "rp": "ticket_system_winforms_PrivacyForm.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 125, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.UserCreateForm", "rp": "ticket_system_winforms_UserCreateForm.html", "cl": 0, "ucl": 139, "cal": 139, "tl": 236, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.UserCRUD.UserRetrieveForm", "rp": "ticket_system_winforms_UserRetrieveForm.html", "cl": 0, "ucl": 95, "cal": 95, "tl": 176, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.UserCRUD.UserUpdateForm", "rp": "ticket_system_winforms_UserUpdateForm.html", "cl": 0, "ucl": 188, "cal": 188, "tl": 314, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.View.UsersForm", "rp": "ticket_system_winforms_UsersForm.html", "cl": 0, "ucl": 159, "cal": 159, "tl": 268, "cb": 0, "tb": 8, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.ViewModel.UsersViewModel", "rp": "ticket_system_winforms_UsersViewModel.html", "cl": 0, "ucl": 41, "cal": 41, "tl": 96, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "ticket_system_winforms.ViewModel.UserUpdateViewModel", "rp": "ticket_system_winforms_UserUpdateViewModel.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 146, "cb": 0, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.UserCreateViewModel", "rp": "ticket_system_winforms_UserCreateViewModel.html", "cl": 0, "ucl": 38, "cal": 38, "tl": 90, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.Dialogs.AlertDialog", "rp": "ticket_system_winforms_AlertDialog.html", "cl": 0, "ucl": 58, "cal": 58, "tl": 118, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.Dialogs.ConfirmDialog", "rp": "ticket_system_winforms_ConfirmDialog.html", "cl": 0, "ucl": 70, "cal": 70, "tl": 139, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.PrivacyForm", "rp": "ticket_system_winforms_PrivacyForm.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 125, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.UserCreateForm", "rp": "ticket_system_winforms_UserCreateForm.html", "cl": 0, "ucl": 139, "cal": 139, "tl": 236, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.UserCRUD.UserRetrieveForm", "rp": "ticket_system_winforms_UserRetrieveForm.html", "cl": 0, "ucl": 95, "cal": 95, "tl": 176, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.UserCRUD.UserUpdateForm", "rp": "ticket_system_winforms_UserUpdateForm.html", "cl": 0, "ucl": 188, "cal": 188, "tl": 314, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.View.UsersForm", "rp": "ticket_system_winforms_UsersForm.html", "cl": 0, "ucl": 159, "cal": 159, "tl": 268, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.ViewModel.UsersViewModel", "rp": "ticket_system_winforms_UsersViewModel.html", "cl": 0, "ucl": 41, "cal": 41, "tl": 96, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "ticket_system_winforms.ViewModel.UserUpdateViewModel", "rp": "ticket_system_winforms_UserUpdateViewModel.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 146, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -267,41 +299,9 @@ var metrics = [{ "name": "Crap Score", "abbreviation": "crp", "explanationUrl": 
 var historicCoverageExecutionTimes = [];
 
 var riskHotspotMetrics = [
-      { "name": "Crap Score", "explanationUrl": "https://googletesting.blogspot.de/2011/02/this-code-is-crap.html" },
-      { "name": "Cyclomatic complexity", "explanationUrl": "https://en.wikipedia.org/wiki/Cyclomatic_complexity" },
 ];
 
 var riskHotspots = [
-  {
-    "assembly": "ticket_system_web_app", "class": "ticket_system_web_app.Models.Employee", "reportPath": "ticket_system_web_app_Employee.html", "methodName": "handleValidationOfConstructorInputs(System.Int32,System.String,System.String,System.String,System.String,System.Nullable`1<System.Boolean>,System.Nullable`1<System.Boolean>,System.Nullable`1<System.Boolean>,System.String)", "methodShortName": "handleValidationOfConstructorInputs(...)", "fileIndex": 0, "line": 76,
-    "metrics": [
-      { "value": 342, "exceeded": true },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "ticket_system_web_app", "class": "ticket_system_web_app.Controllers.UsersController", "reportPath": "ticket_system_web_app_UsersController.html", "methodName": "Edit()", "methodShortName": "Edit()", "fileIndex": 0, "line": 90,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "ticket_system_winforms", "class": "ticket_system_winforms.DAL.UsersDAL", "reportPath": "ticket_system_winforms_UsersDAL.html", "methodName": "CreateUser(System.String,System.String,System.String)", "methodShortName": "CreateUser(...)", "fileIndex": 0, "line": 28,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "ticket_system_winforms", "class": "ticket_system_winforms.DAL.UsersDAL", "reportPath": "ticket_system_winforms_UsersDAL.html", "methodName": "RetrieveUser(System.String,System.String)", "methodShortName": "RetrieveUser(...)", "fileIndex": 0, "line": 91,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
-  {
-    "assembly": "ticket_system_winforms", "class": "ticket_system_winforms.DAL.UsersDAL", "reportPath": "ticket_system_winforms_UsersDAL.html", "methodName": "UpdateUser(System.Int32,System.String,System.String,System.String)", "methodShortName": "UpdateUser(...)", "fileIndex": 0, "line": 162,
-    "metrics": [
-      { "value": 42, "exceeded": true },
-      { "value": 6, "exceeded": false },
-    ]},
 ];
 
 var branchCoverageAvailable = true;
