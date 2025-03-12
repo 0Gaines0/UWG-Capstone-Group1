@@ -8,16 +8,16 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ticket_system_web_app.Controllers.Projects.ProjectsController">
-    <Position X="11" Y="7" Width="2" />
+    <Position X="11.75" Y="5.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAABBACAAAAAAAAAAAEgAEACAIEAAAAACAA=</HashCode>
+      <HashCode>AQAAAAIAAAABBACAAAAAABAAAAEiAEADEIEAAAAACIA=</HashCode>
       <FileName>Controllers\Projects\ProjectsController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ticket_system_web_app.Controllers.EmployeesController">
     <Position X="13.25" Y="11.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAABAAAAAAQCAAACAAEBAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAACAABAAAAAgQDAAACAAEBACAAAAAAAAAECAAAAAAA=</HashCode>
       <FileName>Controllers\EmployeesController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -42,36 +42,29 @@
       <FileName>Controllers\LoginController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ticket_system_web_app.Controllers.UsersController">
-    <Position X="2" Y="7.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABBQCAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
-      <FileName>Controllers\UsersController.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="ticket_system_web_app.Data.TicketSystemDbContext">
     <Position X="8" Y="4.75" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAGAAAIAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAQA=</HashCode>
+      <HashCode>AAAAAGAAAIAIAAAAAAAAAAAAGQAAAAAAAAAAAAAAAQA=</HashCode>
       <FileName>Data\TicketSystemDbContext.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ticket_system_web_app.Migrations.newMig">
+  <Class Name="ticket_system_web_app.Migrations.kanbaninit">
     <Position X="22.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
-      <FileName>Migrations\20250225035137_newMig.cs</FileName>
+      <FileName>Migrations\20250305013353_kanban-init.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ticket_system_web_app.Migrations.createMig">
+  <Class Name="ticket_system_web_app.Migrations.InitKanban">
     <Position X="2.75" Y="1.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAI=</HashCode>
-      <FileName>Migrations\20250225040346_createMig.cs</FileName>
+      <FileName>Migrations\20250305174641_InitKanban.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ticket_system_web_app.Migrations.TicketSystemDbContextModelSnapshot">
-    <Position X="3" Y="3.5" Width="1.5" />
+    <Position X="1.5" Y="3.5" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAA=</HashCode>
       <FileName>Migrations\TicketSystemDbContextModelSnapshot.cs</FileName>
@@ -94,7 +87,7 @@
   <Class Name="ticket_system_web_app.Models.RequestObj.RemoveEmployeeRequest">
     <Position X="18.75" Y="12.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\RequestObj\RemoveEmployeeRequest.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -118,7 +111,7 @@
   <Class Name="ticket_system_web_app.Models.Employee">
     <Position X="16.5" Y="7" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>GAAAAAAAACAgABAAEQAAAAAkCABCAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>GAAAAAAAACAgIBAAEQAAAAAkCABCAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Employee.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -142,7 +135,7 @@
   <Class Name="ticket_system_web_app.Models.Project">
     <Position X="19.25" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AACAAAAABAAAAAAAAAAAAAAAAAAAAAAAAACAAACAAQA=</HashCode>
+      <HashCode>AACAAAAABAAAAAAAAAAQAAAAAAAAAAAAAACAAACAAQA=</HashCode>
       <FileName>Models\Project.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -154,6 +147,62 @@
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAQAAAAgAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.BoardState">
+    <Position X="22.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQQAAAAAAgAAAAAAAAgAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\BoardState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.ProjectBoard">
+    <Position X="26.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAhAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Models\ProjectBoard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.RequestObj.AddStateRequest">
+    <Position X="31.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RequestObj\AddStateRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.RequestObj.DeleteStateRequest">
+    <Position X="31" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RequestObj\DeleteStateRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.RequestObj.EditEmployeeRequest">
+    <Position X="30.75" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEQAACAAAAAAAQAAAAAACAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Models\RequestObj\EditEmployeeRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.RequestObj.GetEmployeeRequest">
+    <Position X="25.5" Y="8.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RequestObj\GetEmployeeRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.RequestObj.UpdateBoardStateOrderRequest">
+    <Position X="25.75" Y="9.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RequestObj\UpdateBoardStateOrderRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ticket_system_web_app.Models.RequestObj.UpdateStateNameRequest">
+    <Position X="29.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\RequestObj\UpdateStateNameRequest.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
