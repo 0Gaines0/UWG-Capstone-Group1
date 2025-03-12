@@ -60,3 +60,29 @@ table board_state {
   state_name varchar(255)
   position integer
 }
+
+table task  {
+  task_id integer pk
+  state varchar(255)
+  description text
+  priority integer
+  created_date datetime
+  assignee_id integer [ref: > employee.e_id]
+  board_id integer [ref: > project_board.board_id]
+  change_log_id integer [ref: > task_change_log.log_id]
+}
+
+
+table task_change_log {
+  log_id integer pk
+  change_id integer [ref: > task_change.change_id]
+}
+
+table task_change {
+  change_id integer pk
+  type enum('StateChange', 'TitleChange', 'DescriptionChange', 'AssigneeChange', 'PriorityChange')
+  changed_date datetime
+  previous_value text
+  new_value text
+  assignee_id integer [ref: > employee.e_id]
+}
