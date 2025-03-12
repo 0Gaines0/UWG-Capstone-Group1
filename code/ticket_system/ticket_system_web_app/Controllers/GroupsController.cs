@@ -6,27 +6,47 @@ using ticket_system_web_app.Models.RequestObj;
 
 namespace ticket_system_web_app.Controllers
 {
+    /// <summary>
+    /// GroupController class
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class GroupsController : Controller
     {
 
         private readonly TicketSystemDbContext context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupsController"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public GroupsController(TicketSystemDbContext context)
         {
             this.context = context;
         }
 
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var groups = await this.constructGroups();
             return View(groups);
         }
 
+        /// <summary>
+        /// Creates the group modal.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateGroupModal()
         {
             return PartialView("_CreateGroupModal");
         }
 
+        /// <summary>
+        /// Gets all groups.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetAllGroups()
         {
@@ -34,6 +54,10 @@ namespace ticket_system_web_app.Controllers
             return Json(groups);
         }
 
+        /// <summary>
+        /// Gets the active user groups.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetActiveUserGroups()
         {
@@ -50,6 +74,11 @@ namespace ticket_system_web_app.Controllers
             return Json(userGroups);
         }
 
+        /// <summary>
+        /// Gets the group by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetGroupById(int id)
         {
@@ -71,6 +100,11 @@ namespace ticket_system_web_app.Controllers
             return Json(group);
         }
 
+        /// <summary>
+        /// Creates the group.
+        /// </summary>
+        /// <param name="jsonRequest">The json request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest jsonRequest)
         {
@@ -100,6 +134,11 @@ namespace ticket_system_web_app.Controllers
 
         }
 
+        /// <summary>
+        /// Removes the group.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> RemoveGroup([FromBody] RemoveGroupRequest request)
         {
@@ -140,8 +179,13 @@ namespace ticket_system_web_app.Controllers
             {
                 return false;
             }
-        }    
+        }
 
+        /// <summary>
+        /// Saves the group edits.
+        /// </summary>
+        /// <param name="jsonRequest">The json request.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SaveGroupEdits([FromBody] CreateGroupRequest jsonRequest)
         {
@@ -168,7 +212,10 @@ namespace ticket_system_web_app.Controllers
             return Json(new { success = true, message = "Group updated successfully." });
         }
 
-        // TODO: Move this to EmployeeController
+        /// <summary>
+        /// Gets all managers.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetAllManagers()
         {
@@ -180,7 +227,10 @@ namespace ticket_system_web_app.Controllers
             return Json(getNeededData);
         }
 
-        // TODO: Move this to EmployeeController
+        /// <summary>
+        /// Gets all employees.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<JsonResult> GetAllEmployees()
         {

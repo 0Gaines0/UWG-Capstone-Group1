@@ -3,42 +3,114 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ticket_system_web_app.Models
 {
+    /// <summary>
+    /// Employee Class
+    /// </summary>
     public class Employee
     {
+        /// <summary>
+        /// Gets or sets the e identifier.
+        /// </summary>
+        /// <value>
+        /// The e identifier.
+        /// </value>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("e_id")] 
         public int EId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of the f.
+        /// </summary>
+        /// <value>
+        /// The name of the f.
+        /// </value>
         [Column("f_name")]
         public string? FName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of the l.
+        /// </summary>
+        /// <value>
+        /// The name of the l.
+        /// </value>
         [Column("l_name")]
         public string? LName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>
+        /// The username.
+        /// </value>
         [Column("username")]
         public string? Username { get; set; }
 
+        /// <summary>
+        /// Gets or sets the hashed password.
+        /// </summary>
+        /// <value>
+        /// The hashed password.
+        /// </value>
         [Column("hashed_password")]
         public string? HashedPassword { get; set; }
 
+        /// <summary>
+        /// Gets or sets the is active.
+        /// </summary>
+        /// <value>
+        /// The is active.
+        /// </value>
         [Column("is_active")]
         public bool? IsActive { get; set; }
 
+        /// <summary>
+        /// Gets or sets the is manager.
+        /// </summary>
+        /// <value>
+        /// The is manager.
+        /// </value>
         [Column("is_manager")]
         public bool? IsManager { get; set; }
 
+        /// <summary>
+        /// Gets or sets the is admin.
+        /// </summary>
+        /// <value>
+        /// The is admin.
+        /// </value>
         [Column("is_admin")]
         public bool? IsAdmin { get; set; }
 
+        /// <summary>
+        /// Gets or sets the email.
+        /// </summary>
+        /// <value>
+        /// The email.
+        /// </value>
         [Column("email")]
         public string? Email { get; set; }
 
+        /// <summary>
+        /// Gets or sets the groups existing in.
+        /// </summary>
+        /// <value>
+        /// The groups existing in.
+        /// </value>
         public ICollection<Group> GroupsExistingIn {  get; set; } = new List<Group>();
+        /// <summary>
+        /// Gets or sets the projects leading.
+        /// </summary>
+        /// <value>
+        /// The projects leading.
+        /// </value>
         public ICollection<Project> ProjectsLeading { get; set; } = new List<Project>();
 
         private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Employee"/> class.
+        /// </summary>
         public Employee()
         {
             this.FName = string.Empty;

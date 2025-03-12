@@ -8,26 +8,65 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ticket_system_web_app.Models
 {
+    /// <summary>
+    /// Project class
+    /// </summary>
     public class Project
     {
+        /// <summary>
+        /// Gets or sets the p identifier.
+        /// </summary>
+        /// <value>
+        /// The p identifier.
+        /// </value>
         [Key]
         [Column("p_id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the project lead identifier.
+        /// </summary>
+        /// <value>
+        /// The project lead identifier.
+        /// </value>
         [Column("project_lead_id")]
         public int ProjectLeadId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the project lead.
+        /// </summary>
+        /// <value>
+        /// The project lead.
+        /// </value>
         [BindNever]
         [Column("project_lead")]
         public Employee? ProjectLead { get; set; }
 
+        /// <summary>
+        /// Gets or sets the p title.
+        /// </summary>
+        /// <value>
+        /// The p title.
+        /// </value>
         [Column("p_title")]
         public string PTitle { get; set; }
 
+        /// <summary>
+        /// Gets or sets the p description.
+        /// </summary>
+        /// <value>
+        /// The p description.
+        /// </value>
         [Column("p_description")]
         public string PDescription { get; set; }
 
+        /// <summary>
+        /// Gets or sets the assigned groups.
+        /// </summary>
+        /// <value>
+        /// The assigned groups.
+        /// </value>
         public ICollection<Group> AssignedGroups { get; set; } = new List<Group>();
 
         /// <summary>

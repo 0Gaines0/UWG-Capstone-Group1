@@ -1,8 +1,9 @@
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', function () {
     fetchEmployees();
 });
 
-document.querySelector('#employeeTableBody').addEventListener('click', function (event) {
+// functionlity for selecting a employee by clicking them 
+document.getElementById('employeeTableBody').addEventListener('click', function (event) {
     if (event.target.closest('tr')) {
         let clickedRow = event.target.closest('tr');
 
@@ -15,30 +16,14 @@ document.querySelector('#employeeTableBody').addEventListener('click', function 
 
         clickedRow.classList.toggle('selected');
         if (clickedRow.classList.contains('selected')) {
-            document.getElementById("remove-employee-btn").removeAttribute('disabled');
-            document.getElementById("remove-employee-btn").title = "";
+            selectedEmployee();
         } else {
-            document.getElementById("remove-employee-btn").setAttribute('disabled', true);
-            document.getElementById("remove-employee-btn").title = "Select a employee to remove them";
+            noSelectedEmployee();
         }
     }
 });
 
-//function setupRows()
-//    {
-//        document.querySelectorAll('#employeeTableBody tr').forEach(row => {
-//            row.addEventListener('click', function (event) {
-//                let rows = document.querySelectorAll('#employeeTableBody tr');
-//                rows.forEach(otherRow => {
-//                    if (otherRow !== this) {
-//                        otherRow.classList.remove('selected');
-//                    }
-//                });
-
-//                this.classList.toggle('selected');
-//            });
-//        });
-//    }
+var selectedUsername = "";
 
 function fetchEmployees() {
     fetch('/Employees/GetAllEmployees')
@@ -62,34 +47,68 @@ function fetchEmployees() {
         .catch(error => console.error('Error fetching groups:', error));
 }
 
-//async function fetchAllAvailableManagers() {
-//    try {
-//        const response = await fetch('/Groups/GetAllManagers');
-//        const data = await response.json();
-//        return data || [];
-//    } catch (error) {
-//        console.error('Error fetching Available Managers:', error);
-//        return [];
-//    }
-//}
-
-//async function fetchAllEmployees() {
-//    try {
-//        const response = await fetch('/Groups/GetAllEmployees');
-//        const data = await response.json();
-//        return data || [];
-//    } catch (error) {
-//        console.error('Error fetching Available Employees:', error);
-//        return [];
-//    }
-//}
-
-function openCreateModal() {
-    document.getElementById("createEmployeeModal").style.display = "flex";
-    resetModal();
+function selectedEmployee() {
+    document.getElementById("remove-employee-btn").removeAttribute('disabled');
+    document.getElementById("remove-employee-btn").title = "";
+    document.getElementById("edit-employee-btn").removeAttribute('disabled');
+    document.getElementById("edit-employee-btn").title = "";
 }
 
-function closeCreateModal() {
+function noSelectedEmployee() {
+    document.getElementById("remove-employee-btn").setAttribute('disabled', true);
+    document.getElementById("remove-employee-btn").title = "Select a employee to remove them";
+    document.getElementById("edit-employee-btn").setAttribute('disabled', true);
+    document.getElementById("edit-employee-btn").title = "Select a employee to edit them";
+}
+function openEditModal() {
+    resetModal();
+    //Gets selected employee
+    let rows = Array.from(document.querySelectorAll('#employeeTableBody tr'));
+    let selectedRow;
+    rows.some(row => {
+        if (row.classList.contains('selected')) {
+            selectedRow = row;
+            return;
+        }
+    });
+    if (selectedRow == null) {
+        alert("No employee selected for editing.");
+        return;
+    }
+    const username = selectedRow.cells[1].textContent;
+    selectedUsername = username;
+
+    fetch('/Employees/GetEmployee', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username })
+    })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("firstName").value = data.fName;
+            document.getElementById("lastName").value = data.lName;
+            document.getElementById("username").value = data.username;
+            document.getElementById("email").value = data.email;
+            document.getElementById("isAdmin").checked = data.isAdmin;
+        })
+        .catch(error => console.error('Error fetching employee:', error));
+    document.getElementById("modalTitle").textContent = "Edit Employee";
+    document.getElementById("passwordField").style.display = "none";
+    document.getElementById("create-btn").style.display = "none";
+    document.getElementById("edit-btn").style.display = "flex";
+    document.getElementById("createEmployeeModal").style.display = "flex";
+}
+
+function openCreateModal() {
+    resetModal();
+    document.getElementById("modalTitle").textContent = "Create Employee";
+    document.getElementById("passwordField").style.display = "block";
+    document.getElementById("create-btn").style.display = "flex";
+    document.getElementById("edit-btn").style.display = "none";
+    document.getElementById("createEmployeeModal").style.display = "flex";
+}
+
+function closeModal() {
     document.getElementById("createEmployeeModal").style.display = "none";
 }
 
@@ -110,7 +129,7 @@ async function resetModal() {
  * @param {any} formData the data in the form
  * @returns true if the form is valid and false otherwise
  */
-function validateForm(formData) {
+function validateFormForCreatingEmployee(formData) {
     let isValid = true;
 
     clearErrors();
@@ -139,6 +158,37 @@ function validateForm(formData) {
     return isValid;
 }
 
+/**
+ * Returns true if the form is valid, and adds error messages for incorrect inputs.
+ * 
+ * @param {any} formData the data in the form
+ * @returns true if the form is valid and false otherwise
+ */
+function validateFormForEditingEmployees(formData) {
+    let isValid = true;
+
+    clearErrors();
+
+    if (formData.FirstName === "") {
+        displayError("firstNameError", "First name is required.");
+        isValid = false;
+    }
+    if (formData.LastName === "") {
+        displayError("lastNameError", "Last name is required.");
+        isValid = false;
+    }
+    if (formData.UserName === "") {
+        displayError("usernameError", "Username is required.");
+        isValid = false;
+    }
+    if (formData.Email === "") {
+        displayError("emailError", "Email is required.");
+        isValid = false;
+    }
+
+    return isValid;
+}
+
 function displayError(errorId, message) {
     let errorLabel = document.getElementById(errorId);
     errorLabel.innerText = message;
@@ -153,8 +203,6 @@ function clearErrors() {
 }
 
 async function createEmployee() {
-    //TODO
-
     const employeeData = {
         FirstName: document.getElementById("firstName").value.trim(),
         LastName: document.getElementById("lastName").value.trim(),
@@ -164,7 +212,7 @@ async function createEmployee() {
         IsAdmin: document.getElementById("isAdmin").checked
     };
 
-    if (!validateForm(employeeData)) return;
+    if (!validateFormForCreatingEmployee(employeeData)) return;
 
     console.log("Sending Employee Data:", employeeData);
 
@@ -180,7 +228,7 @@ async function createEmployee() {
         console.log("Response Received:", result);
         if (response.ok) {
             alert("Employee created successfully!");
-            closeCreateModal();
+            closeModal();
             fetchEmployees();
         } else {
             alert(`Error: ${result.message}`);
@@ -191,130 +239,40 @@ async function createEmployee() {
     }
 }
 
-//function populateLists() {
-//    document.getElementById("employeeList").innerHTML = allEmployees
-//        .map(employee => `<p>${employee.name} <button class="select-btn" onclick="addMember(${employee.id}, '${employee.name}')">+</button></p>`)
-//        .join("");
+async function editEmployee() {
+    const employeeData = {
+        OriginalUsername: selectedUsername,
+        FirstName: document.getElementById("firstName").value.trim(),
+        LastName: document.getElementById("lastName").value.trim(),
+        UserName: document.getElementById("username").value.trim(),
+        Email: document.getElementById("email").value.trim(),
+        IsAdmin: document.getElementById("isAdmin").checked
+    };
 
-//    document.getElementById("selectedEmployees").innerHTML = selectedMembers.length
-//        ? selectedMembers.map(member => `<p>${member.name} <button class="remove-btn" onclick="removeMember(${member.id})">-</button></p>`).join("")
-//        : "<p>No members added</p>";
-//}
+    if (!validateFormForEditingEmployees(employeeData)) return;
 
-//function selectManager(id, name) {
-//    if (selectedManager) {
-//        allManagers.push(selectedManager);
-//    }
+    try {
+        const response = await fetch("/Employees/EditEmployee", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(employeeData)
+        });
 
-//    selectedManager = { id, name };
+        const result = await response.json();
 
-//    document.getElementById("managerSelect").innerHTML = `
-//        <option value="">Select a Manager</option>
-//        <option value="${id}" selected>${name}</option>
-//    `;
-
-//    allManagers = allManagers.filter(m => m.id !== id);
-//    document.getElementById("removeManagerBtn").style.display = "inline-block";
-//    populateManagerLists();
-//}
-
-//function removeManager() {
-//    if (selectedManager) {
-//        allManagers.push(selectedManager);
-//        selectedManager = null;
-
-//        document.getElementById("managerSelect").innerHTML = `<option value="">Select a Manager</option>`;
-
-//        document.getElementById("removeManagerBtn").style.display = "none";
-//        populateManagerLists();
-//    }
-//}
-
-//function populateManagerLists() {
-//    let managerDropdown = document.getElementById("managerSelect");
-//    let managerList = document.getElementById("managerList");
-
-//    managerDropdown.innerHTML = `<option value="">Select a Manager</option>`;
-//    managerList.innerHTML = "";
-
-//    allManagers.forEach(manager => {
-//        managerList.innerHTML += `<p>${manager.name}
-//            <button class="select-btn" onclick="selectManager(${manager.id}, '${manager.name}')">+</button>
-//        </p>`;
-//    });
-
-//    if (selectedManager) {
-//        managerDropdown.innerHTML = `<option value="${selectedManager.id}">${selectedManager.name}</option>`;
-//    }
-//}
-
-//function addMember(id, name) {
-//    if (!selectedMembers.some(m => m.id === id)) {
-//        selectedMembers.push({ id, name });
-//        allEmployees = allEmployees.filter(e => e.id !== id);
-//        populateLists();
-//    }
-//}
-
-//function removeMember(id) {
-//    let member = selectedMembers.find(m => m.id === id);
-//    selectedMembers = selectedMembers.filter(m => m.id !== id);
-//    if (member) allEmployees.push(member); // Restore removed member
-//    populateLists();
-//}
-
-//function filterManagers() {
-//    let searchValue = document.getElementById("managerSearch").value.toLowerCase();
-//    let managerItems = document.querySelectorAll("#managerList p");
-
-//    managerItems.forEach((item) => {
-//        let managerName = item.textContent.toLowerCase();
-//        if (managerName.includes(searchValue)) {
-//            item.style.display = "flex";
-//        } else {
-//            item.style.display = "none";
-//        }
-//    });
-//}
-
-//function filterEmployees() {
-//    let searchValue = document.getElementById("employeeSearch").value.toLowerCase();
-//    let employeeItems = document.querySelectorAll("#employeeList p");
-
-//    employeeItems.forEach((item) => {
-//        let employeeName = item.textContent.toLowerCase();
-//        if (employeeName.includes(searchValue)) {
-//            item.style.display = "flex";
-//        } else {
-//            item.style.display = "none";
-//        }
-//    });
-//}
-
-//function openRemoveModal() {
-//    document.getElementById("removeGroupModal").style.display = "flex";
-//}
-
-//function closeRemoveModal() {
-//    document.getElementById("removeGroupModal").style.display = "none";
-//    document.getElementById("removeGroupName").value = "";
-//    document.getElementById("removeGroupNameError").style.display = "none";
-//    document.getElementById("removeGroupBtn").disabled = true;
-//}
-
-//function validateRemoveGroup() {
-//    const groupNameInput = document.getElementById("removeGroupName").value.trim();
-//    const errorLabel = document.getElementById("removeGroupNameError");
-//    const removeBtn = document.getElementById("removeGroupBtn");
-
-//    if (groupNameInput === "") {
-//        errorLabel.style.display = "block";
-//        removeBtn.disabled = true;
-//    } else {
-//        errorLabel.style.display = "none";
-//        removeBtn.disabled = false;
-//    }
-//}
+        console.log("Response Received:", result);
+        if (response.ok) {
+            alert("Employee updated successfully!");
+            closeModal();
+            fetchEmployees();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Error updating employee:", error);
+        alert("An error occurred while updating the employee.");
+    }
+}
 
 function removeEmployee() {
     let rows = Array.from(document.querySelectorAll('#employeeTableBody tr'));
@@ -341,8 +299,7 @@ function removeEmployee() {
             if (data.success) {
                 alert("User removed successfully!");
                 fetchEmployees();
-                document.getElementById("remove-employee-btn").setAttribute('disabled', true);
-                document.getElementById("remove-employee-btn").title = "Select a employee to remove them";
+                noSelectedEmployee();
             } else {
                 alert("Error: " + data.message);
             }

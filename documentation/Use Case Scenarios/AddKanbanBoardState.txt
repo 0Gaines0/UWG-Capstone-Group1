@@ -1,0 +1,7 @@
+Context - User is logging in as Admin/Manager and Navigated to the EditKanbanBoard Page
+
+Primary flow:
+1 - User selects the Add State button
+2 - System pops up text input for user to add state
+3 - User inputs state
+4 - System updates new state to the end of the Board states
