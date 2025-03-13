@@ -69,5 +69,8 @@
     <Build Include="dbo\Tables\group_member.sql" />
     <Build Include="dbo\Tables\project_board.sql" />
     <Build Include="dbo\Tables\board_state.sql" />
+    <Build Include="dbo\Tables\task.sql" />
+    <Build Include="dbo\Tables\task_change.sql" />
+    <Build Include="dbo\Tables\task_change_log.sql" />
   </ItemGroup>
 </Project>
