@@ -47,7 +47,6 @@ namespace ticket_system_web_app.Models
         /// Gets or sets the assignee identifier.
         /// </summary>
         [Column("assignee_id")]
-        [Required]
         public int? AssigneeId { get; set; }
 
         /// <summary>

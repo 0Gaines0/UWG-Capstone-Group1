@@ -54,5 +54,8 @@ namespace ticket_system_web_app.Models
         /// </value>
         [ForeignKey("BoardId")]
         public ProjectBoard? ProjectBoard { get; set; }
+
+        public List<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
+
     }
 }

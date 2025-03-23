@@ -97,10 +97,11 @@
             display: flex;
             gap: 20px;
             width: 100%;
+            margin-top: 15px;
         }
 
         .column {
-            background-color: #222;
+            background-color: #fff;
             flex: 1;
             border-radius: 10px;
             padding: 10px;
@@ -248,6 +249,25 @@
                     <img src="~/assets/search_icon_img.png" alt="Search">
                     <input type="text" placeholder="Search Task...">
                 </div>
+                <div class="board">
+                    @foreach (var state in Model.ProjectBoard?.States ?? Enumerable.Empty<ticket_system_web_app.Models.BoardState>())
+                    {
+                        <div class="column">
+                            <h3>@state.StateName</h3>
+
+                            @foreach (var task in state.Tasks ?? Enumerable.Empty<ticket_system_web_app.Models.ProjectTask>())
+                            {
+                                <div class="task">
+                                    <strong>Task #@task.TaskId</strong><br />
+                                    @task.Description<br />
+                                    <small>Priority: @task.Priority</small><br />
+                                    <small>Assigned to: @(task.Assignee?.FName ?? "Unassigned")</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
             </div>
         </div>
 
