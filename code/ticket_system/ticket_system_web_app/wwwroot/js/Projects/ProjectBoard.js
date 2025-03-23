@@ -27,3 +27,21 @@
             alert("Failed to update task.");
         }
     }
+
+    async function confirmDeleteTask(btn) {
+        const taskId = btn.dataset.taskId;
+
+        const confirmed = confirm(`Are you sure you want to delete Task #${taskId}?`);
+        if (!confirmed) return;
+
+        const response = await fetch(`/Task/Delete/${taskId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            alert("Failed to delete task.");
+        }
+    }
+

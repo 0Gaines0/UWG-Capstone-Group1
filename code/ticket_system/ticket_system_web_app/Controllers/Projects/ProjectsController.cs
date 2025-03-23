@@ -100,30 +100,6 @@ namespace ticket_system_web_app.Controllers.Projects
                 return NotFound();
             }
             var firstState = project.ProjectBoard?.States?.FirstOrDefault();
-            if (firstState != null && (firstState.Tasks == null || !firstState.Tasks.Any()))
-            {
-                var tempTask = new ProjectTask
-                {
-                    Summary = "Sample Summary",
-                    Description = "Sample Description",
-                    Priority = 1,
-                    CreatedDate = DateTime.Now,
-                    StateId = firstState.StateId,
-                    AssigneeId = null
-                };
-
-                _context.Tasks.Add(tempTask);
-                await _context.SaveChangesAsync();
-
-                project = await _context.Projects
-                    .Include(p => p.ProjectBoard)
-                        .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
-                            .ThenInclude(s => s.Tasks)
-                    .Include(p => p.AssignedGroups)
-                        .ThenInclude(g => g.Employees)
-                    .FirstOrDefaultAsync(p => p.PId == pId);
-            }
-
             var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
 
             var projectTeam = project.AssignedGroups
