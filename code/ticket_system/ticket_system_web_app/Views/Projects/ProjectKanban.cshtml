@@ -119,7 +119,29 @@
             padding: 10px;
             border-radius: 5px;
             margin: 10px 0;
+            position: relative;
         }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .edit-btn {
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: #6b46c1;
+            transition: background-color 0.2s ease;
+        }
+
+            .edit-btn:hover {
+                background-color: #553c9a;
+            }
+
 
         .navigation {
             flex: 0.15;
@@ -224,6 +246,69 @@
             margin-bottom: 5px;
         }
 
+        .modal {
+            position: fixed;
+            inset: 0; 
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #3b5743;
+            border-radius: 15px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90vw;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+
+            .modal-content label {
+                font-weight: bold;
+                margin-top: 10px;
+            }
+
+            .modal-content input[type="text"],
+            .modal-content textarea,
+            .modal-content select {
+                width: 100%;
+                padding: 8px;
+                border: none;
+                border-radius: 6px;
+                background-color: #e6e6e6;
+                color: #000;
+                font-size: 14px;
+            }
+
+            .modal-content button {
+                margin-top: 15px;
+                padding: 10px 20px;
+                font-size: 14px;
+                font-weight: bold;
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+            }
+
+                .modal-content button[type="button"]:first-of-type {
+                    background-color: #805ad5;
+                    color: white;
+                }
+
+                .modal-content button[type="button"]:last-of-type {
+                    background-color: #e53e3e;
+                    color: white;
+                    margin-left: 10px;
+                }
+
+
 
     </style>
 </head>
@@ -258,8 +343,19 @@
                             @foreach (var task in state.Tasks ?? Enumerable.Empty<ticket_system_web_app.Models.ProjectTask>())
                             {
                                 <div class="task">
-                                    <strong>Task #@task.TaskId</strong><br />
-                                    @task.Description<br />
+                                    <div class="task-header">
+                                        <strong>Task #@task.TaskId</strong>
+                                        <a href="#" class="edit-btn"
+                                           data-task-id="@task.TaskId"
+                                           data-state-id="@task.StateId"
+                                           data-priority="@task.Priority"
+                                           data-summary="@task.Summary"
+                                           data-description="@task.Description"
+                                           data-assignee-id="@task.AssigneeId"
+                                           onclick="openEditModal(this)">Edit</a>
+
+                                    </div>
+                                    @task.Summary<br />
                                     <small>Priority: @task.Priority</small><br />
                                     <small>Assigned to: @(task.Assignee?.FName ?? "Unassigned")</small>
                                 </div>
@@ -280,6 +376,49 @@
             </ul>
         </div>
     </div>
+
+    <div id="editTaskModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Edit Task</h2>
+            <form id="editTaskForm">
+                <input type="hidden" id="editTaskId" name="TaskId" />
+
+                <label>State</label>
+                <select id="editTaskStateId" name="StateId">
+                    @foreach (var state in Model.ProjectBoard?.States ?? Enumerable.Empty<ticket_system_web_app.Models.BoardState>())
+                    {
+                        <option value="@state.StateId">@state.StateName</option>
+                    }
+                </select>
+
+                <label>Priority</label>
+                <select id="editTaskPriority" name="Priority">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                </select>
+
+                <label>Assignee</label>
+                <select id="editTaskAssigneeId" name="AssigneeId">
+                    <option value="">Unassigned</option>
+                    @foreach (var emp in ViewBag.ProjectTeam as List<ticket_system_web_app.Models.Employee>)
+                    {
+                        <option value="@emp.EId">@emp.FName @emp.LName</option>
+                    }
+                </select>
+
+                <label>Summary</label>
+                <input type="text" id="editTaskSummary" name="Summary" />
+
+                <label>Description</label>
+                <textarea id="editTaskDescription" name="Description"></textarea>
+
+                <button type="button" onclick="submitEditTask()">Edit Task</button>
+                <button type="button" onclick="closeModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <script src="~/js/Projects/ProjectBoard.js"></script>
 </body>
 </html>
 

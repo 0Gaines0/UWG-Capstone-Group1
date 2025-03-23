@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[task]
 (
 	[task_id] INT NOT NULL PRIMARY KEY,
+	[summary] varchar(255),
 	[description] text,
 	[priority] INT NOT NULL,
 	[createdDate] DATETIME NOT NULL,

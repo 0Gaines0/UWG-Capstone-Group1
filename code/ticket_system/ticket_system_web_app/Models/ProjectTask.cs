@@ -16,6 +16,10 @@ namespace ticket_system_web_app.Models
         [Column("task_id")]
         public int TaskId { get; set; }
 
+        [Column("summary")]
+        [Required]
+        public string? Summary { get; set; }
+
         /// <summary>
         /// Gets or sets the task description.
         /// </summary>

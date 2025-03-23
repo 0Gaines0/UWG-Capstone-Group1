@@ -91,19 +91,21 @@ namespace ticket_system_web_app.Controllers.Projects
                 .Include(p => p.ProjectBoard)
                     .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
                         .ThenInclude(s => s.Tasks)
+                .Include(p => p.AssignedGroups)
+                    .ThenInclude(g => g.Employees)
                 .FirstOrDefaultAsync(p => p.PId == pId);
 
             if (project == null)
             {
                 return NotFound();
             }
-
             var firstState = project.ProjectBoard?.States?.FirstOrDefault();
             if (firstState != null && (firstState.Tasks == null || !firstState.Tasks.Any()))
             {
                 var tempTask = new ProjectTask
                 {
-                    Description = "Sample Task",
+                    Summary = "Sample Summary",
+                    Description = "Sample Description",
                     Priority = 1,
                     CreatedDate = DateTime.Now,
                     StateId = firstState.StateId,
@@ -117,8 +119,21 @@ namespace ticket_system_web_app.Controllers.Projects
                     .Include(p => p.ProjectBoard)
                         .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
                             .ThenInclude(s => s.Tasks)
+                    .Include(p => p.AssignedGroups)
+                        .ThenInclude(g => g.Employees)
                     .FirstOrDefaultAsync(p => p.PId == pId);
             }
+
+            var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
+
+            var projectTeam = project.AssignedGroups
+            .SelectMany(g => g.Employees)
+            .Append(projectLead)
+            .Where(e => e != null)
+            .Distinct()
+            .ToList();
+
+            ViewBag.ProjectTeam = projectTeam;
 
             return View("ProjectKanban", project);
         }
