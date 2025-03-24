@@ -382,6 +382,8 @@
                 </button>
             }
 
+            
+
         </div>
 
         <div class="main-content">
@@ -402,20 +404,23 @@
                                 <div class="task">
                                     <div class="task-header">
                                         <strong>Task #@task.TaskId</strong>
-                                        <div class="task-actions">
-                                            <a href="#" class="edit-btn"
-                                               data-task-id="@task.TaskId"
-                                               data-state-id="@task.StateId"
-                                               data-priority="@task.Priority"
-                                               data-summary="@task.Summary"
-                                               data-description="@task.Description"
-                                               data-assignee-id="@task.AssigneeId"
-                                               onclick="openEditModal(this)">Edit</a>
+                                        @if (hasAdminPerms)
+                                        {
+                                            <div class="task-actions">
+                                                <a href="#" class="edit-btn"
+                                                   data-task-id="@task.TaskId"
+                                                   data-state-id="@task.StateId"
+                                                   data-priority="@task.Priority"
+                                                   data-summary="@task.Summary"
+                                                   data-description="@task.Description"
+                                                   data-assignee-id="@task.AssigneeId"
+                                                   onclick="openEditModal(this)">Edit</a>
 
-                                            <a href="#" class="delete-btn"
-                                               data-task-id="@task.TaskId"
-                                               onclick="confirmDeleteTask(this)">Delete</a>
-                                        </div>
+                                                <a href="#" class="delete-btn"
+                                                   data-task-id="@task.TaskId"
+                                                   onclick="confirmDeleteTask(this)">Delete</a>
+                                            </div>
+                                        }
                                     </div>
                                     @task.Summary<br />
                                     <small>Priority: @task.Priority</small><br />
