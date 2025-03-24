@@ -106,6 +106,7 @@ namespace ticket_system_web_app.Data
                 .HasForeignKey(tc => tc.AssigneeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+
             modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
 
         }

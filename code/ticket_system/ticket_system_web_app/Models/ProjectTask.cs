@@ -16,6 +16,10 @@ namespace ticket_system_web_app.Models
         [Column("task_id")]
         public int TaskId { get; set; }
 
+        [Column("summary")]
+        [Required]
+        public string? Summary { get; set; }
+
         /// <summary>
         /// Gets or sets the task description.
         /// </summary>
@@ -47,7 +51,6 @@ namespace ticket_system_web_app.Models
         /// Gets or sets the assignee identifier.
         /// </summary>
         [Column("assignee_id")]
-        [Required]
         public int? AssigneeId { get; set; }
 
         /// <summary>

@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ticket_system_web_app.Models
 {
-    /// <summary>
-    /// Project class
-    /// </summary>
+    /// <summary>Project class</summary>
     public class Project
     {
         /// <summary>
@@ -68,6 +66,8 @@ namespace ticket_system_web_app.Models
         /// The assigned groups.
         /// </value>
         public ICollection<Group> AssignedGroups { get; set; } = new List<Group>();
+
+        public ProjectBoard? ProjectBoard { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.

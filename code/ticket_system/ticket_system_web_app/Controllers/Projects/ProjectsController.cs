@@ -87,7 +87,30 @@ namespace ticket_system_web_app.Controllers.Projects
         [HttpGet("Projects/BoardPage/{pId}")]
         public async Task<IActionResult> BoardPage(int pId)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.PId == pId);
+            var project = await _context.Projects
+                .Include(p => p.ProjectBoard)
+                    .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
+                        .ThenInclude(s => s.Tasks)
+                .Include(p => p.AssignedGroups)
+                    .ThenInclude(g => g.Employees)
+                .FirstOrDefaultAsync(p => p.PId == pId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+            var firstState = project.ProjectBoard?.States?.FirstOrDefault();
+            var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
+
+            var projectTeam = project.AssignedGroups
+            .SelectMany(g => g.Employees)
+            .Append(projectLead)
+            .Where(e => e != null)
+            .Distinct()
+            .ToList();
+
+            ViewBag.ProjectTeam = projectTeam;
+
             return View("ProjectKanban", project);
         }
 
