@@ -219,12 +219,9 @@ namespace ticket_system_web_app.Controllers
         [HttpGet]
         public async Task<JsonResult> GetAllManagers()
         {
-            
+            var possibleManagers = await this.context.Employees.Where(e => e.IsActive == true).Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).AsNoTracking().ToListAsync();
 
-            var allManagers = this.context.Employees.Where(e => (e.IsManager ?? false) || (e.IsAdmin ?? false));
-            var getNeededData = await allManagers.Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).ToListAsync();
-
-            return Json(getNeededData);
+            return Json(possibleManagers);
         }
 
         /// <summary>
