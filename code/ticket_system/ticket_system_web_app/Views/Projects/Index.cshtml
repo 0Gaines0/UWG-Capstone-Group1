@@ -62,7 +62,12 @@
                                     </td>
                                     <td>
                                     @if (ActiveEmployee.Employee.IsAdmin ?? false) {
-                                        <a asp-action="Edit" asp-route-id="@item.PId" class="btn">Edit</a>
+                                        <button type="button" class="btn" onclick="gotoEditProject(@item.PId);">Edit</button>
+                                        <form asp-action="Edit" method="get" class="hidden">
+                                            <input type="hidden" name="id" value="@item.PId" />
+                                            <button class="btn" id="edit-row-@item.PId">Edit</button>
+                                        </form>
+
                                         <button type="button" class="btn" onclick="promptDeleteProject(@item.PId);">Delete</button>
                                         <form asp-action="Delete" method="post" class="hidden">
                                             <input type="hidden" name="id" value="@item.PId"/>
