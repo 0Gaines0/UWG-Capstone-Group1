@@ -24,6 +24,14 @@ namespace ticket_system_web_app.Data
         /// The task changes.
         /// </value>
         public DbSet<TaskChange> TaskChanges { get; set; }
+
+        /// <summary>
+        /// Gets or sets the task change logs.
+        /// </summary>
+        /// <value>
+        /// The task change logs.
+        /// </value>
+        public DbSet<TaskChangeLog> TaskChangeLogs { get; set; }
         /// <summary>
         /// Gets or sets the users.
         /// </summary>
@@ -105,6 +113,9 @@ namespace ticket_system_web_app.Data
                 .WithMany()
                 .HasForeignKey(tc => tc.AssigneeId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskChangeLog>()
+            .HasKey(tcl => new { tcl.TaskId, tcl.ChangeId });
 
 
             modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
