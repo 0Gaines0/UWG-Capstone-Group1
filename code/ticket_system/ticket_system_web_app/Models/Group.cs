@@ -58,7 +58,7 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The assigned projects.
         /// </value>
-        public ICollection<Project> AssignedProjects { get; set; } = new List<Project>();
+        public ICollection<ProjectGroup> Collaborations { get; set; } = new List<ProjectGroup>();
 
         private static string VALID_NUM_ERROR_MESSAGE = "Parameter must not be negative";
         private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";

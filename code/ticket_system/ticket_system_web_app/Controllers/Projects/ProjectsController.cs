@@ -37,23 +37,19 @@ namespace ticket_system_web_app.Controllers.Projects
         /// <postcondition>true</postcondition>
         /// <param name="id">The project ID.</param>
         /// <returns>The list of collaborators.</returns>
-        public IEnumerable<Group>? GetCollaboratorsOn(int? id)
+        public async Task<IEnumerable<ProjectGroup>?> GetCollaboratorsOn(int? id)
         {
             if (id == null)
             {
                 return null;
             }
 
-            IEnumerable<Group> result = new List<Group>();
-            foreach (var g in _context.Groups)
+            IEnumerable<ProjectGroup> result = null;
+            Project? project = await this._context.Projects.Include(proj => proj.Collaborators).FirstOrDefaultAsync(proj => proj.PId == id);
+
+            if (project != null)
             {
-                foreach (var p in g.AssignedProjects)
-                {
-                    if (p.PId == id)
-                    {
-                        result.Append(g);
-                    }
-                }
+                result = project.Collaborators;
             }
 
             return result;
@@ -87,30 +83,7 @@ namespace ticket_system_web_app.Controllers.Projects
         [HttpGet("Projects/BoardPage/{pId}")]
         public async Task<IActionResult> BoardPage(int pId)
         {
-            var project = await _context.Projects
-                .Include(p => p.ProjectBoard)
-                    .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
-                        .ThenInclude(s => s.Tasks)
-                .Include(p => p.AssignedGroups)
-                    .ThenInclude(g => g.Employees)
-                .FirstOrDefaultAsync(p => p.PId == pId);
-
-            if (project == null)
-            {
-                return NotFound();
-            }
-            var firstState = project.ProjectBoard?.States?.FirstOrDefault();
-            var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
-
-            var projectTeam = project.AssignedGroups
-            .SelectMany(g => g.Employees)
-            .Append(projectLead)
-            .Where(e => e != null)
-            .Distinct()
-            .ToList();
-
-            ViewBag.ProjectTeam = projectTeam;
-
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.PId == pId);
             return View("ProjectKanban", project);
         }
 
@@ -138,28 +111,6 @@ namespace ticket_system_web_app.Controllers.Projects
         public IActionResult Create()
         {
             return View();
-        }
-
-
-        /// <summary>
-        /// Creates the specified project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            IEnumerable<Group> groups = await _context.Groups.ToListAsync();
-            ViewData["Groups"] = groups;
-            return View(project);
         }
 
         /// <summary>
@@ -247,8 +198,8 @@ namespace ticket_system_web_app.Controllers.Projects
                 var newState = new BoardState
                 {
                     StateName = request.Name,
-                    BoardId = request.BoardId, 
-                    Position = maxPosition + 1 
+                    BoardId = request.BoardId,
+                    Position = maxPosition + 1
                 };
 
                 _context.BoardStates.Add(newState);
@@ -283,22 +234,31 @@ namespace ticket_system_web_app.Controllers.Projects
                     return BadRequest(new { message = "Invalid project data" });
                 }
 
-                ICollection<Group> groups = new List<Group>();
-                if (!jsonRequest.CollaboratingGroupIDs.IsNullOrEmpty())
+                Project project = new Project(lead, jsonRequest.PTitle, jsonRequest.PDescription);
+                this._context.Projects.Add(project);
+                await this._context.SaveChangesAsync();
+
+                ICollection<ProjectGroup> collabs = new List<ProjectGroup>();
+                foreach (int currGroupId in jsonRequest.CollaboratingGroupIDs)
                 {
-                    groups = await _context.Groups.Where(group => jsonRequest.CollaboratingGroupIDs.Contains(group.GId)).ToListAsync();
+                    Group? currGroup = this._context.Groups.FindAsync(currGroupId).Result;
+                    if (currGroup != null)
+                    {
+                        ProjectGroup collab = new ProjectGroup(project, currGroup);
+                        collabs.Add(collab);
+                        this._context.ProjectGroups.Add(collab);
+                    }
                 }
-
-                var project = new Project(lead, jsonRequest.PTitle, jsonRequest.PDescription, groups);
-
-                await _context.AddAsync(project);
-                await _context.SaveChangesAsync();  
+                project.Collaborators = collabs;
+                this._context.Projects.Update(project);
+                await this._context.SaveChangesAsync();
                 await AddProjectBoardAndDefaultStates(project.PId);
 
                 return Ok(new { message = "Project created successfully", projectID = project.PId });
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return StatusCode(500, new { message = "An error occurred", error = ex.Message });
             }
         }
@@ -307,57 +267,36 @@ namespace ticket_system_web_app.Controllers.Projects
         {
             try
             {
-                    var board = new ProjectBoard { ProjectId = projectId };
-                    await _context.ProjectBoards.AddAsync(board);
-                    await _context.SaveChangesAsync(); 
+                var board = new ProjectBoard { ProjectId = projectId };
+                await _context.ProjectBoards.AddAsync(board);
+                await _context.SaveChangesAsync();
 
-                    board = await _context.ProjectBoards.FirstOrDefaultAsync(b => b.ProjectId == projectId);
+                board = await _context.ProjectBoards.FirstOrDefaultAsync(b => b.ProjectId == projectId);
 
-                    if (board == null)
-                    {
-                        Console.Out.WriteLine("Failed to create ProjectBoard.");
-                        return;
-                    }
+                if (board == null)
+                {
+                    Console.Out.WriteLine("Failed to create ProjectBoard.");
+                    return;
+                }
 
-                    var boardStates = new List<BoardState>
+                var boardStates = new List<BoardState>
             {
                 new BoardState { BoardId = board.BoardId, StateName = "To Do", Position = 1, ProjectBoard = board },
                 new BoardState { BoardId = board.BoardId, StateName = "In Progress", Position = 2, ProjectBoard = board },
                 new BoardState { BoardId = board.BoardId, StateName = "Completed", Position = 3, ProjectBoard = board }
             };
 
-                    await _context.BoardStates.AddRangeAsync(boardStates);
-                    var result = await _context.SaveChangesAsync();
+                await _context.BoardStates.AddRangeAsync(boardStates);
+                var result = await _context.SaveChangesAsync();
 
-                    Console.Out.WriteLine($"Saved {result} BoardStates successfully.");
-               
+                Console.Out.WriteLine($"Saved {result} BoardStates successfully.");
+
             }
             catch (Exception ex)
             {
                 Console.Out.WriteLine($"Error in AddProjectBoardAndDefaultStates: {ex.Message}");
             }
         }
-
-        /// <summary>
-        /// Edits the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects.Include(i => i.ProjectLead).Include(i => i.AssignedGroups).FirstOrDefaultAsync(i => i.PId == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-            return View(project);
-        }
-
 
         /// <summary>
         /// Edits the specified identifier.
@@ -375,12 +314,13 @@ namespace ticket_system_web_app.Controllers.Projects
                 return NotFound();
             }
 
-            project.AssignedGroups = this.getCollaboratorsFromCSV(csvCollabGroups);
+            project.Collaborators = this.getCollaboratorsFromCSV(id, csvCollabGroups);
             project.ProjectLead = await this._context.Employees.FindAsync(project.ProjectLeadId);
 
-            var projectCurrent = await _context.Projects.Include(p => p.ProjectLead).Include(p => p.AssignedGroups).FirstOrDefaultAsync(p => p.PId == id);
+            var projectCurrent = await _context.Projects.Include(p => p.ProjectLead).Include(p => p.Collaborators).FirstOrDefaultAsync(p => p.PId == id);
 
-            if (projectCurrent == null) { 
+            if (projectCurrent == null)
+            {
                 return NotFound();
             }
 
@@ -393,9 +333,9 @@ namespace ticket_system_web_app.Controllers.Projects
                     projectCurrent.ProjectLeadId = project.ProjectLeadId;
                     projectCurrent.ProjectLead = project.ProjectLead;
 
-                    projectCurrent.AssignedGroups.Clear();
+                    projectCurrent.Collaborators.Clear();
                     _context.Update(projectCurrent);
-                    projectCurrent.AssignedGroups = project.AssignedGroups;
+                    projectCurrent.Collaborators = project.Collaborators;
                     _context.Update(projectCurrent);
                     await _context.SaveChangesAsync();
                 }
@@ -506,7 +446,7 @@ namespace ticket_system_web_app.Controllers.Projects
         {
             var eId = ActiveEmployee.Employee?.EId;
             var leadProject = await this._context.Projects.Where(proj => proj.ProjectLeadId == eId).ToListAsync();
-            var groupProject = await this._context.Projects.Where(proj => proj.AssignedGroups.Any(group => group.Employees.Any(employee => employee.EId == eId))).ToListAsync();
+            var groupProject = await this._context.Projects.Include(proj => proj.Collaborators).Where(proj => proj.Collaborators.Any(collab => collab.Group.Employees.Any(employee => employee.EId == eId))).ToListAsync();
             var allProjects = leadProject.Concat(groupProject).Distinct().ToList();
 
             var projectData = allProjects.Select(proj => new
@@ -524,20 +464,20 @@ namespace ticket_system_web_app.Controllers.Projects
         /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
         public async Task<JsonResult?> Details(int id)
         {
-            var project = await this._context.Projects.Include(project => project.AssignedGroups).Select(project => new
+            var project = await this._context.Projects.Include(project => project.Collaborators).ThenInclude(collab => collab.Group).Select(project => new
             {
                 project.PId,
                 project.PTitle,
                 project.PDescription,
                 ProjectLeadName = this._context.Employees.Where(employee => employee.EId == project.ProjectLeadId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
-                project.AssignedGroups
+                Collaborators = project.Collaborators.Select(collab => new { Accepted = collab.Accepted, GName = collab.Group.GName }).ToList(),
             }).FirstOrDefaultAsync(project => project.PId == id);
-            
+
             if (project == null)
             {
                 return null;
             }
-            
+
             return Json(project);
         }
 
@@ -546,17 +486,17 @@ namespace ticket_system_web_app.Controllers.Projects
             return _context.Projects.Any(e => e.PId == id);
         }
 
-        private ICollection<Group> getCollaboratorsFromCSV(string csv)
+        private ICollection<ProjectGroup> getCollaboratorsFromCSV(int projectId, string csv)
         {
-            ICollection<Group> result = new List<Group>();
+            ICollection<ProjectGroup> result = new List<ProjectGroup>();
 
             string[] collabIDs = csv.Split(',');
 
-            foreach (string collabID in collabIDs)
+            foreach (string token in collabIDs)
             {
-                if (int.TryParse(collabID, out var collab))
+                if (int.TryParse(token, out var collabID))
                 {
-                    Group? collaborator = this._context.Groups.FindAsync(collab).Result;
+                    ProjectGroup? collaborator = this._context.ProjectGroups.FindAsync(projectId, collabID).Result;
                     if (collaborator != null)
                     {
                         result.Add(collaborator);

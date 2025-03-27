@@ -41,9 +41,9 @@
                             </tr>
                         </thead>
                         <tbody id="projectCollaborators">
-                            @foreach (Group currGroup in Model.AssignedGroups.OrderBy(group => group.GName))
+                            @foreach (ProjectGroup currCollab in Model.Collaborators.OrderBy(collab => collab.Group.GName))
                             {
-                                <tr><td>@Html.DisplayFor(group => currGroup.GName)</td></tr>
+                                <tr><td>@Html.DisplayFor(group => currCollab.Group.GName)</td></tr>
                             }
                             
                         </tbody>
@@ -88,11 +88,11 @@
                                 </tr>
                             </thead>
                             <tbody id="collaboratorsTableBody">
-                                @foreach (Group currGroup in Model.AssignedGroups.OrderBy(group => group.GName))
+                                @foreach (ProjectGroup currCollab in Model.Collaborators.OrderBy(collab => collab.Group.GName))
                                 {
-                                    <tr id="row-id-@currGroup.GId">
-                                        <td>@Html.DisplayFor(group => currGroup.GName)</td>
-                                        <td><button class="btn" type="button" onClick="removeCollaborator(@currGroup.GId);">Remove</button></td>
+                                    <tr id="row-id-@currCollab.Group.GId">
+                                        <td>@Html.DisplayFor(group => currCollab.Group.GName)</td>
+                                        <td><button class="btn" type="button" onClick="removeCollaborator(@currCollab.Group.GId);">Remove</button></td>
                                     </tr>
                                 }
                             </tbody>
