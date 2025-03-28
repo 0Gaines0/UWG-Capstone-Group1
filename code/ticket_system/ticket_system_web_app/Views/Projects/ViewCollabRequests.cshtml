@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ProjectGroup>
+
+@{
+    if (ActiveEmployee.Employee == null)
+    {
+        Context.Response.StatusCode = 404;
+        Context.Response.Redirect("/Login/Index");
+        return;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/MainPages.css">
+    <link rel="stylesheet" href="/css/Projects/Projects.css">
+    <link rel="stylesheet" href="/css/Projects/ViewCollabRequests.css">
+    <script src="~/js/Projects/ViewCollabRequests.js"></script>
+</head>
+<body>
+    <h1>Collaboration Requests</h1>
+    <hr />
+    <div class="container">
+        <div class="content-block scrollable">
+            <div class="grid-pane">
+                @foreach (ProjectGroup currCollab in Model) {
+                    string id = $"request-{currCollab.ProjectId}-{currCollab.GroupId}";
+                    <div class="request" id="@id">
+                        <h3>Group: @currCollab.Group.GName</h3>
+                        <h4>Project title: @currCollab.Project.PTitle</h4>
+                        <p>Project description: @currCollab.Project.PDescription</p>
+                        <hr />
+                        <form asp-action="AcceptCollabRequest" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
+                            <button class="btn" onclick="markAccepted(@currCollab.ProjectId, @currCollab.GroupId);">Accept</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="nav_container">
+        <div class="nav_top">
+            <img src="~/assets/navigation_bar_img.png" alt="Navigation Image" class="nav_image">
+        </div>
+        <ul class="nav_list">
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "Projects")';">Projects</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "Groups")';">Groups</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "Employees")';">Employees</li>
+        </ul>
+    </div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>

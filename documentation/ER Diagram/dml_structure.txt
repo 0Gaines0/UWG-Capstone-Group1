@@ -42,6 +42,7 @@ table project {
 table project_group {
   p_id integer [ref: > project.p_id]
   g_id integer [ref: > group.g_id]
+  accepted_collaboration bit
 
   indexes {
     (p_id, g_id) [pk]

@@ -61,6 +61,8 @@ namespace ticket_system_web_app.Data
         /// </value>
         public DbSet<Group> Groups { get; set; }
 
+        public DbSet<ProjectGroup> ProjectGroups { get; set; }
+
         /// <summary>
         /// Gets or sets the project boards.
         /// </summary>
@@ -93,8 +95,12 @@ namespace ticket_system_web_app.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasMany(employee => employee.GroupsExistingIn).WithMany(group => group.Employees).UsingEntity(join => join.ToTable("group_member"));
-            modelBuilder.Entity<Project>().HasMany(project => project.AssignedGroups).WithMany(group => group.AssignedProjects).UsingEntity(join => join.ToTable("project_group"));
+            //modelBuilder.Entity<Project>().HasMany(project => project.AssignedGroups).WithMany(group => group.AssignedProjects).UsingEntity(join => join.ToTable("project_group"));
             modelBuilder.Entity<Project>().HasOne(e => e.ProjectLead).WithMany(e => e.ProjectsLeading).HasForeignKey(e => e.ProjectLeadId).IsRequired();
+
+            modelBuilder.Entity<ProjectGroup>().HasKey(collab => new { collab.ProjectId, collab.GroupId });
+            modelBuilder.Entity<ProjectGroup>().HasOne<Project>().WithMany(project => project.Collaborators).HasForeignKey(collab => collab.ProjectId);
+            modelBuilder.Entity<ProjectGroup>().HasOne<Group>().WithMany(group => group.Collaborations).HasForeignKey(collab => collab.GroupId);
 
             modelBuilder.Entity<ProjectTask>()
                 .HasOne(t => t.Assignee)

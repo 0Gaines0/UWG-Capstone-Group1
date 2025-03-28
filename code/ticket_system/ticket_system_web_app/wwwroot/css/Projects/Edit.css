@@ -1,4 +1,13 @@
-﻿table {
+﻿h3, h4 {
+    margin: 0px;
+    padding: 0px;
+}
+
+hr {
+    width: 100%;
+}
+
+table {
     margin: auto;
     width: 100%;
 }
@@ -23,4 +32,13 @@
 .text-danger {
     display: inline;
     margin-left: 1em;
+}
+
+.not-accepted {
+    background-color: var(--background-color-container);
+    border: 3px #fff solid;
+    border-radius: 0 0.5em;
+    float: left;
+    margin: -3px calc(-5em + -3px) -3px -3px;
+    width: 5em;
 }
