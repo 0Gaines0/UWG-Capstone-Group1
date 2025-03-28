@@ -1,0 +1,20 @@
+﻿.grid-pane {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.request {
+    background-color: var(--button-color-normal);
+    border-radius: 1em;
+    float: left;
+    padding: 1em;
+    width: calc(100% - 4em);
+    margin: 1em;
+}
+
+    .request h1, h2, h3, h4, h5, h6 {
+        background-color: var(--background-color-container);
+        border: 3px #fff solid;
+        border-radius: 0 0.5em;
+        margin-bottom: 0.5em;
+    }

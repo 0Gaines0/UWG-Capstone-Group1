@@ -6,6 +6,7 @@
     if (notLogin)
     {
         Context.Response.StatusCode = 404;
+        Context.Response.Redirect("/Login/Index");
         return;
     }
 }
@@ -119,6 +120,10 @@
             gap: 200px;
         }
 
+            .greeting-container .nav_item {
+                flex: 2;
+            }
+
         .greeting {
             flex: 1;
         }
@@ -224,7 +229,7 @@
         }
 
      
-            .nav_top p {
+        .nav_top p {
             font-size: 1.5rem;
             text-align: center;
         }
@@ -271,6 +276,9 @@
                 <div class="greeting">
                     Good Day, @ticket_system_web_app.Models.ActiveEmployee.Employee?.FName!
                 </div>
+                @if (hasManagerPerms) {
+                    <button class="nav_item" onclick="location.href='@Url.Action("ViewCollabRequests", "Projects", new {managerId = @ActiveEmployee.Employee.EId})';">View collaboration requests</button>
+                }
                 <form asp-action="LogOut" method="post" style="margin: 0;">
                     <button type="submit" class="logout-button">Log Out</button>
                 </form>

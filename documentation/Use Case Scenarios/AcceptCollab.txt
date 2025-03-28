@@ -1,0 +1,16 @@
+Context - User is logged in as Admin/ Manager account and is on their landing page.
+
+Primary flow:
+1 - System detects unaccepted collaboration requests for groups managed by the user.
+2 - System adds button to landing page that leads to the collaboration acceptance page.
+3 - User navigates to the collaboration acceptance page.
+4 - System populates page with the list of collaboration requests and their details, along with controls to accept the requests.
+5 - User uses a control to accept a request.
+6 - System updates the collaboration request to be accepted.
+7 - User is notified that the request was accepted.
+8 - Collaboration request is removed from the page.
+
+Alternative flows
+USER DOES NOT HAVE PENDING REQUESTS
+a1 - System does not detect unaccepted collaboration requests.
+a2 - System does not allow navigation to collaboration acceptance page.

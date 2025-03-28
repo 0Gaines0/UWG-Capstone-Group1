@@ -44,15 +44,7 @@ namespace ticket_system_web_app.Controllers.Projects
                 return null;
             }
 
-            IEnumerable<ProjectGroup> result = null;
-            Project? project = await this._context.Projects.Include(proj => proj.Collaborators).FirstOrDefaultAsync(proj => proj.PId == id);
-
-            if (project != null)
-            {
-                result = project.Collaborators;
-            }
-
-            return result;
+            return await this._context.ProjectGroups.Where(collab => collab.ProjectId == id).ToListAsync();
         }
 
         /// <summary>
@@ -309,11 +301,6 @@ namespace ticket_system_web_app.Controllers.Projects
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project, string csvCollabGroups)
         {
-            if (id != project.PId)
-            {
-                return NotFound();
-            }
-
             project.Collaborators = this.getCollaboratorsFromCSV(id, csvCollabGroups);
             project.ProjectLead = await this._context.Employees.FindAsync(project.ProjectLeadId);
 
@@ -321,6 +308,7 @@ namespace ticket_system_web_app.Controllers.Projects
 
             if (projectCurrent == null)
             {
+                Console.WriteLine("Project not found");
                 return NotFound();
             }
 
@@ -343,6 +331,7 @@ namespace ticket_system_web_app.Controllers.Projects
                 {
                     if (!ProjectExists(project.PId))
                     {
+                        Console.WriteLine("Project DNE");
                         return NotFound();
                     }
                     else
@@ -352,9 +341,28 @@ namespace ticket_system_web_app.Controllers.Projects
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(project);
+            return new NoContentResult();
         }
 
+        /// <summary>
+        /// Edits the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.Include(project => project.ProjectLead).Include(project => project.Collaborators).ThenInclude(collab => collab.Group).FirstOrDefaultAsync(project => project.PId == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            return View(project);
+        }
 
 
         /// <summary>
@@ -496,15 +504,40 @@ namespace ticket_system_web_app.Controllers.Projects
             {
                 if (int.TryParse(token, out var collabID))
                 {
-                    ProjectGroup? collaborator = this._context.ProjectGroups.FindAsync(projectId, collabID).Result;
-                    if (collaborator != null)
-                    {
-                        result.Add(collaborator);
-                    }
+                    ProjectGroup? collaborator = this._context.ProjectGroups.FindAsync(projectId, collabID).Result
+                        ?? new ProjectGroup(this._context.Projects.FindAsync(projectId).Result, this._context.Groups.FindAsync(collabID).Result);
+                    result.Add(collaborator);
                 }
             }
 
             return result;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewCollabRequests(int managerId)
+        {
+            IEnumerable<ProjectGroup> result = await this._context.ProjectGroups.Include(collab => collab.Project).Include(collab => collab.Group).Where(collab => !collab.Accepted && collab.Group.ManagerId == managerId).ToListAsync();
+            result.OrderBy(collab => collab.Project.PTitle).ThenBy(collab => collab.Group.GName);
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AcceptCollabRequest(int projectId, int groupId)
+        {
+            ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
+            if (collab != null)
+            {
+                collab.Accepted = true;
+                this._context.ProjectGroups.Update(collab);
+                await this._context.SaveChangesAsync();
+            }
+            return new NoContentResult();
+        }
+
+        [HttpPost]
+        public async Task<int> CountRequestedCollabs(int managerId)
+        {
+            return await this._context.ProjectGroups.Include(collab => collab.Group).CountAsync(collab => collab.Group.ManagerId == managerId && !collab.Accepted);
         }
     }
 }
