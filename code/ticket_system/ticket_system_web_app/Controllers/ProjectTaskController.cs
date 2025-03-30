@@ -16,6 +16,21 @@ namespace ticket_system_web_app.Controllers
             this._context = context;
         }
 
+        [HttpPost("/Task/Create")]
+        public async Task<IActionResult> CreateTask([FromForm] EditProjectTaskRequest model)
+        {
+            var task = new ProjectTask();
+            task.StateId = model.StateId;
+            task.Priority = model.Priority;
+            task.Summary = model.Summary;
+            task.AssigneeId = model.AssigneeId;
+            task.Description = model.Description;
+
+            this._context.Tasks.Add(task);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpPost("/Task/Edit")]
         public async Task<IActionResult> EditTask([FromForm] EditProjectTaskRequest model)
         {

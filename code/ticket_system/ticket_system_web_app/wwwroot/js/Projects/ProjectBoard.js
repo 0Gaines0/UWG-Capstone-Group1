@@ -1,20 +1,56 @@
 ﻿function openEditModal(btn) {
 
-        document.getElementById('editTaskId').value = btn.dataset.taskId;
-        document.getElementById('editTaskStateId').value = btn.dataset.stateId;
-        document.getElementById('editTaskPriority').value = btn.dataset.priority;
-        document.getElementById('editTaskSummary').value = btn.dataset.summary;
-       document.getElementById('editTaskAssigneeId').value = btn.dataset.assigneeId || "";
-       document.getElementById('editTaskDescription').value = btn.dataset.description;
+    document.getElementById('editTaskId').value = btn.dataset.taskId;
+    document.getElementById('editTaskStateId').value = btn.dataset.stateId;
+    document.getElementById('editTaskPriority').value = btn.dataset.priority;
+    document.getElementById('editTaskSummary').value = btn.dataset.summary;
+    document.getElementById('editTaskAssigneeId').value = btn.dataset.assigneeId || "";
+    document.getElementById('editTaskDescription').value = btn.dataset.description;
+
+    document.getElementById('edit-task').style.display = "flex";
+    document.getElementById('create-task').style.display = "none";
+    document.getElementById('comments-history').style.display = "block";
+    document.getElementById('modal-title').textContent = "Edit Task";
 
     document.getElementById('editTaskModal').style.display = 'flex';
     loadTaskHistory(btn.dataset.taskId);
 
-    }
+}
+
+function openCreateTaskModal() {
+
+    document.getElementById('editTaskStateId').value = document.getElementById('editTaskStateId').options[0].value;
+    document.getElementById('editTaskPriority').value = 1;
+    document.getElementById('editTaskAssigneeId').value = "";
+    document.getElementById('editTaskSummary').value = "";
+    document.getElementById('editTaskDescription').value = "";
+
+    document.getElementById('comments-history').style.display = "none";
+    document.getElementById('edit-task').style.display = "none";
+    document.getElementById('create-task').style.display = "flex";
+    document.getElementById('modal-title').textContent = "Create Task";
+
+    document.getElementById('editTaskModal').style.display = 'flex';
+}
 
     function closeModal() {
         document.getElementById('editTaskModal').style.display = 'none';
     }
+
+async function submitCreateTask() {
+    const form = document.getElementById('editTaskForm');
+    const formData = new FormData(form);
+    const response = await fetch('/Task/Create', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (response.ok) {
+        window.location.reload();
+    } else {
+        alert("Failed to create task.");
+    }
+}
 
     async function submitEditTask() {
         const form = document.getElementById('editTaskForm');
