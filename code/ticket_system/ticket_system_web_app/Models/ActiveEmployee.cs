@@ -8,6 +8,7 @@ namespace ticket_system_web_app.Models
     public static class ActiveEmployee
     {
         private const int AUTH_TOKEN_LENGTH = 32;
+        private const string AUTH_TOKEN_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
 
         /// <summary>
         /// Gets the authentication token.
@@ -80,7 +81,7 @@ namespace ticket_system_web_app.Models
         /// <postcondition>true</postcondition>
         /// <param name="authToken">The authentication token.</param>
         /// <returns><c>True</c> if the request is valid, <c>false</c> otherwise.</returns>
-        public static bool ValidateRequestToken(string authToken)
+        public static bool IsValidRequest(string authToken)
         {
             return IsLoggedIn() && !authToken.IsNullOrEmpty() && AuthToken.Equals(authToken);
         }
@@ -90,9 +91,11 @@ namespace ticket_system_web_app.Models
             string result = string.Empty;
             for (int i = 0; i < AUTH_TOKEN_LENGTH; i++)
             {
-                result += (char)rng.Next();
+                int charIndex = rng.Next(AUTH_TOKEN_VALID_CHARS.Length - 1);
+                result += AUTH_TOKEN_VALID_CHARS.Substring(charIndex, 1);
             }
             AuthToken = result;
+            Console.WriteLine(result);
         }
     }
 }

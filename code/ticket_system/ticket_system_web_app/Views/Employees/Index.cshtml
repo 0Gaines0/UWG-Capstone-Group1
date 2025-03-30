@@ -339,12 +339,13 @@
             <ul class="nav_list">
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "Projects")';">Projects</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToGroupIndex", "LandingPage")';">Groups</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Groups")';">Groups</li>
             </ul>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="~/js/employeeModal.js"></script>
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
 </body>
 </html>
 

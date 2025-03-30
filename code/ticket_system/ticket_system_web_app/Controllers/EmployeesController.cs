@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
 using ticket_system_web_app.Models.RequestObj;
@@ -8,11 +9,18 @@ namespace ticket_system_web_app.Controllers
 {
     /// <summary>
     /// The controller/server class for the manage employees page.
+    /// All client method calls require auth token validation.
     /// </summary>
     public class EmployeesController : Controller
     {
 
+        #region Fields
+
         private readonly TicketSystemDbContext context;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeesController"/> class.
@@ -22,6 +30,10 @@ namespace ticket_system_web_app.Controllers
         {
             this.context = context;
         }
+
+        #endregion
+
+        #region View Loaders
 
         /// <summary>
         /// Indexes this instance.
@@ -42,39 +54,53 @@ namespace ticket_system_web_app.Controllers
             return PartialView("_CreateEmployeeModal");
         }
 
+        #endregion
+
+        #region Authenticated Methods
+
         /// <summary>
-        /// Returns a list of all the employees in a Json object.
+        ///     Returns a list of all the employees in a Json object.
+        ///     Requires admin perms.
         /// </summary>
-        /// <returns>A Json object of all the employees</returns>
-        [HttpGet]
-        public async Task<JsonResult> GetAllEmployees()
+        /// <param name="authToken">The auth token.</param>
+        /// <returns>A Json object of all the employees, or a Json with an error message if request is invalid.</returns>
+        [HttpGet("Employees/GetAllEmployees/{authToken}")]
+        public async Task<JsonResult> GetAllEmployees(string authToken)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetAllEmployees)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsAdmin())
+            {
+                return Json("Admin permissions required.");
+            }
+
             var employees = await this.constructEmployees();
             return Json(employees);
-            //var employees = await this.context.Employees
-            //    .Select(employee => new { Id = employee.EId, Name = $"{employee.FName} {employee.LName}", employee.Username, employee.Email, Role = employee.IsAdmin }) // Standardized Id
-            //    .AsNoTracking()
-            //    .ToListAsync();
-
-            //return Json(employees);
         }
 
-
-        /// Creates the employee with the given information if it doesn't exist already.
+        /// <summary>
+        ///     Creates the employee with the given information if it doesn't exist already.
+        ///     Requires admin perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The new employee information</param>
         /// <returns>Ok if employee was created, BadRequest otherwise</returns>
-        [HttpPost]
-        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest jsonRequest)
+        [HttpPost("Employees/CreateEmployee/{authToken}")]
+        public async Task<IActionResult> CreateEmployee(string authToken, [FromBody] CreateEmployeeRequest jsonRequest)
         {
-            if (!IsLoggedIn())
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
+                Console.WriteLine($"{nameof(CreateEmployee)} Got auth token: {authToken}");
                 return BadRequest(new { success = false, message = "Not logged in." });
             }
-            if (!IsAdmin())
+            if (!ActiveEmployee.IsAdmin())
             {
                 return BadRequest(new { success = false, message = "Admin permissions required." });
             }
+
             if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.FirstName) || string.IsNullOrWhiteSpace(jsonRequest.LastName) ||
                 string.IsNullOrWhiteSpace(jsonRequest.Username) || string.IsNullOrWhiteSpace(jsonRequest.Password) || string.IsNullOrWhiteSpace(jsonRequest.Email))
             {
@@ -96,23 +122,28 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Employee created successfully", employeeId = newUser.EId });
         }
 
-
-        /// Removes the given employee if they are not the current user and don't manage a group.
+        /// <summary>
+        ///     Removes the given employee if they are not the current user and don't manage a group.
+        ///     Requires admin perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="request">The employee to be deleted username</param>
         /// <returns>Ok if employee was removed, BadRequest otherwise</returns>
-        [HttpPost]
-        public async Task<IActionResult> RemoveEmployee([FromBody] RemoveEmployeeRequest request)
+        [HttpPost("Employees/RemoveEmployee/{authToken}")]
+        public async Task<IActionResult> RemoveEmployee(string authToken, [FromBody] RemoveEmployeeRequest request)
         {
-            if (!IsLoggedIn())
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
+                Console.WriteLine($"{nameof(RemoveEmployee)} Got auth token: {authToken}");
                 return BadRequest(new { success = false, message = "Not logged in." });
             }
-            if (!IsAdmin())
+            if (!ActiveEmployee.IsAdmin())
             {
                 return BadRequest(new { success = false, message = "Admin permissions required." });
             }
-            if (request == null || string.IsNullOrWhiteSpace(request.username)) {
+
+            if (request == null || string.IsNullOrWhiteSpace(request.username))
+            {
                 return BadRequest(new { message = "Invalid request data" });
             }
 
@@ -147,21 +178,25 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Edits the given employee's data.
+        ///     Edits the given employee's data.
+        ///     Requires admin perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The employee username and updated employee information</param>
-        /// <returns>Ok if successfull, BadRequest otherwise</returns>
-        [HttpPost]
-        public async Task<IActionResult> EditEmployee([FromBody] EditEmployeeRequest jsonRequest)
+        /// <returns>Ok if successful, BadRequest otherwise</returns>
+        [HttpPost("Employees/EditEmployee/{authToken}")]
+        public async Task<IActionResult> EditEmployee(string authToken, [FromBody] EditEmployeeRequest jsonRequest)
         {
-            if (!IsLoggedIn())
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
+                Console.WriteLine($"{nameof(EditEmployee)} Got auth token: {authToken}");
                 return BadRequest(new { success = false, message = "Not logged in." });
             }
-            if (!IsAdmin())
+            if (!ActiveEmployee.IsAdmin())
             {
                 return BadRequest(new { success = false, message = "Admin permissions required." });
             }
+
             if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.FirstName) || string.IsNullOrWhiteSpace(jsonRequest.LastName) ||
                 string.IsNullOrWhiteSpace(jsonRequest.Username) || string.IsNullOrWhiteSpace(jsonRequest.Email) || string.IsNullOrWhiteSpace(jsonRequest.OriginalUsername))
             {
@@ -189,63 +224,32 @@ namespace ticket_system_web_app.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(new { message = "Employee created successfully"});
+            return Ok(new { message = "Employee created successfully" });
         }
 
         /// <summary>
-        /// Removes employee with the given username from the database.
+        ///     Returns the employee data for the given username.
         /// </summary>
-        /// <param name="username">The username of the employee to be removed</param>
-        /// <returns>True if employee was successfully removed, false otherwise</returns>
-        private async Task<bool> removeEmployeeFromDb(String username)
-        {
-            try
-            {
-                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
-                this.context.Employees.Remove(employee);
-                await this.context.SaveChangesAsync();
-                return true;
-                
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Creates a list of all the employees.
-        /// </summary>
-        /// <returns>List of all employees</returns>
-        private async Task<List<object>> constructEmployees()
-        {
-            var employees = await this.context.Employees.Select(employee => new
-            {
-                Id = employee.EId,
-                Name = employee.FName + " " + employee.LName,
-                employee.Username,
-                employee.Email,
-                employee.IsAdmin
-            }).ToListAsync();
-            return employees.Cast<object>().ToList();
-        }
-
-        /// <summary>
-        /// Returns the employee data for the given username.
-        /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="data">The employee's username</param>
-        /// <returns>The employee data for this username</returns>
-        [HttpPost]
-        public async Task<object> GetEmployee([FromBody] GetEmployeeRequest data)
+        /// <returns>
+        ///     If authToken or data are invalid, BadRequest.
+        ///     If the employee is not found, NotFound.
+        ///     Otherwise, returns the employee data for this username
+        /// </returns>
+        [HttpPost("Employees/GetEmployee/{authToken}")]
+        public async Task<object> GetEmployee(string authToken, [FromBody] GetEmployeeRequest data)
         {
-            if (!IsLoggedIn())
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
+                Console.WriteLine($"{nameof(GetEmployee)} Got auth token: {authToken}");
                 return BadRequest(new { success = false, message = "Not logged in." });
             }
-            if (!IsAdmin())
+            if (!ActiveEmployee.IsAdmin())
             {
                 return BadRequest(new { success = false, message = "Admin permissions required." });
             }
+
             if (data == null)
             {
                 return BadRequest(new { message = "Bad request" });
@@ -270,27 +274,39 @@ namespace ticket_system_web_app.Controllers
             return Ok(employee);
         }
 
-        /// <summary>
-        /// Checks if there is a session employee.
-        /// </summary>
-        /// <returns>True if there is a session employee, false otherwise</returns>
-        private bool IsLoggedIn()
-        {
-            return ActiveEmployee.Employee != null;
-        }
+        #endregion
 
-        /// <summary>
-        /// Checks if the session user is logged in and is an admin.
-        /// </summary>
-        /// <returns>True if admin, false otherwise</returns>
-        private bool IsAdmin()
+        #region Helpers
+
+        private async Task<bool> removeEmployeeFromDb(string username)
         {
-            if (!IsLoggedIn())
+            try
+            {
+                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
+                this.context.Employees.Remove(employee);
+                await this.context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception)
             {
                 return false;
             }
-            var adminStatus = ActiveEmployee.Employee.IsAdmin;
-            return adminStatus.HasValue && adminStatus.Value;
         }
+
+        private async Task<List<object>> constructEmployees()
+        {
+            var employees = await this.context.Employees.Select(employee => new
+            {
+                Id = employee.EId,
+                Name = employee.FName + " " + employee.LName,
+                employee.Username,
+                employee.Email,
+                employee.IsAdmin
+            }).ToListAsync();
+            return employees.Cast<object>().ToList();
+        }
+
+        #endregion
     }
 }
