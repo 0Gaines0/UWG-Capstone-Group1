@@ -1,11 +1,10 @@
 ﻿@{
     Layout = null; // Set your layout here if applicable
-    var notLogin = ActiveEmployee.Employee == null;
-    var hasManagerPerms = (ActiveEmployee.Employee?.IsAdmin ?? false) || (ActiveEmployee.Employee?.IsManager ?? false);
     
-    if (notLogin)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
+        Context.Response.Redirect("/Login/Index");
         return;
     }
 
@@ -328,7 +327,7 @@
                         <input type="text" id="groupSearch" placeholder="Search Groups..." oninput="filterGroups()">
                     </div>
 
-                    @if (hasManagerPerms)
+                    @if (ActiveEmployee.IsAdmin())
                     {
                         <div class="button-container">
                             <button class="btn" onclick="openCreateModal()">+ Add New Group</button>
@@ -361,12 +360,13 @@
             <ul class="nav_list">
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "Projects")';">Projects</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToEmployeesIndex", "LandingPage")';">Employees</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Employees")';">Employees</li>
             </ul>
         </div>
     </div>
     <div id="toast" class="toast"></div>
     <script src="~/js/groupModal.js"></script>
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
 </body>
 </html>
 
