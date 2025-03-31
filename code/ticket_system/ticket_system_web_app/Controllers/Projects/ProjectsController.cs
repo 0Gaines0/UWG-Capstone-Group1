@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Evaluation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ticket_system_web_app.Data;
@@ -75,7 +76,31 @@ namespace ticket_system_web_app.Controllers.Projects
         [HttpGet("Projects/BoardPage/{pId}")]
         public async Task<IActionResult> BoardPage(int pId)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.PId == pId);
+            var project = await _context.Projects
+                 .Include(p => p.ProjectBoard)
+                     .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
+                         .ThenInclude(s => s.Tasks)
+                 .Include(p => p.Collaborators).ThenInclude(collab => collab.Group)
+                     .ThenInclude(g => g.Employees)
+                 .FirstOrDefaultAsync(p => p.PId == pId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+            var firstState = project.ProjectBoard?.States?.FirstOrDefault();
+            var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
+
+            var projectTeam = project.Collaborators
+                .Select(collab => collab.Group)
+                .SelectMany(g => g.Employees)
+                .Append(projectLead)
+                .Where(e => e != null)
+                .Distinct()
+                .ToList();
+
+            ViewBag.ProjectTeam = projectTeam;
+
             return View("ProjectKanban", project);
         }
 
@@ -226,7 +251,7 @@ namespace ticket_system_web_app.Controllers.Projects
                     return BadRequest(new { message = "Invalid project data" });
                 }
 
-                Project project = new Project(lead, jsonRequest.PTitle, jsonRequest.PDescription);
+                var project = new Models.Project(lead, jsonRequest.PTitle, jsonRequest.PDescription);
                 this._context.Projects.Add(project);
                 await this._context.SaveChangesAsync();
 
@@ -299,7 +324,7 @@ namespace ticket_system_web_app.Controllers.Projects
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Project project, string csvCollabGroups)
+        public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Models.Project project, string csvCollabGroups)
         {
             project.Collaborators = this.getCollaboratorsFromCSV(id, csvCollabGroups);
             project.ProjectLead = await this._context.Employees.FindAsync(project.ProjectLeadId);
