@@ -46,16 +46,5 @@ namespace ticket_system_testing.WebApp_Testing.ControllersTests
             Assert.That(redirectResult.ControllerName, Is.EqualTo("Login"));
             Assert.That(ActiveEmployee.Employee, Is.Null);
         }
-
-        [Test]
-        public void TestRedirectToGroupIndexRedirectsToGroupsIndex()
-        {
-            var result = this.controller.RedirectToGroupIndex();
-            ClassicAssert.IsInstanceOf<RedirectToActionResult>(result);
-            var redirectResult = result as RedirectToActionResult;
-            ClassicAssert.IsNotNull(redirectResult);
-            Assert.That(redirectResult.ActionName, Is.EqualTo("Index"));
-            Assert.That(redirectResult.ControllerName, Is.EqualTo("Groups"));
-        }
     }
 }
