@@ -55,7 +55,7 @@ function populateUnselectedTable() {
     unselectedGroups.forEach(group => {
         let row = `
                 <tr>
-                    <td>${group.gName} ${group.gId}</td>
+                    <td>${group.gName}</td>
                     <td><button class="btn" type="button" onClick="addCollaborator(${group.gId});">Add</button></td>
                 </tr>`;
         unselectedGroupsTableBody.innerHTML += row;

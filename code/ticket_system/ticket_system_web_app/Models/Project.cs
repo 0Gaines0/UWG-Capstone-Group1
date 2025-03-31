@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
 using System.Net;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Build.Evaluation;
 
 namespace ticket_system_web_app.Models
 {
@@ -65,7 +66,7 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The assigned groups.
         /// </value>
-        public ICollection<Group> AssignedGroups { get; set; } = new List<Group>();
+        public ICollection<ProjectGroup> Collaborators { get; set; } = new List<ProjectGroup>();
 
         public ProjectBoard? ProjectBoard { get; set; }
 
@@ -91,7 +92,7 @@ namespace ticket_system_web_app.Models
         /// or
         /// Description cannot be null or blank.
         /// </exception>
-        public Project(Employee pLead, string pTitle, string pDesc, ICollection<Group> assignedGroups)
+        public Project(Employee pLead, string pTitle, string pDesc)
         {
             if (pLead == null)
             {
@@ -105,16 +106,12 @@ namespace ticket_system_web_app.Models
             {
                 throw new ArgumentException("Description cannot be null or blank.");
             }
-            if (assignedGroups.IsNullOrEmpty())
-            {
-                throw new ArgumentException("Must have at least one assigned group.");
-            }
 
             this.ProjectLead = pLead;
             this.ProjectLeadId = pLead.EId;
             this.PTitle = pTitle;
             this.PDescription = pDesc;
-            this.AssignedGroups = assignedGroups;
+            this.Collaborators = new List<ProjectGroup>();
         }
 
 
