@@ -570,11 +570,5 @@ namespace ticket_system_web_app.Controllers.Projects
             }
             return new NoContentResult();
         }
-
-        [HttpPost]
-        public async Task<int> CountRequestedCollabs(int managerId)
-        {
-            return await this._context.ProjectGroups.Include(collab => collab.Group).CountAsync(collab => collab.Group.ManagerId == managerId && !collab.Accepted);
-        }
     }
 }
