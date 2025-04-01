@@ -12,7 +12,7 @@ using ticket_system_web_app.Data;
 namespace ticket_system_web_app.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20250313011811_InitCreate")]
+    [Migration("20250331180832_InitCreate")]
     partial class InitCreate
     {
         /// <inheritdoc />
@@ -38,21 +38,6 @@ namespace ticket_system_web_app.Migrations
                     b.HasIndex("GroupsExistingInGId");
 
                     b.ToTable("group_member", (string)null);
-                });
-
-            modelBuilder.Entity("GroupProject", b =>
-                {
-                    b.Property<int>("AssignedGroupsGId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AssignedProjectsPId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AssignedGroupsGId", "AssignedProjectsPId");
-
-                    b.HasIndex("AssignedProjectsPId");
-
-                    b.ToTable("project_group", (string)null);
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
@@ -219,9 +204,38 @@ namespace ticket_system_web_app.Migrations
 
                     b.HasKey("BoardId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectId")
+                        .IsUnique();
 
                     b.ToTable("ProjectBoards");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.ProjectGroup", b =>
+                {
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("GroupGId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectPId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProjectId", "GroupId");
+
+                    b.HasIndex("GroupGId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ProjectPId");
+
+                    b.ToTable("ProjectGroups");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.ProjectTask", b =>
@@ -233,7 +247,7 @@ namespace ticket_system_web_app.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"));
 
-                    b.Property<int>("AssigneeId")
+                    b.Property<int?>("AssigneeId")
                         .HasColumnType("int")
                         .HasColumnName("assignee_id");
 
@@ -252,6 +266,11 @@ namespace ticket_system_web_app.Migrations
                     b.Property<int>("StateId")
                         .HasColumnType("int")
                         .HasColumnName("state_id");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("summary");
 
                     b.HasKey("TaskId");
 
@@ -300,26 +319,21 @@ namespace ticket_system_web_app.Migrations
                     b.ToTable("TaskChanges");
                 });
 
-            modelBuilder.Entity("ticket_system_web_app.Models.User", b =>
+            modelBuilder.Entity("ticket_system_web_app.Models.TaskChangeLog", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int")
+                        .HasColumnName("task_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("ChangeId")
+                        .HasColumnType("int")
+                        .HasColumnName("change_id");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("TaskId", "ChangeId");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("ChangeId");
 
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
+                    b.ToTable("TaskChangeLogs");
                 });
 
             modelBuilder.Entity("EmployeeGroup", b =>
@@ -333,21 +347,6 @@ namespace ticket_system_web_app.Migrations
                     b.HasOne("ticket_system_web_app.Models.Group", null)
                         .WithMany()
                         .HasForeignKey("GroupsExistingInGId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GroupProject", b =>
-                {
-                    b.HasOne("ticket_system_web_app.Models.Group", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedGroupsGId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ticket_system_web_app.Models.Project", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedProjectsPId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -381,10 +380,37 @@ namespace ticket_system_web_app.Migrations
             modelBuilder.Entity("ticket_system_web_app.Models.ProjectBoard", b =>
                 {
                     b.HasOne("ticket_system_web_app.Models.Project", "Project")
+                        .WithOne("ProjectBoard")
+                        .HasForeignKey("ticket_system_web_app.Models.ProjectBoard", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.ProjectGroup", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Group", "Group")
                         .WithMany()
+                        .HasForeignKey("GroupGId");
+
+                    b.HasOne("ticket_system_web_app.Models.Group", null)
+                        .WithMany("Collaborations")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ticket_system_web_app.Models.Project", null)
+                        .WithMany("Collaborators")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ticket_system_web_app.Models.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectPId");
+
+                    b.Navigation("Group");
 
                     b.Navigation("Project");
                 });
@@ -394,11 +420,10 @@ namespace ticket_system_web_app.Migrations
                     b.HasOne("ticket_system_web_app.Models.Employee", "Assignee")
                         .WithMany()
                         .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("ticket_system_web_app.Models.BoardState", "BoardState")
-                        .WithMany()
+                        .WithMany("Tasks")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -419,9 +444,45 @@ namespace ticket_system_web_app.Migrations
                     b.Navigation("Assignee");
                 });
 
+            modelBuilder.Entity("ticket_system_web_app.Models.TaskChangeLog", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.TaskChange", "TaskChange")
+                        .WithMany()
+                        .HasForeignKey("ChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ticket_system_web_app.Models.ProjectTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+
+                    b.Navigation("TaskChange");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
+                {
+                    b.Navigation("Tasks");
+                });
+
             modelBuilder.Entity("ticket_system_web_app.Models.Employee", b =>
                 {
                     b.Navigation("ProjectsLeading");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.Group", b =>
+                {
+                    b.Navigation("Collaborations");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.Project", b =>
+                {
+                    b.Navigation("Collaborators");
+
+                    b.Navigation("ProjectBoard");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.ProjectBoard", b =>

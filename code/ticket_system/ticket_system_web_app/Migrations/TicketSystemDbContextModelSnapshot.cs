@@ -333,28 +333,6 @@ namespace ticket_system_web_app.Migrations
                     b.ToTable("TaskChangeLogs");
                 });
 
-            modelBuilder.Entity("ticket_system_web_app.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("EmployeeGroup", b =>
                 {
                     b.HasOne("ticket_system_web_app.Models.Employee", null)

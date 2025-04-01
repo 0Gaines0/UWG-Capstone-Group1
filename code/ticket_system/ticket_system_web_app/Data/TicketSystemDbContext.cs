@@ -33,13 +33,6 @@ namespace ticket_system_web_app.Data
         /// </value>
         public DbSet<TaskChangeLog> TaskChangeLogs { get; set; }
         /// <summary>
-        /// Gets or sets the users.
-        /// </summary>
-        /// <value>
-        /// The users.
-        /// </value>
-        public DbSet<User> Users { get; set; }
-        /// <summary>
         /// Gets or sets the employees.
         /// </summary>
         /// <value>

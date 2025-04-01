@@ -47,21 +47,6 @@ namespace ticket_system_web_app.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
@@ -135,30 +120,6 @@ namespace ticket_system_web_app.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "project_group",
-                columns: table => new
-                {
-                    AssignedGroupsGId = table.Column<int>(type: "int", nullable: false),
-                    AssignedProjectsPId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_project_group", x => new { x.AssignedGroupsGId, x.AssignedProjectsPId });
-                    table.ForeignKey(
-                        name: "FK_project_group_Groups_AssignedGroupsGId",
-                        column: x => x.AssignedGroupsGId,
-                        principalTable: "Groups",
-                        principalColumn: "g_id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_project_group_Projects_AssignedProjectsPId",
-                        column: x => x.AssignedProjectsPId,
-                        principalTable: "Projects",
-                        principalColumn: "p_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProjectBoards",
                 columns: table => new
                 {
@@ -175,6 +136,43 @@ namespace ticket_system_web_app.Migrations
                         principalTable: "Projects",
                         principalColumn: "p_id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProjectGroups",
+                columns: table => new
+                {
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    ProjectPId = table.Column<int>(type: "int", nullable: true),
+                    GroupGId = table.Column<int>(type: "int", nullable: true),
+                    Accepted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectGroups", x => new { x.ProjectId, x.GroupId });
+                    table.ForeignKey(
+                        name: "FK_ProjectGroups_Groups_GroupGId",
+                        column: x => x.GroupGId,
+                        principalTable: "Groups",
+                        principalColumn: "g_id");
+                    table.ForeignKey(
+                        name: "FK_ProjectGroups_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "g_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProjectGroups_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "p_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProjectGroups_Projects_ProjectPId",
+                        column: x => x.ProjectPId,
+                        principalTable: "Projects",
+                        principalColumn: "p_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -204,11 +202,12 @@ namespace ticket_system_web_app.Migrations
                 {
                     task_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     priority = table.Column<int>(type: "int", nullable: false),
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     state_id = table.Column<int>(type: "int", nullable: false),
-                    assignee_id = table.Column<int>(type: "int", nullable: false)
+                    assignee_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -224,6 +223,30 @@ namespace ticket_system_web_app.Migrations
                         column: x => x.assignee_id,
                         principalTable: "Employees",
                         principalColumn: "e_id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskChangeLogs",
+                columns: table => new
+                {
+                    task_id = table.Column<int>(type: "int", nullable: false),
+                    change_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskChangeLogs", x => new { x.task_id, x.change_id });
+                    table.ForeignKey(
+                        name: "FK_TaskChangeLogs_TaskChanges_change_id",
+                        column: x => x.change_id,
+                        principalTable: "TaskChanges",
+                        principalColumn: "change_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TaskChangeLogs_task_task_id",
+                        column: x => x.task_id,
+                        principalTable: "task",
+                        principalColumn: "task_id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -242,14 +265,25 @@ namespace ticket_system_web_app.Migrations
                 column: "GroupsExistingInGId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_project_group_AssignedProjectsPId",
-                table: "project_group",
-                column: "AssignedProjectsPId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectBoards_p_id",
                 table: "ProjectBoards",
-                column: "p_id");
+                column: "p_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectGroups_GroupGId",
+                table: "ProjectGroups",
+                column: "GroupGId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectGroups_GroupId",
+                table: "ProjectGroups",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectGroups_ProjectPId",
+                table: "ProjectGroups",
+                column: "ProjectPId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_EmployeeEId",
@@ -272,6 +306,11 @@ namespace ticket_system_web_app.Migrations
                 column: "state_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TaskChangeLogs_change_id",
+                table: "TaskChangeLogs",
+                column: "change_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskChanges_assignee_id",
                 table: "TaskChanges",
                 column: "assignee_id");
@@ -284,19 +323,19 @@ namespace ticket_system_web_app.Migrations
                 name: "group_member");
 
             migrationBuilder.DropTable(
-                name: "project_group");
+                name: "ProjectGroups");
 
             migrationBuilder.DropTable(
-                name: "task");
+                name: "TaskChangeLogs");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "TaskChanges");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Groups");
+                name: "task");
 
             migrationBuilder.DropTable(
                 name: "BoardStates");
