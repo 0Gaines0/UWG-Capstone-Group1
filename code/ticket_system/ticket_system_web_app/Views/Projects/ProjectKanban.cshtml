@@ -340,6 +340,7 @@
             display: flex;
             justify-content: flex-end;
             gap: 15px;
+            padding-top: 10px;
         }
 
             .modal-buttons button {
@@ -362,7 +363,6 @@
             }
 
         .task-change-tabs {
-            margin-top: 30px;
             border-top: 1px solid #ddd;
             padding-top: 20px;
         }
@@ -425,6 +425,13 @@
                 z-index: 1;
             }
 
+        #newCommentForm {
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            flex-wrap: wrap-reverse;
+        }
+
         .comments-section ul {
             list-style: none;
             padding: 0;
@@ -440,12 +447,15 @@
         }
 
         .comments-section textarea {
-            width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             resize: vertical;
             margin-bottom: 10px;
+        }
+
+        .comments-section .save-btn {
+            width: 20%;
         }
 
         .history-scroll-container {
@@ -469,7 +479,7 @@
             <h2>@Model.PTitle</h2>
             @if (ActiveEmployee.IsAdmin())
             {
-                <button class="button">Create Task</button>
+                <button class="button" onclick="openCreateTaskModal()">Create Task</button>
                 <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
                     Edit Board
                 </button>
@@ -539,7 +549,7 @@
 
     <div id="editTaskModal" class="modal" style="display:none;">
         <div class="modal-content">
-            <h2>Edit Task</h2>
+            <h2 id="modal-title">Edit Task</h2>
             <form id="editTaskForm">
                 <input type="hidden" id="editTaskId" name="TaskId" />
 
@@ -585,11 +595,12 @@
 
                 <div class="modal-buttons">
                     <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-                    <button type="button" class="save-btn" onclick="submitEditTask()">Edit Task</button>
+                    <button type="button" id="edit-task" class="save-btn" onclick="submitEditTask()">Edit Task</button>
+                    <button type="button" id="create-task" class="save-btn" onclick="submitCreateTask()">Create Task</button>
                 </div>
             </form>
 
-            <div class="task-change-tabs">
+            <div id="comments-history" class="task-change-tabs">
                 <div class="tab-buttons">
                     <button type="button" class="tab-button active" onclick="switchTab('comments')">Comments</button>
                     <button type="button" class="tab-button" onclick="switchTab('history')">History</button>

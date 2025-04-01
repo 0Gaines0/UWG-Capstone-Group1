@@ -21,7 +21,7 @@ async function retrieveProject(id) {
         projectTitle = data.pTitle;
         projectDescription = data.pDescription;
         projectLead = data.projectLeadName;
-        projectCollaborators = data.assignedGroups;
+        projectCollaborators = data.collaborators;
     }).catch(_error => alert("Error fetching project."));
 }
 
@@ -32,13 +32,13 @@ function displayProject() {
 
     let tableBody = document.getElementById("projectCollaborators");
     tableBody.innerHTML = ""
-    projectCollaborators.forEach(group => {
+    projectCollaborators.forEach(collab => {
         let row = `
             <tr>
                 <td>
-                    ${group.gName}
+                    ${collab.gName}${collab.accepted ? "" : "<span class=\"not-accepted\">(Pending)</span>"}
                 </td>
-            </tr`;
+            </tr>`;
         tableBody.innerHTML += row;
     });
 }

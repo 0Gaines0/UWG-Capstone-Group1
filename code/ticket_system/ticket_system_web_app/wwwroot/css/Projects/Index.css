@@ -33,3 +33,12 @@ tr td:last-child {
     background-color: #800000;
     color: #fff;
 }
+
+.not-accepted {
+    background-color: var(--background-color-container);
+    border: 3px #fff solid;
+    border-radius: 0 0.5em;
+    float: left;
+    margin: -3px calc(-5em + -3px) -3px -3px;
+    width: 5em;
+}

@@ -25,9 +25,13 @@
     <div class="container">
         <div class="content-block project-info-display">
             <h2>Current:</h2>
+            <hr />
             <div class="form-group">
+                <h4>Title</h4>
                 <input disabled id="projectTitle" class="form-control" placeholder="Project title" value="@Model.PTitle" />
-                <textarea disabled id="projectDescription" class="form-control" placeholder="Project description">@Model.PDescription</textarea>
+                <h4>Description</h4>
+                <textarea disabled id="projectDescription" class="form-control" placeholder="Project description" >@Model.PDescription</textarea>
+                <h4>Lead</h4>
                 <input disabled id="projectLead" class="form-control" placeholder="Project lead" value="@Html.Raw($"{Model.ProjectLead.FName} {Model.ProjectLead.LName}")" />
                 <div class="scrollable">
                     <table class="table">
@@ -37,9 +41,16 @@
                             </tr>
                         </thead>
                         <tbody id="projectCollaborators">
-                            @foreach (Group currGroup in Model.AssignedGroups.OrderBy(group => group.GName))
+                            @foreach (ProjectGroup currCollab in Model.Collaborators.OrderBy(collab => collab.Group.GName))
                             {
-                                <tr><td>@Html.DisplayFor(group => currGroup.GName)</td></tr>
+                                <tr>
+                                    <td>
+                                        @currCollab.Group.GName
+                                        @if (!currCollab.Accepted) {
+                                            <span class="not-accepted">(Pending)</span>
+                                        }
+                                    </td>
+                                </tr>
                             }
                             
                         </tbody>
@@ -50,10 +61,11 @@
 
         <div class="content-block edit-project">
             <h2>New:</h2>
+            <hr />
             <form asp-action="Edit" id="editForm">
                 <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" name="authToken" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="PId" />
+                <input type="hidden" asp-for="PId" name="id" />
                 <div class="form-group">
                     <label asp-for="PTitle" class="control-label">(*) Title</label>
                     <span id="PTitleErr" asp-validation-for="PTitle" class="text-danger"></span>
@@ -85,11 +97,11 @@
                                 </tr>
                             </thead>
                             <tbody id="collaboratorsTableBody">
-                                @foreach (Group currGroup in Model.AssignedGroups.OrderBy(group => group.GName))
+                                @foreach (ProjectGroup currCollab in Model.Collaborators.OrderBy(collab => collab.Group.GName))
                                 {
-                                    <tr id="row-id-@currGroup.GId">
-                                        <td>@Html.DisplayFor(group => currGroup.GName)</td>
-                                        <td><button class="btn" type="button" onClick="removeCollaborator(@currGroup.GId);">Remove</button></td>
+                                    <tr id="row-id-@currCollab.Group.GId">
+                                        <td>@Html.DisplayFor(group => currCollab.Group.GName)</td>
+                                        <td><button class="btn" type="button" onClick="removeCollaborator(@currCollab.Group.GId);">Remove</button></td>
                                     </tr>
                                 }
                             </tbody>

@@ -19,8 +19,8 @@ namespace ticket_system_testing.WebApp_Testing.ModelTests
             Assert.That(group.GId, Is.EqualTo(0), "Expected GId to be 0 by default.");
             Assert.That(group.Employees, Is.Not.Null, "Expected Employees collection to be initialized.");
             Assert.That(group.Employees, Is.Empty, "Expected Employees collection to be empty by default.");
-            Assert.That(group.AssignedProjects, Is.Not.Null, "Expected AssignedProjects collection to be initialized.");
-            Assert.That(group.AssignedProjects, Is.Empty, "Expected AssignedProjects collection to be empty by default.");
+            Assert.That(group.Collaborations, Is.Not.Null, "Expected AssignedProjects collection to be initialized.");
+            Assert.That(group.Collaborations, Is.Empty, "Expected AssignedProjects collection to be empty by default.");
         }
 
         [Test]
