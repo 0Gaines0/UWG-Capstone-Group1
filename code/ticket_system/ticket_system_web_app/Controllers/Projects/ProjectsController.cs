@@ -560,6 +560,22 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         [HttpPost]
+        public async Task<IActionResult> DenyCollabRequest(int projectId, int groupId)
+        {
+            ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
+            if (collab != null) {
+                this._context.ProjectGroups.Remove(collab);
+                Console.WriteLine(collab.Project.Collaborators.Count);
+                if (collab.Project.Collaborators.Count <= 1)
+                {
+                    this._context.Projects.Remove(collab.Project);
+                }
+                await this._context.SaveChangesAsync();
+            }
+            return new NoContentResult();
+        }
+
+        [HttpPost]
         public async Task<int> CountRequestedCollabs(int managerId)
         {
             return await this._context.ProjectGroups.Include(collab => collab.Group).CountAsync(collab => collab.Group.ManagerId == managerId && !collab.Accepted);
