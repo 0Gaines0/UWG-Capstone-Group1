@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
 using ticket_system_web_app.Models.RequestObj;
+using Project = ticket_system_web_app.Models.Project;
 
 namespace ticket_system_web_app.Controllers.Projects
 {
@@ -255,18 +256,7 @@ namespace ticket_system_web_app.Controllers.Projects
                 this._context.Projects.Add(project);
                 await this._context.SaveChangesAsync();
 
-                ICollection<ProjectGroup> collabs = new List<ProjectGroup>();
-                foreach (int currGroupId in jsonRequest.CollaboratingGroupIDs)
-                {
-                    Group? currGroup = this._context.Groups.FindAsync(currGroupId).Result;
-                    if (currGroup != null)
-                    {
-                        ProjectGroup collab = new ProjectGroup(project, currGroup);
-                        collabs.Add(collab);
-                        this._context.ProjectGroups.Add(collab);
-                    }
-                }
-                project.Collaborators = collabs;
+                project.Collaborators = this.getCollaboratorsFromCSV(project.PId, String.Join(",", jsonRequest.CollaboratingGroupIDs.Select(x => x.ToString()).ToArray()));
                 this._context.Projects.Update(project);
                 await this._context.SaveChangesAsync();
                 await AddProjectBoardAndDefaultStates(project.PId);
@@ -529,8 +519,15 @@ namespace ticket_system_web_app.Controllers.Projects
             {
                 if (int.TryParse(token, out var collabID))
                 {
-                    ProjectGroup? collaborator = this._context.ProjectGroups.FindAsync(projectId, collabID).Result
-                        ?? new ProjectGroup(this._context.Projects.FindAsync(projectId).Result, this._context.Groups.FindAsync(collabID).Result);
+                    ProjectGroup? collaborator = this._context.ProjectGroups.FindAsync(projectId, collabID).Result;
+                    if (collaborator == null)
+                    {
+                        Project? project = this._context.Projects.FindAsync(projectId).Result;
+                        Group? group = this._context.Groups.FindAsync(collabID).Result;
+
+                        collaborator = new ProjectGroup(project, group);
+                        collaborator.Accepted = group.ManagerId == ActiveEmployee.Employee.EId;
+                    }
                     result.Add(collaborator);
                 }
             }
@@ -565,7 +562,6 @@ namespace ticket_system_web_app.Controllers.Projects
             ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
             if (collab != null) {
                 this._context.ProjectGroups.Remove(collab);
-                Console.WriteLine(collab.Project.Collaborators.Count);
                 if (collab.Project.Collaborators.Count <= 1)
                 {
                     this._context.Projects.Remove(collab.Project);
