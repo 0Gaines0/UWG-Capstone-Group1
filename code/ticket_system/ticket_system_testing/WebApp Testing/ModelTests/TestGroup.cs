@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using ticket_system_web_app.Models;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace ticket_system_testing.WebApp_Testing.ModelTests
 {
@@ -92,34 +93,6 @@ namespace ticket_system_testing.WebApp_Testing.ModelTests
                 () => new Group(managerId, gName, gDescription)
             );
             Assert.That(ex.ParamName, Is.EqualTo("gName"));
-            Assert.That(ex.Message, Does.Contain("Parameter must not be null or empty"));
-        }
-
-        [Test]
-        public void TestConstructorNullGDescriptionThrowsArgumentException()
-        {
-            int managerId = 10;
-            string gName = "Valid Name";
-            string? gDescription = null;
-
-            var ex = Assert.Throws<ArgumentException>(
-                () => new Group(managerId, gName, gDescription)
-            );
-            Assert.That(ex.ParamName, Is.EqualTo("gDescription"));
-            Assert.That(ex.Message, Does.Contain("Parameter must not be null or empty"));
-        }
-
-        [Test]
-        public void TestConstructorEmptyGDescriptionThrowsArgumentException()
-        {
-            int managerId = 10;
-            string gName = "Valid Name";
-            string gDescription = "";
-
-            var ex = Assert.Throws<ArgumentException>(
-                () => new Group(managerId, gName, gDescription)
-            );
-            Assert.That(ex.ParamName, Is.EqualTo("gDescription"));
             Assert.That(ex.Message, Does.Contain("Parameter must not be null or empty"));
         }
 

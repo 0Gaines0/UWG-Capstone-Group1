@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace ticket_system_web_app.Controllers.Projects
+namespace ticket_system_web_app.Models.RequestObj
 {
     /// <summary>
     /// CreateProjectRequest

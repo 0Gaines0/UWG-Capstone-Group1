@@ -66,7 +66,7 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The assigned groups.
         /// </value>
-        public ICollection<ProjectGroup> Collaborators { get; set; } = new List<ProjectGroup>();
+        public ICollection<ProjectGroup> Collaborators { get; set; }
 
         public ProjectBoard? ProjectBoard { get; set; }
 
@@ -77,6 +77,7 @@ namespace ticket_system_web_app.Models
         {
             this.PTitle = string.Empty;
             this.PDescription = string.Empty;
+            this.Collaborators = new List<ProjectGroup>();
         }
 
         /// <summary>
@@ -96,15 +97,15 @@ namespace ticket_system_web_app.Models
         {
             if (pLead == null)
             {
-                throw new ArgumentException("Project lead cannot be null.");
+                throw new ArgumentNullException(nameof(pLead), "Project lead cannot be null.");
             }
             if (string.IsNullOrWhiteSpace(pTitle))
             {
-                throw new ArgumentException("Title cannot be null or blank.");
+                throw new ArgumentException("Title cannot be null or blank.", nameof(pTitle));
             }
             if (string.IsNullOrEmpty(pDesc))
             {
-                throw new ArgumentException("Description cannot be null or blank.");
+                throw new ArgumentException("Description cannot be null or blank.", nameof(pDesc));
             }
 
             this.ProjectLead = pLead;

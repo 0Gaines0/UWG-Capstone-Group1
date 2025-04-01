@@ -219,6 +219,7 @@ namespace ticket_system_web_app.Controllers
         [HttpGet]
         public async Task<JsonResult> GetAllManagers()
         {
+            //Get all active employees? This feels wrong.
             var possibleManagers = await this.context.Employees.Where(e => e.IsActive == true).Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).AsNoTracking().ToListAsync();
 
             return Json(possibleManagers);

@@ -88,7 +88,7 @@ namespace ticket_system_web_app.Controllers
 
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(jsonRequest.Password, BCrypt.Net.BCrypt.GenerateSalt());
 
-            var newUser = new Employee(fName: jsonRequest.FirstName, lName: jsonRequest.LastName, username: jsonRequest.Username, hashedPassword: hashedPassword, email: jsonRequest.Email, isAdmin: jsonRequest.IsAdmin, isActive: true);
+            var newUser = new Employee(eId: 0, fName: jsonRequest.FirstName, lName: jsonRequest.LastName, username: jsonRequest.Username, hashedPassword: hashedPassword, email: jsonRequest.Email, isAdmin: jsonRequest.IsAdmin, isActive: true, isManager: false);
 
             this.context.Employees.Add(newUser);
             await this.context.SaveChangesAsync();

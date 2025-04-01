@@ -16,7 +16,6 @@ namespace ticket_system_testing.WebApp_Testing.ModelTests.RequestObjTests
         {
             var request = new RemoveGroupRequest();
 
-            // 
             Assert.That(request.GroupName, Is.Null, "Expected GroupName to be null by default.");
         }
 
