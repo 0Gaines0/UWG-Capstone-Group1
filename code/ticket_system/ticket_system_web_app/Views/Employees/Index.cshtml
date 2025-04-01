@@ -1,9 +1,7 @@
 ﻿@{
     Layout = null; // Set your layout here if applicable
-    var notLogin = ActiveEmployee.Employee == null;
-    var hasAdminPerms = (ActiveEmployee.Employee?.IsAdmin ?? false);
     
-    if (notLogin)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");
@@ -306,7 +304,7 @@
                         <input type="text" id="employeeSearch" placeholder="Search Employees..." oninput="filterEmployees()">
                     </div>
 
-                    @if (hasAdminPerms)
+                    @if (ActiveEmployee.IsAdmin())
                     {
                         <div class="button-container">
                             <button class="btn" onclick="openCreateModal()">+ Add New Employee</button>

@@ -3,15 +3,11 @@
 @{
     ViewData["Title"] = "Index";
 
-    bool isAdmin = false;
-
-    if (ActiveEmployee.Employee == null)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");
         return;
-    } else {
-        isAdmin = ActiveEmployee.Employee.IsAdmin ?? false;
     }
 }
 
@@ -22,7 +18,7 @@
         <link rel="stylesheet" href="/css/Projects/Projects.css">
         <link rel="stylesheet" href="/css/Projects/Index.css">
         <script src="~/js/Projects/Index.js"></script>
-        @if (isAdmin) {
+        @if (ActiveEmployee.IsAdmin()) {
             <script src="~/js/Projects/Index_Admin.js"></script>
         }
     </head>
@@ -32,7 +28,7 @@
         <div class="container">
             <div class="content-block projects-list">
                 @{
-                    if (isAdmin) {
+                    if (ActiveEmployee.IsAdmin()) {
                         <form asp-action="Create" method="get" class="form-group">
                             <button type="submit" class="btn">Create New Project</button>
                         </form>
@@ -61,7 +57,7 @@
                                         @Html.DisplayFor(modelItem => item.PDescription)
                                     </td>
                                     <td>
-                                    @if (ActiveEmployee.Employee.IsAdmin ?? false) {
+                                    @if (ActiveEmployee.IsAdmin()) {
                                         <button type="button" class="btn" onclick="gotoEditProject(@item.PId);">Edit</button>
                                         <form asp-action="Edit" method="get" class="hidden">
                                             <input type="hidden" name="id" value="@item.PId" />
@@ -70,6 +66,7 @@
 
                                         <button type="button" class="btn" onclick="promptDeleteProject(@item.PId);">Delete</button>
                                         <form asp-action="Delete" method="post" class="hidden">
+                                            <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" name="authToken" />
                                             <input type="hidden" name="id" value="@item.PId"/>
                                             <button class="hidden" id="delete-row-@item.PId"></button>
                                         </form>
@@ -80,7 +77,7 @@
                             }
                         </tbody>
                     </table>
-                    @if (ActiveEmployee.Employee.IsAdmin ?? false) {
+                    @if (ActiveEmployee.IsAdmin()) {
                         <div id="delete-prompt-content">
                             <p>Delete this project?</p>
                             <button type="button" class="btn btn-del" onclick="confirmDeleteProject();">Delete</button>
@@ -115,12 +112,13 @@
             </div>
             <ul class="nav_list">
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToGroupIndex", "LandingPage")';">Groups</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToEmployeesIndex", "LandingPage")';">Employees</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Groups")';">Groups</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Employees")';">Employees</li>
             </ul>
         </div>
         @section Scripts {
             @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
         }
+        <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
     </body>
 </html>

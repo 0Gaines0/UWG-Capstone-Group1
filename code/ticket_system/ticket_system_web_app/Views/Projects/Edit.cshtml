@@ -3,15 +3,11 @@
 @{
     ViewData["Title"] = "Edit";
 
-    bool isAdmin = false;
-
-    if (ActiveEmployee.Employee == null)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");
         return;
-    } else {
-        isAdmin = ActiveEmployee.Employee.IsAdmin ?? false;
     }
 }
 
@@ -30,9 +26,9 @@
         <div class="content-block project-info-display">
             <h2>Current:</h2>
             <div class="form-group">
-                <input id="projectTitle" class="form-control" placeholder="Project title" disabled="true" value="@Model.PTitle" />
-                <textarea id="projectDescription" class="form-control" placeholder="Project description" disabled="true">@Model.PDescription</textarea>
-                <input id="projectLead" class="form-control" placeholder="Project lead" disabled="true" value="@Html.Raw($"{Model.ProjectLead.FName} {Model.ProjectLead.LName}")" />
+                <input disabled id="projectTitle" class="form-control" placeholder="Project title" value="@Model.PTitle" />
+                <textarea disabled id="projectDescription" class="form-control" placeholder="Project description">@Model.PDescription</textarea>
+                <input disabled id="projectLead" class="form-control" placeholder="Project lead" value="@Html.Raw($"{Model.ProjectLead.FName} {Model.ProjectLead.LName}")" />
                 <div class="scrollable">
                     <table class="table">
                         <thead>
@@ -55,6 +51,7 @@
         <div class="content-block edit-project">
             <h2>New:</h2>
             <form asp-action="Edit" id="editForm">
+                <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" name="authToken" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="PId" />
                 <div class="form-group">
@@ -123,8 +120,8 @@
         </div>
         <ul class="nav_list">
             <li class="nav_item" onclick="location.href='@Url.Action("Index", "LandingPage")';">Home</li>
-            <li class="nav_item" onclick="location.href='@Url.Action("RedirectToGroupIndex", "LandingPage")';">Groups</li>
-            <li class="nav_item" onclick="location.href='@Url.Action("RedirectToEmployeesIndex", "LandingPage")';">Employees</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "Groups")';">Groups</li>
+            <li class="nav_item" onclick="location.href='@Url.Action("Index", "Employees")';">Employees</li>
 
         </ul>
     </div>
@@ -133,5 +130,6 @@
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
         }
     }
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
 </body>
 </html>
