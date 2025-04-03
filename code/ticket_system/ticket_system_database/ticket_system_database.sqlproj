@@ -72,5 +72,9 @@
     <Build Include="dbo\Tables\task.sql" />
     <Build Include="dbo\Tables\task_change.sql" />
     <Build Include="dbo\Tables\task_change_log.sql" />
+    <Build Include="dbo\Tables\state_assigned_group.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ticket_system_database.refactorlog" />
   </ItemGroup>
 </Project>

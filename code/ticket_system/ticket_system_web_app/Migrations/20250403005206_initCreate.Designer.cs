@@ -12,8 +12,8 @@ using ticket_system_web_app.Data;
 namespace ticket_system_web_app.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20250331180832_InitCreate")]
-    partial class InitCreate
+    [Migration("20250403005206_initCreate")]
+    partial class initCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -281,6 +281,21 @@ namespace ticket_system_web_app.Migrations
                     b.ToTable("task");
                 });
 
+            modelBuilder.Entity("ticket_system_web_app.Models.StateAssignedGroup", b =>
+                {
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StateId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("StateAssignedGroups");
+                });
+
             modelBuilder.Entity("ticket_system_web_app.Models.TaskChange", b =>
                 {
                     b.Property<int>("ChangeId")
@@ -431,6 +446,25 @@ namespace ticket_system_web_app.Migrations
                     b.Navigation("Assignee");
 
                     b.Navigation("BoardState");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.StateAssignedGroup", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ticket_system_web_app.Models.BoardState", "BoardState")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BoardState");
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.TaskChange", b =>

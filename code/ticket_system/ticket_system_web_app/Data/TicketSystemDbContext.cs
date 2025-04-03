@@ -72,6 +72,14 @@ namespace ticket_system_web_app.Data
         /// </value>
         public DbSet<BoardState> BoardStates { get; set; }
 
+        /// <summary>
+        /// Gets or sets the state assigned groups.
+        /// </summary>
+        /// <value>
+        /// The state assigned groups.
+        /// </value>
+        public DbSet<StateAssignedGroup> StateAssignedGroups { get; set; }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TicketSystemDbContext"/> class.
@@ -118,6 +126,19 @@ namespace ticket_system_web_app.Data
 
 
             modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
+
+            modelBuilder.Entity<StateAssignedGroup>()
+        .HasKey(sg => new { sg.StateId, sg.GroupId });
+
+            modelBuilder.Entity<StateAssignedGroup>()
+                .HasOne(sg => sg.BoardState)
+                .WithMany()
+                .HasForeignKey(sg => sg.StateId);
+
+            modelBuilder.Entity<StateAssignedGroup>()
+                .HasOne(sg => sg.Group)
+                .WithMany()
+                .HasForeignKey(sg => sg.GroupId);
 
         }
 
