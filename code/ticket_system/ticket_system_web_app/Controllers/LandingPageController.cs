@@ -19,6 +19,10 @@ namespace ticket_system_web_app.Controllers
         /// <param name="context">The context.</param>
         public LandingPageController(TicketSystemDbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context), "DBContext should not be null");
+            }
             _context = context;
         }
 
