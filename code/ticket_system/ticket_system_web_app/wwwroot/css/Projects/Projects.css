@@ -81,6 +81,7 @@ table {
     background-color: var(--button-color-normal);
     border: var(--button-border-weight) solid white;
     border-radius: 10px;
+    color: #fff;
     padding: 1em;
 }
     .btn:hover {
