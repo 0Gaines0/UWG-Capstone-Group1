@@ -92,8 +92,8 @@ namespace ticket_system_web_app.Data
             modelBuilder.Entity<Project>().HasOne(e => e.ProjectLead).WithMany(e => e.ProjectsLeading).HasForeignKey(e => e.ProjectLeadId).IsRequired();
 
             modelBuilder.Entity<ProjectGroup>().HasKey(collab => new { collab.ProjectId, collab.GroupId });
-            modelBuilder.Entity<ProjectGroup>().HasOne<Project>().WithMany(project => project.Collaborators).HasForeignKey(collab => collab.ProjectId);
-            modelBuilder.Entity<ProjectGroup>().HasOne<Group>().WithMany(group => group.Collaborations).HasForeignKey(collab => collab.GroupId);
+            modelBuilder.Entity<ProjectGroup>().HasOne(pg => pg.Project).WithMany(project => project.Collaborators).HasForeignKey(collab => collab.ProjectId);
+            modelBuilder.Entity<ProjectGroup>().HasOne(pg => pg.Group).WithMany(group => group.Collaborations).HasForeignKey(collab => collab.GroupId);
 
             modelBuilder.Entity<ProjectTask>()
                 .HasOne(t => t.Assignee)

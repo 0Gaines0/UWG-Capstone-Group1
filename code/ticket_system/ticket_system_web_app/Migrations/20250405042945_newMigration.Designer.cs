@@ -12,8 +12,8 @@ using ticket_system_web_app.Data;
 namespace ticket_system_web_app.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20250331180832_InitCreate")]
-    partial class InitCreate
+    [Migration("20250405042945_newMigration")]
+    partial class newMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,19 +221,9 @@ namespace ticket_system_web_app.Migrations
                     b.Property<bool>("Accepted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("GroupGId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProjectPId")
-                        .HasColumnType("int");
-
                     b.HasKey("ProjectId", "GroupId");
 
-                    b.HasIndex("GroupGId");
-
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("ProjectPId");
 
                     b.ToTable("ProjectGroups");
                 });
@@ -391,24 +381,16 @@ namespace ticket_system_web_app.Migrations
             modelBuilder.Entity("ticket_system_web_app.Models.ProjectGroup", b =>
                 {
                     b.HasOne("ticket_system_web_app.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupGId");
-
-                    b.HasOne("ticket_system_web_app.Models.Group", null)
                         .WithMany("Collaborations")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ticket_system_web_app.Models.Project", null)
+                    b.HasOne("ticket_system_web_app.Models.Project", "Project")
                         .WithMany("Collaborators")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ticket_system_web_app.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectPId");
 
                     b.Navigation("Group");
 
