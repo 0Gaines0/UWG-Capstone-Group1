@@ -281,10 +281,12 @@ namespace ticket_system_web_app.Migrations
             modelBuilder.Entity("ticket_system_web_app.Models.StateAssignedGroup", b =>
                 {
                     b.Property<int>("StateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
                     b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.HasKey("StateId", "GroupId");
 
@@ -454,7 +456,7 @@ namespace ticket_system_web_app.Migrations
                         .IsRequired();
 
                     b.HasOne("ticket_system_web_app.Models.BoardState", "BoardState")
-                        .WithMany()
+                        .WithMany("AssignedGroups")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -496,6 +498,8 @@ namespace ticket_system_web_app.Migrations
 
             modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
                 {
+                    b.Navigation("AssignedGroups");
+
                     b.Navigation("Tasks");
                 });
 

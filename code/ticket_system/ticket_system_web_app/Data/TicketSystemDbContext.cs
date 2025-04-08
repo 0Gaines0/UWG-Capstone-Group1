@@ -128,17 +128,21 @@ namespace ticket_system_web_app.Data
             modelBuilder.Entity<Employee>().HasData(tempAdminCreation());
 
             modelBuilder.Entity<StateAssignedGroup>()
-        .HasKey(sg => new { sg.StateId, sg.GroupId });
+      .HasKey(sg => new { sg.StateId, sg.GroupId });
 
             modelBuilder.Entity<StateAssignedGroup>()
                 .HasOne(sg => sg.BoardState)
-                .WithMany()
-                .HasForeignKey(sg => sg.StateId);
+                .WithMany(bs => bs.AssignedGroups)
+                .HasForeignKey(sg => sg.StateId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<StateAssignedGroup>()
                 .HasOne(sg => sg.Group)
                 .WithMany()
-                .HasForeignKey(sg => sg.GroupId);
+                .HasForeignKey(sg => sg.GroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
 
         }
 

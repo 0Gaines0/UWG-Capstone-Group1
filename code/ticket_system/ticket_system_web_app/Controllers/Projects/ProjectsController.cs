@@ -113,10 +113,21 @@ namespace ticket_system_web_app.Controllers.Projects
         public async Task<IActionResult> EditKanban(int pId)
         {
             var board = await _context.Projects.FirstOrDefaultAsync(project => project.PId == pId);
-            var project_board = await _context.ProjectBoards.Include(b => b.States).FirstOrDefaultAsync(b => b.ProjectId == pId);
+            var project_board = await _context.ProjectBoards
+                .Include(b => b.States)
+                .ThenInclude(state => state.AssignedGroups)
+                .ThenInclude(ag => ag.Group)
+                .FirstOrDefaultAsync(b => b.ProjectId == pId);
+
+            var groups = await _context.ProjectGroups
+                .Include(pg => pg.Group)
+                .Where(pg => pg.ProjectId == pId)
+                .Select(pg => pg.Group)
+                .ToListAsync();
 
             ViewBag.Board = board;
             ViewBag.ProjectBoard = project_board;
+            ViewBag.Groups = groups;
 
             return View("EditKanban");
         }
