@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ticket_system_web_app.Migrations
 {
     /// <inheritdoc />
-    public partial class InitCreate : Migration
+    public partial class newMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -144,18 +144,11 @@ namespace ticket_system_web_app.Migrations
                 {
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    ProjectPId = table.Column<int>(type: "int", nullable: true),
-                    GroupGId = table.Column<int>(type: "int", nullable: true),
                     Accepted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectGroups", x => new { x.ProjectId, x.GroupId });
-                    table.ForeignKey(
-                        name: "FK_ProjectGroups_Groups_GroupGId",
-                        column: x => x.GroupGId,
-                        principalTable: "Groups",
-                        principalColumn: "g_id");
                     table.ForeignKey(
                         name: "FK_ProjectGroups_Groups_GroupId",
                         column: x => x.GroupId,
@@ -168,11 +161,6 @@ namespace ticket_system_web_app.Migrations
                         principalTable: "Projects",
                         principalColumn: "p_id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProjectGroups_Projects_ProjectPId",
-                        column: x => x.ProjectPId,
-                        principalTable: "Projects",
-                        principalColumn: "p_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -271,19 +259,9 @@ namespace ticket_system_web_app.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectGroups_GroupGId",
-                table: "ProjectGroups",
-                column: "GroupGId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectGroups_GroupId",
                 table: "ProjectGroups",
                 column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectGroups_ProjectPId",
-                table: "ProjectGroups",
-                column: "ProjectPId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_EmployeeEId",
