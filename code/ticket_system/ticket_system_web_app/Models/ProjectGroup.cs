@@ -14,6 +14,16 @@
 
         public ProjectGroup(Project project, Group group)
         {
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project), "Parameter must not be null");
+            }
+            if (group == null)
+            {
+                throw new ArgumentNullException(nameof(group), "Parameter must not be null");
+            }
+
+
             this.Project = project;
             this.Group = group;
             this.ProjectId = project.PId;
