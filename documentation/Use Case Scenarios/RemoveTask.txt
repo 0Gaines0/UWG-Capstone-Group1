@@ -1,0 +1,7 @@
+Context - User is logged into webapp, has access to a project and has navigated to that project's Kanban Board Page
+
+
+Primary Flow
+1 - User selects the Remove button on the ticket it wishes to remove
+2 - System removes task from database
+3 - System repopulate page with correct tasks

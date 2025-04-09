@@ -1,0 +1,17 @@
+Context - User is logged into webapp, has access to a project and has navigated to that project's Kanban Board Page
+
+Primary Flow
+1 - User selects Create Task button
+2 - System displays Create Task modal
+3 - User populates required fields for Task
+4 - User selects Create Task button in modal
+5 - System creates Task and repopulates page to display new task in the very left column
+
+
+Alternate Flow(s)
+USER INPUTS INVALID TASK DETAILS
+a1 - Starts at Primary Flow step 2
+a2 - User does not populate required fields or populated fields with invalid data
+a3 - System notifies User of expected requirements with error label
+a4 - System reprompts usser to re-enter required fields 
+a5 - back to Primary Flow step 3
