@@ -11,8 +11,13 @@ namespace ticket_system_web_app.Controllers
     /// </summary>
     public class EmployeesController : Controller
     {
-
+        #region Fields
+        
         private readonly TicketSystemDbContext context;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeesController"/> class.
@@ -20,8 +25,16 @@ namespace ticket_system_web_app.Controllers
         /// <param name="context">The context.</param>
         public EmployeesController(TicketSystemDbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context), "Parameter cannot be null");
+            }
             this.context = context;
         }
+
+        #endregion
+
+        #region Page Loaders
 
         /// <summary>
         /// Indexes this instance.
@@ -42,6 +55,10 @@ namespace ticket_system_web_app.Controllers
             return PartialView("_CreateEmployeeModal");
         }
 
+        #endregion
+
+        #region Public Methods
+
         /// <summary>
         /// Returns a list of all the employees in a Json object.
         /// </summary>
@@ -58,7 +75,6 @@ namespace ticket_system_web_app.Controllers
 
             //return Json(employees);
         }
-
 
         /// Creates the employee with the given information if it doesn't exist already.
         /// </summary>
@@ -193,44 +209,6 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Removes employee with the given username from the database.
-        /// </summary>
-        /// <param name="username">The username of the employee to be removed</param>
-        /// <returns>True if employee was successfully removed, false otherwise</returns>
-        private async Task<bool> removeEmployeeFromDb(String username)
-        {
-            try
-            {
-                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
-                this.context.Employees.Remove(employee);
-                await this.context.SaveChangesAsync();
-                return true;
-                
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Creates a list of all the employees.
-        /// </summary>
-        /// <returns>List of all employees</returns>
-        private async Task<List<object>> constructEmployees()
-        {
-            var employees = await this.context.Employees.Select(employee => new
-            {
-                Id = employee.EId,
-                Name = employee.FName + " " + employee.LName,
-                employee.Username,
-                employee.Email,
-                employee.IsAdmin
-            }).ToListAsync();
-            return employees.Cast<object>().ToList();
-        }
-
-        /// <summary>
         /// Returns the employee data for the given username.
         /// </summary>
         /// <param name="data">The employee's username</param>
@@ -270,19 +248,44 @@ namespace ticket_system_web_app.Controllers
             return Ok(employee);
         }
 
-        /// <summary>
-        /// Checks if there is a session employee.
-        /// </summary>
-        /// <returns>True if there is a session employee, false otherwise</returns>
+        #endregion
+
+        #region Helper Methods
+
+        private async Task<bool> removeEmployeeFromDb(String username)
+        {
+            try
+            {
+                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
+                this.context.Employees.Remove(employee);
+                await this.context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task<List<object>> constructEmployees()
+        {
+            var employees = await this.context.Employees.Select(employee => new
+            {
+                Id = employee.EId,
+                Name = employee.FName + " " + employee.LName,
+                employee.Username,
+                employee.Email,
+                employee.IsAdmin
+            }).ToListAsync();
+            return employees.Cast<object>().ToList();
+        }
+
         private bool IsLoggedIn()
         {
             return ActiveEmployee.Employee != null;
         }
 
-        /// <summary>
-        /// Checks if the session user is logged in and is an admin.
-        /// </summary>
-        /// <returns>True if admin, false otherwise</returns>
         private bool IsAdmin()
         {
             if (!IsLoggedIn())
@@ -292,5 +295,7 @@ namespace ticket_system_web_app.Controllers
             var adminStatus = ActiveEmployee.Employee.IsAdmin;
             return adminStatus.HasValue && adminStatus.Value;
         }
+
+        #endregion
     }
 }
