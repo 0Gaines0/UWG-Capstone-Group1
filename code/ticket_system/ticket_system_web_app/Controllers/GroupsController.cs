@@ -199,7 +199,7 @@ namespace ticket_system_web_app.Controllers
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
-                Console.WriteLine($"{nameof(CreateGroup)} Got auth token: {authToken}");
+                Console.WriteLine($"{nameof(RemoveGroup)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsAdmin())

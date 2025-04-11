@@ -30,7 +30,7 @@
                         <h4>Project title: @currCollab.Project.PTitle</h4>
                         <p>Project description: @currCollab.Project.PDescription</p>
                         <hr />
-                        <form asp-action="AcceptCollabRequest" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
+                        <form asp-action="AcceptCollabRequest" asp-route-authToken="@ActiveEmployee.AuthToken" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
                             <button class="btn" onclick="markAccepted(@currCollab.ProjectId, @currCollab.GroupId);">Accept</button>
                         </form>
                     </div>
@@ -55,5 +55,6 @@
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
         }
     }
+
 </body>
 </html>

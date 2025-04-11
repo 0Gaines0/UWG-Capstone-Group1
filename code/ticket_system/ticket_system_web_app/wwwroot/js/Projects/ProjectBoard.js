@@ -46,7 +46,7 @@ function openCreateTaskModal() {
 async function submitCreateTask() {
     const form = document.getElementById('editTaskForm');
     const formData = new FormData(form);
-    const response = await fetch('/Task/Create', {
+    const response = await fetch(`/Task/Create/${authToken}`, {
         method: 'POST',
         body: formData
     });
