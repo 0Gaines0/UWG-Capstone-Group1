@@ -1,7 +1,7 @@
-﻿@{
+﻿@model int
+@{
     Layout = null; // Set your layout here if applicable
     var notLogin = ActiveEmployee.Employee == null;
-    var hasManagerPerms = (ActiveEmployee.Employee?.IsAdmin ?? false) || (ActiveEmployee.Employee?.IsManager ?? false);
 
     if (notLogin)
     {
@@ -276,8 +276,8 @@
                 <div class="greeting">
                     Good Day, @ticket_system_web_app.Models.ActiveEmployee.Employee?.FName!
                 </div>
-                @if (hasManagerPerms) {
-                    <button class="nav_item" onclick="location.href='@Url.Action("ViewCollabRequests", "Projects", new {managerId = @ActiveEmployee.Employee.EId})';">View collaboration requests</button>
+                @if (Model > 0) {
+                    <button class="nav_item" onclick="location.href='@Url.Action("ViewCollabRequests", "Projects", new {managerId = @ActiveEmployee.Employee.EId})';">View @Model collaboration request(s)</button>
                 }
                 <form asp-action="LogOut" method="post" style="margin: 0;">
                     <button type="submit" class="logout-button">Log Out</button>
@@ -303,8 +303,8 @@
             </div>
             <ul class="nav_list">
                 <li class="nav_item" onclick="location.href='@Url.Action("Index", "Projects")';">Projects</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToGroupIndex", "LandingPage")';">Groups</li>
-                <li class="nav_item" onclick="location.href='@Url.Action("RedirectToEmployeesIndex", "LandingPage")';">Employees</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Groups")';">Groups</li>
+                <li class="nav_item" onclick="location.href='@Url.Action("Index", "Employees")';">Employees</li>
             </ul>
         </div>
     </div>
