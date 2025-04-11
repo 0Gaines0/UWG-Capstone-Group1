@@ -566,6 +566,7 @@
                             }
                         </select>
                     </div>
+
                     <div class="modal-column">
                         <label for="editTaskPriority">Priority</label>
                         <select id="editTaskPriority" name="Priority">
@@ -574,17 +575,15 @@
                             <option value="3">High</option>
                         </select>
                     </div>
+
                     <div class="modal-column">
                         <label for="editTaskAssigneeId">Assignee</label>
                         <select id="editTaskAssigneeId" name="AssigneeId">
                             <option value="">Unassigned</option>
-                            @foreach (var emp in ViewBag.ProjectTeam as List<ticket_system_web_app.Models.Employee>)
-                            {
-                                <option value="@emp.EId">@emp.FName @emp.LName @(emp.EId == Model.ProjectLeadId ? "(Project Lead)" : "")</option>
-                            }
                         </select>
                     </div>
                 </div>
+
 
                 <div class="form-group">
                     <label for="editTaskSummary">Summary*</label>
@@ -648,6 +647,18 @@
         </div>
     </div>
     <script src="~/js/Projects/ProjectBoard.js"></script>
+    <script>
+        initStatesWithEmployees(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+            Model.ProjectBoard.States.Select(s => new
+            {
+                StateId = s.StateId,
+                Employees = s.AssignedGroups.SelectMany(ag => ag.Group.Employees)
+                    .Select(e => new { e.EId, Name = e.FName + " " + e.LName })
+                    .Distinct()
+            })
+        )));
+    </script>
+
 </body>
 </html>
 

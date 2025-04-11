@@ -77,29 +77,19 @@ namespace ticket_system_web_app.Controllers.Projects
         public async Task<IActionResult> BoardPage(int pId)
         {
             var project = await _context.Projects
-                 .Include(p => p.ProjectBoard)
-                     .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
-                         .ThenInclude(s => s.Tasks)
-                 .Include(p => p.Collaborators).ThenInclude(collab => collab.Group)
-                     .ThenInclude(g => g.Employees)
-                 .FirstOrDefaultAsync(p => p.PId == pId);
+                .Include(p => p.ProjectBoard)
+                    .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
+                        .ThenInclude(s => s.Tasks)
+                .Include(p => p.ProjectBoard.States)
+                    .ThenInclude(s => s.AssignedGroups)
+                        .ThenInclude(ag => ag.Group)
+                            .ThenInclude(g => g.Employees)
+                .FirstOrDefaultAsync(p => p.PId == pId);
 
             if (project == null)
             {
                 return NotFound();
             }
-            var firstState = project.ProjectBoard?.States?.FirstOrDefault();
-            var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
-
-            var projectTeam = project.Collaborators
-                .Select(collab => collab.Group)
-                .SelectMany(g => g.Employees)
-                .Append(projectLead)
-                .Where(e => e != null)
-                .Distinct()
-                .ToList();
-
-            ViewBag.ProjectTeam = projectTeam;
 
             return View("ProjectKanban", project);
         }

@@ -250,5 +250,3 @@ window.removeGroupFromState = function (stateId, groupId) {
         });
 }
 
-
-
