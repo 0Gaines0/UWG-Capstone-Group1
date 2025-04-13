@@ -1,4 +1,14 @@
-﻿.grid-pane {
+﻿.btn-accept {
+    background-color: darkgreen;
+    float: left;
+    margin-right: 1em;
+}
+
+.btn-deny {
+    background-color: darkred;
+}
+
+.grid-pane {
     display: grid;
     grid-template-columns: auto auto auto;
 }
