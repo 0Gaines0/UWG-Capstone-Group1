@@ -352,6 +352,11 @@ namespace ticket_system_web_app.Controllers.Projects
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AcceptCollabRequest(int projectId, int groupId)
         {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
             if (collab != null)
             {
@@ -373,6 +378,11 @@ namespace ticket_system_web_app.Controllers.Projects
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DenyCollabRequest(int projectId, int groupId)
         {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
             if (collab != null)
             {
