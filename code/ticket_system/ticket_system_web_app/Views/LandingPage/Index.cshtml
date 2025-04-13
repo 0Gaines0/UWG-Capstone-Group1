@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null; // Set your layout here if applicable
     var notLogin = ActiveEmployee.Employee == null;
-    var hasManagerPerms = (ActiveEmployee.Employee?.IsAdmin ?? false) || (ActiveEmployee.Employee?.IsManager ?? false);
+    var hasManagerPerms = ActiveEmployee.IsManager();
 
     if (notLogin)
     {

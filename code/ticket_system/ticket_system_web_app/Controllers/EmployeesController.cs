@@ -70,11 +70,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllEmployees)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return Json("Admin permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
 
             var employees = await this.constructEmployees();
@@ -229,6 +229,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Returns the employee data for the given username.
+        ///     Requires admin perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <param name="data">The employee's username</param>

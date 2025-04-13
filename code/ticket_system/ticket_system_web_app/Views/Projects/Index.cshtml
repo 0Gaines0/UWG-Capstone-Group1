@@ -18,8 +18,8 @@
         <link rel="stylesheet" href="/css/Projects/Projects.css">
         <link rel="stylesheet" href="/css/Projects/Index.css">
         <script src="~/js/Projects/Index.js"></script>
-        @if (ActiveEmployee.IsAdmin()) {
-            <script src="~/js/Projects/Index_Admin.js"></script>
+        @if (ActiveEmployee.IsManager()) {
+            <script src="~/js/Projects/Index_Manager.js"></script>
         }
     </head>
     <body>
@@ -28,7 +28,7 @@
         <div class="container">
             <div class="content-block projects-list">
                 @{
-                    if (ActiveEmployee.IsAdmin()) {
+                    if (ActiveEmployee.IsManager()) {
                         <form asp-action="Create" method="get" class="form-group">
                             <button type="submit" class="btn">Create New Project</button>
                         </form>
@@ -57,7 +57,7 @@
                                         @Html.DisplayFor(modelItem => item.PDescription)
                                     </td>
                                     <td>
-                                    @if (ActiveEmployee.IsAdmin()) {
+                                    @if (ActiveEmployee.IsManager()) {
                                         <button type="button" class="btn" onclick="gotoEditProject(@item.PId);">Edit</button>
                                         <form asp-action="Edit" method="get" class="hidden">
                                             <input type="hidden" name="id" value="@item.PId" />
@@ -76,7 +76,7 @@
                             }
                         </tbody>
                     </table>
-                    @if (ActiveEmployee.IsAdmin()) {
+                    @if (ActiveEmployee.IsManager()) {
                         <div id="delete-prompt-content">
                             <p>Delete this project?</p>
                             <button type="button" class="btn btn-del" onclick="confirmDeleteProject();">Delete</button>
@@ -88,9 +88,9 @@
 
             <div class="content-block project-info-display">
                 <div class="form-group">
-                    <input id="projectTitle" class="form-control" placeholder="Project title" disabled="true" />
-                    <textarea id="projectDescription" class="form-control" placeholder="Project description" disabled="true"></textarea>
-                    <input id="projectLead" class="form-control" placeholder="Project lead" disabled="true" />
+                    <input disabled id="projectTitle" class="form-control" placeholder="Project title"/>
+                    <textarea disabled id="projectDescription" class="form-control" placeholder="Project description"></textarea>
+                    <input disabled id="projectLead" class="form-control" placeholder="Project lead"/>
                     <div class="scrollable">
                         <table class="table">
                             <thead>

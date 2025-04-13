@@ -60,7 +60,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Gets all groups.
-        ///     Requires admin perms.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all the groups, or a Json with an error message if request is invalid.</returns>
@@ -72,9 +72,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(GetAllGroups)} Got auth token: {authToken}");
                 return Json("Not logged in.");
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return Json("Admin permissions required.");
+                return Json("Manager permissions required.");
             }
 
             var groups = await this.constructGroups();
@@ -110,6 +110,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Gets the group with the specified ID.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <param name="id">The identifier.</param>
@@ -121,6 +122,10 @@ namespace ticket_system_web_app.Controllers
             {
                 Console.WriteLine($"{nameof(GetGroupById)} Got auth token: {authToken}");
                 return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
             }
 
             var group = await this.context.Groups.Where(g => g.GId == id).Select(g => new
@@ -143,7 +148,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Creates the group.
-        ///     Requires admin perms.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The json request.</param>
@@ -156,9 +161,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(CreateGroup)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return Json("Manager permissions required.");
             }
 
             if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.GroupName) || jsonRequest.ManagerId == 0)
@@ -189,7 +194,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Removes the group.
-        ///     Requires admin perms.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <param name="request">The request.</param>
@@ -202,9 +207,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(RemoveGroup)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return Json("Manager permissions required.");
             }
 
             var groupName = request.GroupName;
@@ -232,7 +237,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Saves the group edits.
-        ///     Requires admin perms.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The json request.</param>
@@ -245,9 +250,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(SaveGroupEdits)} Got auth token: {authToken}");
                 return Json("Not logged in.");
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return Json("Admin permissions required.");
+                return Json("Manager permissions required.");
             }
 
             var group = await this.context.Groups.Include(g => g.Employees).FirstOrDefaultAsync(g => g.GId == jsonRequest.GroupId);
@@ -275,7 +280,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Gets all managers.
-        ///     Requires admin perms.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all of the managers, or a Json with an error message if request is invalid.</returns>
@@ -287,9 +292,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(GetAllManagers)} Got auth token: {authToken}");
                 return Json("Not logged in.");
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return Json("Admin permissions required.");
+                return Json("Manager permissions required.");
             }
             var possibleManagers = await this.context.Employees.Where(e => e.IsActive == true).Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).AsNoTracking().ToListAsync();
 
@@ -298,7 +303,7 @@ namespace ticket_system_web_app.Controllers
 
         /// <summary>
         ///     Gets all employees.
-        ///     Requires admin perms.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all of the employees, or a Json with an error message if request is invalid.</returns>
@@ -310,9 +315,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(GetAllEmployees)} Got auth token: {authToken}");
                 return Json("Not logged in.");
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return Json("Admin permissions required.");
+                return Json("Manager permissions required.");
             }
 
             var employees = await this.context.Employees

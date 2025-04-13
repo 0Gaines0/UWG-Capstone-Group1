@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjectGroup>
 
 @{
-    if (ActiveEmployee.Employee == null)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");

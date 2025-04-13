@@ -70,7 +70,7 @@ namespace ticket_system_web_app.Controllers
             }
 
             TempData["EnteredUsername"] = string.Empty;
-            ActiveEmployee.LogInEmployee(user);
+            ActiveEmployee.LogInEmployee(user, this.context);
             return RedirectToAction("Index", "LandingPage");
         }
 

@@ -148,7 +148,8 @@ namespace ticket_system_web_app.Controllers.Projects
         #region Validated Methods
 
         /// <summary>
-        /// Creates a project from the specified json request.
+        ///     Creates a project from the specified json request.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="jsonRequest">The json request.</param>
         /// <returns>OK if successful; BadRequest otherwise.</returns>
@@ -160,9 +161,9 @@ namespace ticket_system_web_app.Controllers.Projects
                 Console.WriteLine($"{nameof(CreateProject)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (jsonRequest == null)
@@ -208,7 +209,7 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Returns the details of the project with the specified id.
+        ///     Returns the details of the project with the specified id.
         /// </summary>
         /// <param name="id">The desired project's ID.</param>
         /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
@@ -219,10 +220,6 @@ namespace ticket_system_web_app.Controllers.Projects
             {
                 Console.WriteLine($"{nameof(Details)} Got auth token: {authToken}");
                 return Json(new { message = "Not logged in." });
-            }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return Json(new { message = "Admin permissions required." });
             }
 
             var project = await this._context.Projects.Include(project => project.Collaborators).ThenInclude(collab => collab.Group).Select(project => new
@@ -243,7 +240,7 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Gets the project related to employee.
+        ///     Gets the projects related to the current user.
         /// </summary>
         /// <returns></returns>
         [HttpGet("Projects/GetProjectRelatedToEmployee/{authToken}")]
@@ -253,10 +250,6 @@ namespace ticket_system_web_app.Controllers.Projects
             {
                 Console.WriteLine($"{nameof(GetProjectRelatedToEmployee)} Got auth token: {authToken}");
                 return Json(new { message = "Not logged in." });
-            }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return Json(new { message = "Admin permissions required." });
             }
 
             var eId = ActiveEmployee.Employee?.EId;
@@ -273,7 +266,8 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Edits the specified identifier.
+        ///     Edits the specified identifier.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="project">The project.</param>
@@ -283,6 +277,11 @@ namespace ticket_system_web_app.Controllers.Projects
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Models.Project project, string csvCollabGroups)
         {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             project.Collaborators = this.getCollaboratorsFromCSV(id, csvCollabGroups);
             project.ProjectLead = await this._context.Employees.FindAsync(project.ProjectLeadId);
 
@@ -327,7 +326,8 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Deletes the confirmed.
+        ///     Deletes the confirmed.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
@@ -335,6 +335,11 @@ namespace ticket_system_web_app.Controllers.Projects
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             var project = await _context.Projects.FindAsync(id);
             if (project != null)
             {
@@ -345,6 +350,14 @@ namespace ticket_system_web_app.Controllers.Projects
             return RedirectToAction(nameof(Index));
         }
 
+        /// <summary>
+        ///     Accepts the collab request.
+        ///     Requires manager perms.
+        /// </summary>
+        /// <param name="authToken">The authentication token.</param>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="groupId">The group identifier.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AcceptCollabRequest(string authToken, int projectId, int groupId)
         {
@@ -353,9 +366,9 @@ namespace ticket_system_web_app.Controllers.Projects
                 Console.WriteLine($"{nameof(AcceptCollabRequest)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
@@ -369,7 +382,8 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Updates the name of the state.
+        ///     Updates the name of the state.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
@@ -381,9 +395,9 @@ namespace ticket_system_web_app.Controllers.Projects
                 Console.WriteLine($"{nameof(UpdateStateName)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (request == null || request.Id <= 0 || string.IsNullOrWhiteSpace(request.Name))
@@ -410,7 +424,8 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Deletes the state.
+        ///     Deletes the state.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
@@ -422,9 +437,9 @@ namespace ticket_system_web_app.Controllers.Projects
                 Console.WriteLine($"{nameof(DeleteState)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (request == null || request.Id <= 0)
@@ -452,7 +467,8 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Adds the state.
+        ///     Adds the state.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns></returns>
@@ -464,9 +480,9 @@ namespace ticket_system_web_app.Controllers.Projects
                 Console.WriteLine($"{nameof(AddState)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (request == null || string.IsNullOrWhiteSpace(request.Name) || request.BoardId <= 0)
@@ -499,7 +515,8 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         /// <summary>
-        /// Updates the board state order.
+        ///     Updates the board state order.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="stateOrder">The state order.</param>
         /// <returns></returns>
@@ -511,9 +528,9 @@ namespace ticket_system_web_app.Controllers.Projects
                 Console.WriteLine($"{nameof(UpdateBoardStateOrder)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
+            if (!ActiveEmployee.IsManager())
             {
-                return BadRequest(new { message = "Admin permissions required." });
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (stateOrder == null || !stateOrder.Any())

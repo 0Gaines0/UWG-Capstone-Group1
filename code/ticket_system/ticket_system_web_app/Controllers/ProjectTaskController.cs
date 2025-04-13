@@ -35,10 +35,6 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(CreateTask)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return BadRequest(new { message = "Admin permissions required." });
-            }
 
             var task = new ProjectTask();
             task.StateId = model.StateId;
@@ -59,10 +55,6 @@ namespace ticket_system_web_app.Controllers
             {
                 Console.WriteLine($"{nameof(EditTask)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
-            }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return BadRequest(new { message = "Admin permissions required." });
             }
 
             var task = await _context.Tasks.FindAsync(model.TaskId);
@@ -180,10 +172,6 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(DeleteTask)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return BadRequest(new { message = "Admin permissions required." });
-            }
 
             var task = await _context.Tasks.FindAsync(taskId);
             if (task == null)
@@ -202,10 +190,6 @@ namespace ticket_system_web_app.Controllers
             {
                 Console.WriteLine($"{nameof(GetTaskHistory)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
-            }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return BadRequest(new { message = "Admin permissions required." });
             }
 
             var changes = await _context.TaskChangeLogs
