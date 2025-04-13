@@ -16,15 +16,13 @@ namespace ticket_system_winforms.View
     public partial class LoginPage : Form
     {
         private readonly TicketSystemDbContext context;
-        private static string VALIDATE_PARAMETER_MESSAGE = "input must not be null or empty";
-        private static string INVALID_ENTERED_CREDENTIALS = "credentials entered are invalid";
 
         public LoginPage(TicketSystemDbContext context)
         {
             InitializeComponent();
-            if (context == null)
+            if (context is null)
             {
-                throw new ArgumentNullException(nameof(context), VALIDATE_PARAMETER_MESSAGE);
+                throw new ArgumentNullException(nameof(context), "Input must not be null or empty");
             }
             this.context = context;
         }
@@ -37,26 +35,27 @@ namespace ticket_system_winforms.View
 
             if (string.IsNullOrEmpty(username))
             {
-                this.errorProvider1.SetError(label1, "Username cannot be empty.");
+                this.validationErrorProvider.SetError(usernameLabel, "Username cannot be empty.");
                 invalidLogin = true;
             }
             else
             {
-                this.errorProvider1.SetError(label1, string.Empty);
+                this.validationErrorProvider.SetError(usernameLabel, string.Empty);
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                this.errorProvider2.SetError(label2, "Password cannot be empty.");
+                this.validationErrorProvider.SetError(passwordLabel, "Password cannot be empty.");
                 invalidLogin = true;
             }
             else
             {
-                this.errorProvider2.SetError(label2, string.Empty);
+                this.validationErrorProvider.SetError(passwordLabel, string.Empty);
             }
+
             if (invalidLogin)
             {
-                this.errorProvider3.SetError(login_button, string.Empty);
+                this.validationErrorProvider.SetError(login_button, string.Empty);
                 return;
             }
 
@@ -64,7 +63,7 @@ namespace ticket_system_winforms.View
             var userPassword = user?.HashedPassword;
             if (user == null || userPassword == null || !this.verifyCorrectPassword(password, userPassword))
             {
-                this.errorProvider3.SetError(login_button, "Invalid Credentials.");
+                this.validationErrorProvider.SetError(login_button, "Incorrect username or password.");
                 invalidLogin = true;
             }
 
