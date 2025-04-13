@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
     authToken = document.getElementById("authToken").value;   
-    alert(authToken);
 
     fetchGroups();
     fetchUserGroups();

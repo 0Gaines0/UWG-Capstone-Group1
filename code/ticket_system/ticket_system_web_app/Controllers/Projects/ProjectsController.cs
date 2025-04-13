@@ -212,7 +212,7 @@ namespace ticket_system_web_app.Controllers.Projects
         /// </summary>
         /// <param name="id">The desired project's ID.</param>
         /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
-        [HttpGet("Projects/Details/{authToken}&{id}")]
+        [HttpPost("Projects/Details/{authToken}&{id}")]
         public async Task<JsonResult?> Details(string authToken, int id)
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
@@ -331,19 +331,10 @@ namespace ticket_system_web_app.Controllers.Projects
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        [HttpPost("Projects/Delete/{authToken}&{id}")]
-        public async Task<IActionResult> Delete(string authToken, int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!ActiveEmployee.IsValidRequest(authToken))
-            {
-                Console.WriteLine($"{nameof(Delete)} Got auth token: {authToken}");
-                return BadRequest(new { message = "Not logged in." });
-            }
-            if (!ActiveEmployee.IsAdmin())
-            {
-                return BadRequest(new { message = "Admin permissions required." });
-            }
-
             var project = await _context.Projects.FindAsync(id);
             if (project != null)
             {

@@ -66,7 +66,6 @@
 
                                         <button type="button" class="btn" onclick="promptDeleteProject(@item.PId);">Delete</button>
                                         <form asp-action="Delete" method="post" class="hidden">
-                                            <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" name="authToken" />
                                             <input type="hidden" name="id" value="@item.PId"/>
                                             <button class="hidden" id="delete-row-@item.PId"></button>
                                         </form>
