@@ -30,10 +30,10 @@
                         <h4>Project title: @currCollab.Project.PTitle</h4>
                         <p>Project description: @currCollab.Project.PDescription</p>
                         <hr />
-                        <form asp-action="AcceptCollabRequest" asp-route-authToken="@ActiveEmployee.AuthToken" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
+                        <form asp-action="AcceptCollabRequest" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
                             <button class="btn btn-accept" onclick="markAccepted(@currCollab.ProjectId, @currCollab.GroupId);">Accept</button>
                         </form>
-                        <form asp-action="DenyCollabRequest" asp-route-authToken="@ActiveEmployee.AuthToken" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
+                        <form asp-action="DenyCollabRequest" asp-route-projectId="@currCollab.ProjectId" asp-route-groupId="@currCollab.GroupId" method="post">
                             <button class="btn btn-deny" onclick="markDenied(@currCollab.ProjectId, @currCollab.GroupId);">Deny</button>
                         </form>
                     </div>

@@ -83,6 +83,7 @@ namespace ticket_system_web_app.Controllers.Projects
             return View(projects);
         }
 
+        [HttpGet]
         public async Task<IActionResult> ViewCollabRequests()
         {
             IEnumerable<ProjectGroup> result = await this._context.ProjectGroups.Include(collab => collab.Project).Include(collab => collab.Group).Where(collab => !collab.Accepted && collab.Group.ManagerId == ActiveEmployee.Employee.EId).ToListAsync();
@@ -348,23 +349,38 @@ namespace ticket_system_web_app.Controllers.Projects
         /// <param name="groupId">The group identifier.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AcceptCollabRequest(string authToken, int projectId, int groupId)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptCollabRequest(int projectId, int groupId)
         {
-            if (!ActiveEmployee.IsValidRequest(authToken))
-            {
-                Console.WriteLine($"{nameof(AcceptCollabRequest)} Got auth token: {authToken}");
-                return BadRequest(new { message = "Not logged in." });
-            }
-            if (!ActiveEmployee.IsManager())
-            {
-                return BadRequest(new { message = "Manager permissions required." });
-            }
-
             ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
             if (collab != null)
             {
                 collab.Accepted = true;
                 this._context.ProjectGroups.Update(collab);
+                await this._context.SaveChangesAsync();
+            }
+            return new NoContentResult();
+        }
+
+        /// <summary>
+        ///     Denies the collab request.
+        /// </summary>
+        /// <param name="authToken">The authentication token.</param>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="groupId">The group identifier.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DenyCollabRequest(int projectId, int groupId)
+        {
+            ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
+            if (collab != null)
+            {
+                this._context.ProjectGroups.Remove(collab);
+                if (collab.Project.Collaborators.Count <= 1)
+                {
+                    this._context.Projects.Remove(collab.Project);
+                }
                 await this._context.SaveChangesAsync();
             }
             return new NoContentResult();
@@ -623,41 +639,5 @@ namespace ticket_system_web_app.Controllers.Projects
         }
 
         #endregion
-        
-        [HttpGet]
-        public async Task<IActionResult> ViewCollabRequests(int managerId)
-        {
-            IEnumerable<ProjectGroup> result = await this._context.ProjectGroups.Include(collab => collab.Project).Include(collab => collab.Group).Where(collab => !collab.Accepted && collab.Group.ManagerId == managerId).ToListAsync();
-            result.OrderBy(collab => collab.Project.PTitle).ThenBy(collab => collab.Group.GName);
-            return View(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AcceptCollabRequest(int projectId, int groupId)
-        {
-            ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
-            if (collab != null)
-            {
-                collab.Accepted = true;
-                this._context.ProjectGroups.Update(collab);
-                await this._context.SaveChangesAsync();
-            }
-            return new NoContentResult();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DenyCollabRequest(int projectId, int groupId)
-        {
-            ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
-            if (collab != null) {
-                this._context.ProjectGroups.Remove(collab);
-                if (collab.Project.Collaborators.Count <= 1)
-                {
-                    this._context.Projects.Remove(collab.Project);
-                }
-                await this._context.SaveChangesAsync();
-            }
-            return new NoContentResult();
-        }
     }
 }
