@@ -106,6 +106,15 @@ namespace ticket_system_web_app.Models
         /// </value>
         public ICollection<Project> ProjectsLeading { get; set; } = new List<Project>();
 
+        /// <summary>
+        /// Gets or sets the managed groups.
+        /// </summary>
+        /// <value>
+        /// The managed groups.
+        /// </value>
+        public ICollection<Group> ManagedGroups { get; set; } = new List<Group>();
+
+
         private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";
 
         /// <summary>

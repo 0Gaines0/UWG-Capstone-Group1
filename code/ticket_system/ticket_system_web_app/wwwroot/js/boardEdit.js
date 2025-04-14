@@ -191,4 +191,62 @@
 
         board.appendChild(column);
     }
+
+
+
+
+
 });
+
+window.assignGroupToState = function () {
+    const stateId = document.getElementById("state-select").value;
+    const groupId = document.getElementById("group-select").value;
+
+    fetch(`/Groups/AssignGroups`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            stateId: parseInt(stateId),
+            groupIds: [parseInt(groupId)]
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error assigning group:', error);
+            alert('Failed to assign group.');
+        });
+}
+
+window.removeGroupFromState = function (stateId, groupId) {
+    fetch(`/Groups/RemoveStateGroup`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            stateId: parseInt(stateId),
+            groupIds: [parseInt(groupId)]
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error removing group:', error);
+            alert('Failed to remove group: ' + error.message);
+        });
+}
+

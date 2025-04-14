@@ -78,32 +78,27 @@ namespace ticket_system_web_app.Controllers.Projects
         public async Task<IActionResult> BoardPage(int pId)
         {
             var project = await _context.Projects
-                 .Include(p => p.ProjectBoard)
-                     .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
-                         .ThenInclude(s => s.Tasks)
-                 .Include(p => p.Collaborators).ThenInclude(collab => collab.Group)
-                     .ThenInclude(g => g.Employees)
-                 .FirstOrDefaultAsync(p => p.PId == pId);
+                .Include(p => p.ProjectBoard)
+                    .ThenInclude(pb => pb.States.OrderBy(s => s.Position))
+                        .ThenInclude(s => s.Tasks)
+                .Include(p => p.ProjectBoard.States)
+                    .ThenInclude(s => s.AssignedGroups)
+                        .ThenInclude(ag => ag.Group)
+                            .ThenInclude(g => g.Employees)
+                .Include(p => p.ProjectBoard.States)
+                    .ThenInclude(s => s.AssignedGroups)
+                        .ThenInclude(ag => ag.Group)
+                            .ThenInclude(g => g.Manager)
+                .FirstOrDefaultAsync(p => p.PId == pId);
 
             if (project == null)
             {
                 return NotFound();
             }
-            var firstState = project.ProjectBoard?.States?.FirstOrDefault();
-            var projectLead = await _context.Employees.FirstOrDefaultAsync(e => e.EId == project.ProjectLeadId);
-
-            var projectTeam = project.Collaborators
-                .Select(collab => collab.Group)
-                .SelectMany(g => g.Employees)
-                .Append(projectLead)
-                .Where(e => e != null)
-                .Distinct()
-                .ToList();
-
-            ViewBag.ProjectTeam = projectTeam;
 
             return View("ProjectKanban", project);
         }
+
 
         /// <summary>
         /// Edits the kanban.
@@ -114,10 +109,21 @@ namespace ticket_system_web_app.Controllers.Projects
         public async Task<IActionResult> EditKanban(int pId)
         {
             var board = await _context.Projects.FirstOrDefaultAsync(project => project.PId == pId);
-            var project_board = await _context.ProjectBoards.Include(b => b.States).FirstOrDefaultAsync(b => b.ProjectId == pId);
+            var project_board = await _context.ProjectBoards
+                .Include(b => b.States)
+                .ThenInclude(state => state.AssignedGroups)
+                .ThenInclude(ag => ag.Group)
+                .FirstOrDefaultAsync(b => b.ProjectId == pId);
+
+            var groups = await _context.ProjectGroups
+                .Include(pg => pg.Group)
+                .Where(pg => pg.ProjectId == pId)
+                .Select(pg => pg.Group)
+                .ToListAsync();
 
             ViewBag.Board = board;
             ViewBag.ProjectBoard = project_board;
+            ViewBag.Groups = groups;
 
             return View("EditKanban");
         }
