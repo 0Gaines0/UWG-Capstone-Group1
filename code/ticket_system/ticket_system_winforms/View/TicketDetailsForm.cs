@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,6 +27,19 @@ namespace ticket_system_winforms.View
             this.task = task;
             currentUserId = ActiveEmployee.Employee.EId;
             _context = context;
+
+            /*         string query = @"
+                     select g.*
+                     from groups g
+                     where g.g_id in (
+                         select gm.groupsexistingingid
+                         from group_member gm
+                         where gm.employeeseid = @userid
+                         ) or g.manager_id = @userid;";
+
+                     var groups = this._context.groups.fromsqlraw(query, new sqlparameter("@userid", currentuserid)).tolist();
+                     var boardstates = this._context.stateassignedgroups.where(sag => groups.contains(sag.group)).select(sag => sag.boardstate).tolist();*/
+            //context.ProjectBoards.Where(pb => pb.BoardId == task.BoardState.BoardId).SelectMany(pb => pb.States).ToList()
 
             cmbState.DataSource = _context.BoardStates.ToList();
             cmbState.DisplayMember = "StateName";
@@ -64,5 +79,19 @@ namespace ticket_system_winforms.View
 
             _context.SaveChanges();
         }
+
+/*        private async Task<List<Group>> getGroupsForUser(int userId)
+        {
+            string query = @"
+            SELECT g.*
+            FROM Groups g
+            WHERE g.g_id IN (
+                SELECT gm.GroupsExistingInGId
+                FROM group_member gm
+                WHERE gm.EmployeesEId = @UserId
+                ) OR g.manager_id = @UserId;";
+
+            return await this._context.Groups.FromSqlRaw(query, new SqlParameter("@UserId", userId)).ToListAsync();
+        }*/
     }
 }

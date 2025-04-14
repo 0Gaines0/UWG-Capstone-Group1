@@ -38,7 +38,8 @@ namespace ticket_system_winforms.View
             comboBoxTaskFilter.SelectedIndexChanged += ComboBoxTaskFilter_SelectedIndexChanged;
 
             var employeeId = ActiveEmployee.Employee.EId;
-            allTasks = await this.getTasksForUser(employeeId);
+            var allGroups = await getGroupsForUser(employeeId);
+            allTasks =  this.context.StateAssignedGroups.Where(sag => allGroups.Contains(sag.Group)).SelectMany(sag => sag.BoardState.Tasks).ToList();
 
             DisplayTasks("Available Tasks");
         }
@@ -94,22 +95,18 @@ namespace ticket_system_winforms.View
             // TODO
         }
 
-        private async Task<List<ProjectTask>> getTasksForUser(int userId)
+        private async Task<List<Group>> getGroupsForUser(int userId)
         {
             string query = @"
-            SELECT t.*
-            FROM task t
-            WHERE t.state_id IN (
-                SELECT sg.StateId
-                FROM StateAssignedGroups sg
-                WHERE sg.GroupId IN (
-                    SELECT gm.GroupsExistingInGId
-                    FROM group_member gm
-                    WHERE gm.EmployeesEId = @UserId
-                )
-            );";
+            SELECT g.*
+            FROM Groups g
+            WHERE g.g_id IN (
+                SELECT gm.GroupsExistingInGId
+                FROM group_member gm
+                WHERE gm.EmployeesEId = @UserId
+                ) OR g.manager_id = @UserId;";
 
-            return await context.Tasks.FromSqlRaw(query, new SqlParameter("@UserId", userId)).ToListAsync();
+            return await context.Groups.FromSqlRaw(query, new SqlParameter("@UserId", userId)).ToListAsync();
         }
     }
 }
