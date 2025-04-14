@@ -30,7 +30,7 @@ namespace ticket_system_web_app.Controllers
         /// Indexes this instance.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index()
+        public async Task<ViewResult> Index()
         {
             int numPendingRequests = await this._context.ProjectGroups.Include(collab => collab.Group).CountAsync(collab => collab.Group.ManagerId == ActiveEmployee.Employee.EId && !collab.Accepted);
             return View(numPendingRequests);

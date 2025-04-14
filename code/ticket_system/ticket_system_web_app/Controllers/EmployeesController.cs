@@ -65,7 +65,8 @@ namespace ticket_system_web_app.Controllers
         #region Authenticated Methods
 
         /// <summary>
-        ///     Returns a list of all the employees in a Json object.
+        ///     Returns the following information, in a Json object, for all employees:
+        ///     Id, full name, username, email address, and admin status.
         ///     Requires admin perms.
         /// </summary>
         /// <precondition>true</precondition>
@@ -155,8 +156,7 @@ namespace ticket_system_web_app.Controllers
             {
                 return BadRequest(new { message = "Invalid request data" });
             }
-
-            String userName = request.username;
+            string userName = request.username;
             if (!this.context.Employees.Where(employee => employee.Username == userName).Any())
             {
                 return BadRequest(new { success = false, message = "Employee with username does not exist." });
@@ -174,16 +174,8 @@ namespace ticket_system_web_app.Controllers
                 return BadRequest(new { success = false, message = "Employee can't be deleted while being a group manager" });
             }
 
-            bool isRemoved = await this.removeEmployeeFromDb(userName);
-
-            if (isRemoved)
-            {
-                return Ok(new { success = true });
-            }
-            else
-            {
-                return BadRequest(new { success = false, message = "Failed to remove Employee." });
-            }
+            await this.removeEmployeeFromDb(userName);
+            return Ok(new { success = true });
         }
 
         /// <summary>
@@ -250,7 +242,7 @@ namespace ticket_system_web_app.Controllers
         ///     Otherwise, returns the employee data for this username
         /// </returns>
         [HttpPost("Employees/GetEmployee/{authToken}")]
-        public async Task<object> GetEmployee(string authToken, [FromBody] GetEmployeeRequest data)
+        public async Task<IActionResult> GetEmployee(string authToken, [FromBody] GetEmployeeRequest data)
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
@@ -290,57 +282,26 @@ namespace ticket_system_web_app.Controllers
 
         #region Helpers
 
+        private async Task<List<object>> constructEmployees()
+        {
+            var employees = await this.context.Employees.Select(employee => new
+            {
+                Id = employee.EId,
+                Name = employee.FName + " " + employee.LName,
+                employee.Username,
+                employee.Email,
+                employee.IsAdmin
+            }).ToListAsync();
+            return employees.Cast<object>().ToList();
+        }
+        
         private async Task<bool> removeEmployeeFromDb(string username)
         {
-            try
-            {
-                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
-                this.context.Employees.Remove(employee);
-                await this.context.SaveChangesAsync();
-                return true;
-
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private async Task<List<object>> constructEmployees()
-        {
-            var employees = await this.context.Employees.Select(employee => new
-            {
-                Id = employee.EId,
-                Name = employee.FName + " " + employee.LName,
-                employee.Username,
-                employee.Email,
-                employee.IsAdmin
-            }).ToListAsync();
-            return employees.Cast<object>().ToList();
-        }
-
-        private bool IsLoggedIn()
-        {
-            return ActiveEmployee.Employee == null;
-        }
-
-        private bool IsAdmin()
-        {
-            return ActiveEmployee.Employee.IsAdmin ?? false;
-        }
-
-        private async Task<List<object>> constructEmployees()
-        {
-            var employees = await this.context.Employees.Select(employee => new
-            {
-                Id = employee.EId,
-                Name = employee.FName + " " + employee.LName,
-                employee.Username,
-                employee.Email,
-                employee.IsAdmin
-            }).ToListAsync();
-            return employees.Cast<object>().ToList();
-        }
+            var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
+            this.context.Employees.Remove(employee);
+            await this.context.SaveChangesAsync();
+            return true;
+        }       
 
         #endregion
     }

@@ -15,8 +15,6 @@ namespace ticket_system_web_app.Controllers
     {
         #region Fields
 
-        #region Fields
-
         private readonly TicketSystemDbContext context;
 
         #endregion
@@ -175,7 +173,7 @@ namespace ticket_system_web_app.Controllers
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.GroupName) || jsonRequest.ManagerId == 0)
