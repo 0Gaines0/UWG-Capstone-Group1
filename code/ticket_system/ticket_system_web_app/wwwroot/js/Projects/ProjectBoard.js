@@ -10,8 +10,10 @@ function openEditModal(btn) {
     document.getElementById('editTaskStateId').value = btn.dataset.stateId;
     document.getElementById('editTaskPriority').value = btn.dataset.priority;
     document.getElementById('editTaskSummary').value = btn.dataset.summary;
-    document.getElementById('editTaskAssigneeId').value = btn.dataset.assigneeId || "";
     document.getElementById('editTaskDescription').value = btn.dataset.description;
+
+    populateEmployeesByState(btn.dataset.assigneeId || "");
+    document.getElementById('editTaskAssigneeId').value = btn.dataset.assigneeId || "";
 
     document.getElementById('edit-task').style.display = "flex";
     document.getElementById('create-task').style.display = "none";
@@ -27,9 +29,11 @@ function openCreateTaskModal() {
 
     document.getElementById('editTaskStateId').value = document.getElementById('editTaskStateId').options[0].value;
     document.getElementById('editTaskPriority').value = 1;
-    document.getElementById('editTaskAssigneeId').value = "";
     document.getElementById('editTaskSummary').value = "";
     document.getElementById('editTaskDescription').value = "";
+
+    populateEmployeesByState();
+    document.getElementById('editTaskAssigneeId').value = "";
 
     document.getElementById('comments-history').style.display = "none";
     document.getElementById('edit-task').style.display = "none";
@@ -153,5 +157,43 @@ function submitComment(event) {
     console.log("Submitting comment:", commentText);
     document.getElementById('newCommentText').value = "";
 }
+
+let statesWithEmployees = [];
+
+function initStatesWithEmployees(statesData) {
+    statesWithEmployees = statesData;
+}
+
+function populateEmployeesByState(selectedAssigneeId = "") {
+    const stateSelect = document.getElementById('editTaskStateId');
+    const employeeSelect = document.getElementById('editTaskAssigneeId');
+    const stateId = parseInt(stateSelect.value);
+
+    employeeSelect.innerHTML = '<option value="">Unassigned</option>';
+
+    const state = statesWithEmployees.find(s => s.StateId === stateId);
+
+    if (state && state.Employees.length > 0) {
+        state.Employees.forEach(emp => {
+            const option = document.createElement("option");
+            option.value = emp.EId;
+            option.textContent = emp.Name;
+            if (emp.EId.toString() === selectedAssigneeId.toString()) {
+                option.selected = true;
+            }
+            employeeSelect.appendChild(option);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('editTaskStateId').addEventListener('change', () => {
+        const currentAssigneeId = document.getElementById('editTaskAssigneeId').value || "";
+        populateEmployeesByState(currentAssigneeId);
+    });
+});
+
+
+
 
 

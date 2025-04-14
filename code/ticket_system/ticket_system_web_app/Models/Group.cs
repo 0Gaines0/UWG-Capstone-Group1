@@ -45,6 +45,9 @@ namespace ticket_system_web_app.Models
         /// </value>
         [Column("g_description")]
         public string? GDescription { get; set; }
+
+        [ForeignKey("ManagerId")]
+        public Employee? Manager { get; set; }
         /// <summary>
         /// Gets or sets the employees.
         /// </summary>
@@ -59,6 +62,9 @@ namespace ticket_system_web_app.Models
         /// The assigned projects.
         /// </value>
         public ICollection<ProjectGroup> Collaborations { get; set; } = new List<ProjectGroup>();
+
+    
+
 
         private static string VALID_NUM_ERROR_MESSAGE = "Parameter must not be negative";
         private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";

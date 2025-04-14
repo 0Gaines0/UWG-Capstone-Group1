@@ -11,6 +11,9 @@
     <Compile Update="View\HomeForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="View\LoginPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\PrivacyForm.cs">
       <SubType>Form</SubType>
     </Compile>

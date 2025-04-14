@@ -173,6 +173,44 @@
                 color: red;
             }
 
+        .group-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .group-list li {
+                background-color: #805ad5;
+                color: white;
+                margin: 3px 0;
+                padding: 5px;
+                border-radius: 5px;
+                text-align: center;
+            }
+
+        .group-assign-controls {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+            .group-assign-controls select, .group-assign-controls button {
+                padding: 5px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+
+            .group-assign-controls button {
+                background-color: #9f7aea;
+                color: white;
+                cursor: pointer;
+            }
+
+        .assign-group-container {
+            margin: 20px 0;
+            text-align: center;
+        }
 
     </style>
 </head>
@@ -192,16 +230,41 @@
             <div class="project-kanban-board">
                 <h1>Edit Kanban Board</h1>
                 <div id="board" class="board" data-boardid="@ViewBag.ProjectBoard.BoardId">
-                @foreach (var state in states)
-                {
-                    <div class="column" id="state-@state.StateId" data-stateid="@state.StateId">
-                        <div class="column-header">
-                            <h3>@state.StateName</h3>
-                            <button class="delete-btn" onclick="removeState(@state.StateId)">✖</button>
+                    @foreach (var state in states)
+                    {
+                        <div class="column" id="state-@state.StateId" data-stateid="@state.StateId">
+                            <div class="column-header">
+                                <h3>@state.StateName</h3>
+                                <button class="delete-btn" onclick="removeState(@state.StateId)">✖</button>
+                            </div>
+                            <ul class="group-list">
+                                @foreach (var group in state.AssignedGroups)
+                                {
+                                    <li>
+                                        @group.Group.GName
+                                        <button onclick="removeGroupFromState(@state.StateId, @group.Group.GId)">✖</button>
+                                    </li>
+                                }
+                            </ul>
                         </div>
-                    </div>
-                }
-        </div>
+                    }
+                </div>
+                <div class="assign-group-container">
+                    <h3>Assign Group to State</h3>
+                    <select id="state-select">
+                        @foreach (var s in ViewBag.ProjectBoard.States)
+                        {
+                            <option value="@s.StateId">@s.StateName</option>
+                        }
+                    </select>
+                    <select id="group-select">
+                        @foreach (var group in ViewBag.Groups)
+                        {
+                            <option value="@group.GId">@group.GName</option>
+                        }
+                    </select>
+                    <button onclick="assignGroupToState()">Assign Group</button>
+                </div>
             </div>
         </div>
     </div>

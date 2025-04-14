@@ -363,5 +363,58 @@ namespace ticket_system_web_app.Controllers
         }
 
         #endregion
+        
+        [HttpPost]
+        public IActionResult AssignGroups([FromBody] GroupAssignmentRequest request)
+        {
+            var state = context.BoardStates.Include(bs => bs.AssignedGroups)
+                                           .FirstOrDefault(bs => bs.StateId == request.StateId);
+
+            if (state == null)
+            {
+                return NotFound(new { message = "State not found" });
+            }
+
+            var existingAssignments = context.StateAssignedGroups
+                .Where(sg => sg.StateId == request.StateId)
+                .ToList();
+
+            var newGroupIds = request.GroupIds.Except(existingAssignments.Select(ea => ea.GroupId)).ToList();
+
+            var groupsToRemove = existingAssignments
+                .Where(ea => !request.GroupIds.Contains(ea.GroupId)).ToList();
+            context.StateAssignedGroups.RemoveRange(groupsToRemove);
+
+            foreach (var groupId in newGroupIds)
+            {
+                context.StateAssignedGroups.Add(new StateAssignedGroup
+                {
+                    StateId = request.StateId,
+                    GroupId = groupId
+                });
+            }
+
+            context.SaveChanges();
+
+            return Ok(new { message = "Groups assigned successfully" });
+        }
+
+        [HttpPost]
+        public IActionResult RemoveStateGroup([FromBody] GroupAssignmentRequest request)
+        {
+            var assignment = context.StateAssignedGroups.FirstOrDefault(sg => sg.StateId == request.StateId && sg.GroupId == request.GroupIds.FirstOrDefault());
+            if (assignment == null)
+            {
+                return NotFound(new { message = "Group assignment not found" });
+            }
+
+            context.StateAssignedGroups.Remove(assignment);
+            context.SaveChanges();
+
+            return Ok(new { message = "Group removed successfully" });
+        }
+
     }
+
 }
+
