@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
 using ticket_system_web_app.Models.RequestObj;
@@ -9,16 +10,32 @@ namespace ticket_system_web_app.Controllers
 {
     public class ProjectTaskController : Controller
     {
+        #region Fields
+
         private readonly TicketSystemDbContext _context;
+
+        #endregion
+
+        #region Constructors
 
         public ProjectTaskController(TicketSystemDbContext context)
         {
             this._context = context;
         }
 
-        [HttpPost("/Task/Create")]
-        public async Task<IActionResult> CreateTask([FromForm] EditProjectTaskRequest model)
+        #endregion
+
+        #region Authenticated Methods
+
+        [HttpPost("/Task/Create/{authToken}")]
+        public async Task<IActionResult> CreateTask(string authToken, [FromForm] EditProjectTaskRequest model)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(CreateTask)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+
             var task = new ProjectTask();
             task.StateId = model.StateId;
             task.Priority = model.Priority;
@@ -31,9 +48,15 @@ namespace ticket_system_web_app.Controllers
             return Ok();
         }
 
-        [HttpPost("/Task/Edit")]
-        public async Task<IActionResult> EditTask([FromForm] EditProjectTaskRequest model)
+        [HttpPost("/Task/Edit/{authToken}")]
+        public async Task<IActionResult> EditTask(string authToken, [FromForm] EditProjectTaskRequest model)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(EditTask)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+
             var task = await _context.Tasks.FindAsync(model.TaskId);
             if (task == null)
             {
@@ -141,25 +164,15 @@ namespace ticket_system_web_app.Controllers
             return Ok();
         }
 
-        private String getPriority(int priority)
+        [HttpDelete("/Task/Delete/{authToken}&{taskId}")]
+        public async Task<IActionResult> DeleteTask(string authToken, int taskId)
         {
-            switch (priority)
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
-                case 1:
-                    return "Low";
-                case 2:
-                    return "Medium";
-                case 3:
-                    return "High";
-                default:
-                    return "Medium";
+                Console.WriteLine($"{nameof(DeleteTask)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
             }
-        }
 
-
-            [HttpDelete("/Task/Delete/{taskId}")]
-        public async Task<IActionResult> DeleteTask(int taskId)
-        {
             var task = await _context.Tasks.FindAsync(taskId);
             if (task == null)
                 return NotFound();
@@ -170,9 +183,15 @@ namespace ticket_system_web_app.Controllers
             return Ok();
         }
 
-        [HttpGet("/Task/History/{taskId}")]
-        public async Task<IActionResult> GetTaskHistory(int taskId)
+        [HttpGet("/Task/History/{authToken}&{taskId}")]
+        public async Task<IActionResult> GetTaskHistory(string authToken, int taskId)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetTaskHistory)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+
             var changes = await _context.TaskChangeLogs
                 .Where(log => log.TaskId == taskId)
                 .Include(log => log.TaskChange)
@@ -191,6 +210,25 @@ namespace ticket_system_web_app.Controllers
             return Json(changes);
         }
 
+        #endregion
 
+        #region Helper Methods
+
+        private String getPriority(int priority)
+        {
+            switch (priority)
+            {
+                case 1:
+                    return "Low";
+                case 2:
+                    return "Medium";
+                case 3:
+                    return "High";
+                default:
+                    return "Medium";
+            }
+        }
+
+        #endregion
     }
 }

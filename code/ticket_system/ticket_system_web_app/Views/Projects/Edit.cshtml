@@ -3,15 +3,11 @@
 @{
     ViewData["Title"] = "Edit";
 
-    bool isAdmin = false;
-
-    if (ActiveEmployee.Employee == null)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");
         return;
-    } else {
-        isAdmin = ActiveEmployee.Employee.IsAdmin ?? false;
     }
 }
 
@@ -67,6 +63,7 @@
             <h2>New:</h2>
             <hr />
             <form asp-action="Edit" id="editForm">
+                <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" name="authToken" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="PId" name="id" />
                 <div class="form-group">
@@ -145,5 +142,6 @@
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
         }
     }
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
 </body>
 </html>
