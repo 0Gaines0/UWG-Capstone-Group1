@@ -17,6 +17,9 @@
     <Compile Update="View\PrivacyForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="View\UserControls\TaskItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="View\UserCRUD\UserCreateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -27,6 +30,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="View\UsersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\ViewTasksPage.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

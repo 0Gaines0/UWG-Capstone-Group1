@@ -69,7 +69,8 @@ namespace ticket_system_winforms.View
 
             if (!invalidLogin)
             {
-                Form form = new HomeForm();
+                ActiveEmployee.LogInEmployee(user);
+                Form form = new ViewTasksPage(this.context);
                 form.Show();
                 this.Hide();
             } else
