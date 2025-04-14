@@ -85,6 +85,10 @@ namespace ticket_system_web_app.Controllers.Projects
                     .ThenInclude(s => s.AssignedGroups)
                         .ThenInclude(ag => ag.Group)
                             .ThenInclude(g => g.Employees)
+                .Include(p => p.ProjectBoard.States)
+                    .ThenInclude(s => s.AssignedGroups)
+                        .ThenInclude(ag => ag.Group)
+                            .ThenInclude(g => g.Manager)
                 .FirstOrDefaultAsync(p => p.PId == pId);
 
             if (project == null)
@@ -94,6 +98,7 @@ namespace ticket_system_web_app.Controllers.Projects
 
             return View("ProjectKanban", project);
         }
+
 
         /// <summary>
         /// Edits the kanban.

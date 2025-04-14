@@ -142,6 +142,12 @@ namespace ticket_system_web_app.Data
                 .HasForeignKey(sg => sg.GroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Group>()
+            .HasOne(g => g.Manager)
+            .WithMany(e => e.ManagedGroups)
+            .HasForeignKey(g => g.ManagerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
 
         }

@@ -510,8 +510,7 @@
                                 <div class="task">
                                     <div class="task-header">
                                         <strong>Task #@task.TaskId</strong>
-                                        @if (hasAdminPerms)
-                                        {
+                                       
                                             <div class="task-actions">
                                                 <a href="#" class="edit-btn"
                                                    data-task-id="@task.TaskId"
@@ -526,7 +525,7 @@
                                                    data-task-id="@task.TaskId"
                                                    onclick="confirmDeleteTask(this)">Delete</a>
                                             </div>
-                                        }
+                                        
                                     </div>
                                     @task.Summary<br />
                                     <small>Priority: @task.Priority</small><br />
@@ -648,15 +647,20 @@
     </div>
     <script src="~/js/Projects/ProjectBoard.js"></script>
     <script>
-        initStatesWithEmployees(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+                initStatesWithEmployees(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
             Model.ProjectBoard.States.Select(s => new
             {
                 StateId = s.StateId,
-                Employees = s.AssignedGroups.SelectMany(ag => ag.Group.Employees)
+                Employees = s.AssignedGroups
+                    .SelectMany(ag => ag.Group.Employees)
+                    .Concat(s.AssignedGroups
+                        .Where(ag => ag.Group.Manager != null)
+                        .Select(ag => ag.Group.Manager))
                     .Select(e => new { e.EId, Name = e.FName + " " + e.LName })
                     .Distinct()
             })
         )));
+
     </script>
 
 </body>
