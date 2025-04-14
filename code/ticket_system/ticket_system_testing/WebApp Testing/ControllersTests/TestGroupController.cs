@@ -17,6 +17,19 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         private TicketSystemDbContext context;
         private GroupsController controller;
 
+        private void setActiveUserPermsToManager()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            Employee employee = new Employee();
+            Group group = new Group();
+            group.ManagerId = employee.EId;
+            this.context.Groups.Add(group);
+            this.context.SaveChanges();
+            ActiveEmployee.LogInEmployee(employee, context);
+            this.context.Groups.Remove(group);
+        }
+
+
         [SetUp]
         public void Setup()
         {
@@ -33,6 +46,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         {
             this.context.Dispose();
             this.controller.Dispose();
+            ActiveEmployee.LogoutCurrentEmployee();
         }
 
         [Test]
@@ -67,9 +81,11 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestGetAllGroupsReturnsJsonResult()
         {
+            this.setActiveUserPermsToManager();
+
             var group = new Group(10, "TestGroup", "A test group");
             this.context.Groups.Add(group);
-            await context.SaveChangesAsync();
+            context.SaveChanges();
 
             var result = await this.controller.GetAllGroups(ActiveEmployee.AuthToken);
 
@@ -84,6 +100,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestGetActiveUserGroupsNoActiveEmployeeReturnsJsonNull()
         {
+            ActiveEmployee.LogoutCurrentEmployee();
             var result = await controller.GetActiveUserGroups(ActiveEmployee.AuthToken);
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
@@ -94,6 +111,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestGetActiveUserGroupsWithActiveEmployeeReturnsUserGroups()
         {
+            this.setActiveUserPermsToManager();
+
             var activeEmployee = new Employee { EId = 1, FName = "Active", LName = "User" };
             ActiveEmployee.Employee = activeEmployee;
             context.Employees.Add(activeEmployee);
@@ -121,6 +140,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestCreateGroupInvalidRequestReturnsBadRequest()
         {
+            this.setActiveUserPermsToManager();
             var resultNull = await this.controller.CreateGroup(ActiveEmployee.AuthToken, null);
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(resultNull);
 
@@ -144,6 +164,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestCreateGroupDuplicateGroupReturnsBadRequest()
         {
+            this.setActiveUserPermsToManager();
+
             var existingGroup = new Group(10, "DuplicateGroup", "Existing group");
             this.context.Groups.Add(existingGroup);
             await context.SaveChangesAsync();
@@ -163,6 +185,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestCreateGroupValidRequestReturnsOk()
         {
+            this.setActiveUserPermsToManager();
+
             var manager = new Employee { EId = 20, FName = "Manager", LName = "User" };
             this.context.Employees.Add(manager);
             await this.context.SaveChangesAsync();
@@ -188,6 +212,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestCreateGroupValidRequestWithMembers()
         {
+            this.setActiveUserPermsToManager();
+
             var manager = new Employee { EId = 1, FName = "Manager", LName = "User" };
             this.context.Employees.Add(manager);
             var member1 = new Employee { EId = 2, FName = "Alice", LName = "Smith" };
@@ -219,6 +245,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestRemoveGroupInvalidRequestReturnsBadRequest()
         {
+            this.setActiveUserPermsToManager();
+
             var request = new RemoveGroupRequest
             {
                 GroupName = "   "
@@ -232,6 +260,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestRemoveGroupNonExistentReturnsBadRequest()
         {
+            this.setActiveUserPermsToManager();
+
             var request = new RemoveGroupRequest
             {
                 GroupName = "NonExistentGroup"
@@ -248,6 +278,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestRemoveGroupValidRequestReturnsOk()
         {
+            this.setActiveUserPermsToManager();
+
             var group = new Group(10, "GroupToRemove", "Group to be removed");
             this.context.Groups.Add(group);
             await context.SaveChangesAsync();
@@ -267,9 +299,12 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestGetAllManagersReturnsJsonResult()
         {
-            var manager1 = new Employee { EId = 1, FName = "Alice", LName = "Smith", IsManager = true };
-            var admin1 = new Employee { EId = 2, FName = "Bob", LName = "Jones", IsAdmin = true };
-            var employee = new Employee { EId = 3, FName = "Charlie", LName = "Brown", IsManager = false, IsAdmin = false };
+            this.setActiveUserPermsToManager();
+
+            Employee manager1 = new Employee { EId = 1, FName = "Alice", LName = "Smith", IsManager = true, IsActive = true };
+            Employee admin1 = new Employee { EId = 2, FName = "Bob", LName = "Jones", IsAdmin = true, IsActive = true };
+            Employee employee = new Employee { EId = 3, FName = "Charlie", LName = "Brown", IsManager = false, IsAdmin = false, IsActive = false };            
+
             this.context.Employees.AddRange(manager1, admin1, employee);
             await context.SaveChangesAsync();
 
@@ -293,6 +328,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestGetAllEmployeesReturnsJsonResult()
         {
+            this.setActiveUserPermsToManager();
+
             var employee1 = new Employee { EId = 1, FName = "Alice", LName = "Smith" };
             var employee2 = new Employee { EId = 2, FName = "Bob", LName = "Jones" };
             context.Employees.AddRange(employee1, employee2);

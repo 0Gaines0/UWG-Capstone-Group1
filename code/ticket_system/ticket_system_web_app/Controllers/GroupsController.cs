@@ -100,14 +100,10 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetActiveUserGroups)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(null);
             }
 
             var activeEmployeeId = ActiveEmployee.Employee?.EId;
-            if (activeEmployeeId == null)
-            {
-                return Json(null);
-            }
 
             var managedGroups = this.context.Groups.Where(group => group.ManagerId == activeEmployeeId);
             var memberGroups = this.context.Groups.Where(group => group.Employees.Any(employ => employ.EId == activeEmployeeId));
@@ -446,6 +442,7 @@ namespace ticket_system_web_app.Controllers
 
         private async Task<List<object>> constructGroups()
         {
+            Console.WriteLine(await this.context.Groups.CountAsync());
             var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
             {
                 group.GId,
@@ -455,6 +452,7 @@ namespace ticket_system_web_app.Controllers
                 MembersCount = group.Employees.Count() + 1,
                 group.GDescription
             }).ToListAsync();
+            Console.WriteLine(groups.Count);
             return groups.Cast<object>().ToList();
         }
 
