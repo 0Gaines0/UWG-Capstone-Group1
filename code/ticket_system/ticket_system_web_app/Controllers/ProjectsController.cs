@@ -13,7 +13,7 @@ using ticket_system_web_app.Models;
 using ticket_system_web_app.Models.RequestObj;
 using Project = ticket_system_web_app.Models.Project;
 
-namespace ticket_system_web_app.Controllers.Projects
+namespace ticket_system_web_app.Controllers
 {
     /// <summary>
     /// ProjectsController class

@@ -60,18 +60,15 @@ namespace ticket_system_testing.WebApp_Testing.ControllersTests
         [Test]
         public void TestIndexReturnsViewResult()
         {
-            var result = this.controller.Index();
+            var result = this.controller.Index().Result;
             ClassicAssert.IsInstanceOf<ViewResult>(result);
         }
 
         [Test]
-        public void TestCreateEmployeeModalReturnsViewResult()
+        public void TestCreateEmployeeModalReturnsPartialViewResult()
         {
             var result = this.controller.CreateEmployeeModal();
-            ClassicAssert.IsInstanceOf<ViewResult>(result);
+            ClassicAssert.IsInstanceOf<PartialViewResult>(result);
         }
-
-        [Test]
-        public void 
     }
 }

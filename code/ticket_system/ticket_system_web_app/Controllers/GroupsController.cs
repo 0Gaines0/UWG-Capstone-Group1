@@ -12,22 +12,37 @@ namespace ticket_system_web_app.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class GroupsController : Controller
     {
+        #region Fields
 
         private readonly TicketSystemDbContext context;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupsController"/> class.
         /// </summary>
+        /// <precondition>context != null</precondition>
         /// <param name="context">The context.</param>
         public GroupsController(TicketSystemDbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context), "Parameter cannot be null");
+            }
             this.context = context;
         }
 
+        #endregion
+
+        #region Page Loaders
+
         /// <summary>
-        /// Indexes this instance.
+        /// Loads the Groups homepage.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the homepage</returns>
         public async Task<IActionResult> Index()
         {
             var groups = await this.constructGroups();
@@ -35,18 +50,24 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Creates the group modal.
+        /// Loads the CreateGroup modal.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the modal</returns>
         public IActionResult CreateGroupModal()
         {
             return PartialView("_CreateGroupModal");
         }
 
+        #endregion
+
+        #region Validated Methods
+
         /// <summary>
-        /// Gets all groups.
+        /// Gets all groups as a Json object.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the Json</returns>
         [HttpGet]
         public async Task<JsonResult> GetAllGroups()
         {
@@ -55,9 +76,10 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Gets the active user groups.
+        /// Gets the groups that include the active user.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the groups, as a Json object</returns>
         [HttpGet]
         public async Task<JsonResult> GetActiveUserGroups()
         {
@@ -75,10 +97,11 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Gets the group by identifier.
+        /// Gets the group with the specified ID.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <param name="id">The ID.</param>
+        /// <returns>the group, as a Json object</returns>
         [HttpGet]
         public async Task<JsonResult> GetGroupById(int id)
         {
@@ -101,10 +124,11 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Creates the group.
+        /// Creates a new group with the specified info.
         /// </summary>
-        /// <param name="jsonRequest">The json request.</param>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <param name="jsonRequest">The request containing the group's info.</param>
+        /// <returns>OK if successful, BadRequest otherwise</returns>
         [HttpPost]
         public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest jsonRequest)
         {
@@ -135,10 +159,11 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Removes the group.
+        /// Removes the group with the specified info.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <param name="request">The removal request containing the group's info.</param>
+        /// <returns>OK if successful; BadRequest otherwise</returns>
         [HttpPost]
         public async Task<IActionResult> RemoveGroup([FromBody] RemoveGroupRequest request)
         {
@@ -165,29 +190,14 @@ namespace ticket_system_web_app.Controllers
             }
         }
 
-        private async Task<bool> removeGroupFromDb(string groupName)
-        {
-            try
-            {
-                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
-                this.context.Groups.Remove(group);
-                await this.context.SaveChangesAsync();
-                return true;
-                
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         /// <summary>
-        /// Saves the group edits.
+        /// Saves the group edits using the specified info.
         /// </summary>
-        /// <param name="jsonRequest">The json request.</param>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <param name="jsonRequest">The json request containing the info.</param>
+        /// <returns>A Json object with a raised success flag and message if successful, or a cleared flag and error message otherwise.</returns>
         [HttpPost]
-        public async Task<IActionResult> SaveGroupEdits([FromBody] CreateGroupRequest jsonRequest)
+        public async Task<JsonResult> SaveGroupEdits([FromBody] CreateGroupRequest jsonRequest)
         {
             var group = await this.context.Groups.Include(g => g.Employees).FirstOrDefaultAsync(g => g.GId == jsonRequest.GroupId);
             var duplicateGroup = await this.context.Groups.FirstOrDefaultAsync(g => g.GName == jsonRequest.GroupName && g.GId != jsonRequest.GroupId);
@@ -213,9 +223,10 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Gets all managers.
+        /// Gets all employees that are eligible to be managers.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the employees as a Json object.</returns>
         [HttpGet]
         public async Task<JsonResult> GetAllManagers()
         {
@@ -228,7 +239,8 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         /// Gets all employees.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the employees as a Json object</returns>
         [HttpGet]
         public async Task<JsonResult> GetAllEmployees()
         {
@@ -240,21 +252,12 @@ namespace ticket_system_web_app.Controllers
             return Json(employees);
         }
 
-       
-        private async Task<List<object>> constructGroups()
-        {
-            var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
-            {
-                group.GId,
-                group.GName,
-                ManagerName = this.context.Employees.Where(employee => employee.EId == group.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
-                group.ManagerId,
-                MembersCount = group.Employees.Count() + 1,
-                group.GDescription
-            }).ToListAsync();
-            return groups.Cast<object>().ToList();
-        }
-
+        /// <summary>
+        /// Assigns groups to a task state based on the specified info.
+        /// </summary>
+        /// <precondition>true</precondition>
+        /// <param name="request">The request containing the info.</param>
+        /// <returns>OK if successful; NotFound otherwise</returns>
         [HttpPost]
         public IActionResult AssignGroups([FromBody] GroupAssignmentRequest request)
         {
@@ -290,6 +293,12 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Groups assigned successfully" });
         }
 
+        /// <summary>
+        /// Removes groups from a task state based on the specified info.
+        /// </summary>
+        /// <precondition>true</precondition>
+        /// <param name="request">The request containing the info.</param>
+        /// <returns>OK if successful; NotFound otherwise</returns>
         [HttpPost]
         public IActionResult RemoveStateGroup([FromBody] GroupAssignmentRequest request)
         {
@@ -305,6 +314,41 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Group removed successfully" });
         }
 
+        #endregion
+
+        #region Helpers
+
+        private async Task<bool> removeGroupFromDb(string groupName)
+        {
+            try
+            {
+                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
+                this.context.Groups.Remove(group);
+                await this.context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task<List<object>> constructGroups()
+        {
+            var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
+            {
+                group.GId,
+                group.GName,
+                ManagerName = this.context.Employees.Where(employee => employee.EId == group.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
+                group.ManagerId,
+                MembersCount = group.Employees.Count() + 1,
+                group.GDescription
+            }).ToListAsync();
+            return groups.Cast<object>().ToList();
+        }
+
+        #endregion
     }
 
 }

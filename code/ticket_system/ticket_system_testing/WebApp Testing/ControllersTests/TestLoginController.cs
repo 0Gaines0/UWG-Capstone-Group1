@@ -45,6 +45,24 @@ namespace ticket_system_testing.WebApp_Testing.ControllersTests
         }
 
         [Test]
+        public void TestNullConstructor()
+        {
+            var ex = Assert.Throws<ArgumentNullException>(() => {
+                new LoginController(null);
+            });
+
+            Assert.That(ex.Message, Does.Contain("null"));
+        }
+
+        [Test]
+        public void TestValidConstructor()
+        {
+            Assert.DoesNotThrow(() => {
+                this.controller = new LoginController(this.context);
+            });
+        }
+
+        [Test]
         public void TestIndexReturnsViewResult()
         {
             var result = this.controller.Index();

@@ -22,7 +22,8 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeesController"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <precondition>context != null</precondition>
+        /// <param name="context">The DB context.</param>
         public EmployeesController(TicketSystemDbContext context)
         {
             if (context == null)
@@ -37,19 +38,21 @@ namespace ticket_system_web_app.Controllers
         #region Page Loaders
 
         /// <summary>
-        /// Indexes this instance.
+        /// Loads the Employees homepage.
         /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> Index()
+        /// <precondition>true</precondition>
+        /// <returns>the homepage</returns>
+        public async Task<ViewResult> Index()
         {
             var employees = await this.constructEmployees();
             return View(employees);
         }
 
         /// <summary>
-        /// Creates the employee modal.
+        /// Loads the Employee creation modal.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the modal</returns>
         public IActionResult CreateEmployeeModal()
         {
             return PartialView("_CreateEmployeeModal");
@@ -62,22 +65,19 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         /// Returns a list of all the employees in a Json object.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <returns>A Json object of all the employees</returns>
         [HttpGet]
         public async Task<JsonResult> GetAllEmployees()
         {
             var employees = await this.constructEmployees();
             return Json(employees);
-            //var employees = await this.context.Employees
-            //    .Select(employee => new { Id = employee.EId, Name = $"{employee.FName} {employee.LName}", employee.Username, employee.Email, Role = employee.IsAdmin }) // Standardized Id
-            //    .AsNoTracking()
-            //    .ToListAsync();
-
-            //return Json(employees);
         }
 
+        /// <summary>
         /// Creates the employee with the given information if it doesn't exist already.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="jsonRequest">The new employee information</param>
         /// <returns>Ok if employee was created, BadRequest otherwise</returns>
         [HttpPost]
@@ -112,10 +112,11 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Employee created successfully", employeeId = newUser.EId });
         }
 
-
+        /// <summary>
         /// Removes the given employee if they are not the current user and don't manage a group.
         /// </summary>
-        /// <param name="request">The employee to be deleted username</param>
+        /// <precondition>true</precondition>
+        /// <param name="request">The username of the employee to be deleted</param>
         /// <returns>Ok if employee was removed, BadRequest otherwise</returns>
         [HttpPost]
         public async Task<IActionResult> RemoveEmployee([FromBody] RemoveEmployeeRequest request)
@@ -165,6 +166,7 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         /// Edits the given employee's data.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="jsonRequest">The employee username and updated employee information</param>
         /// <returns>Ok if successfull, BadRequest otherwise</returns>
         [HttpPost]
@@ -209,8 +211,9 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Returns the employee data for the given username.
+        /// Returns the data for the employee with the given username.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="data">The employee's username</param>
         /// <returns>The employee data for this username</returns>
         [HttpPost]
@@ -281,21 +284,16 @@ namespace ticket_system_web_app.Controllers
             return employees.Cast<object>().ToList();
         }
 
+        #endregion
+
         private bool IsLoggedIn()
         {
-            return ActiveEmployee.Employee != null;
+            return ActiveEmployee.Employee == null;
         }
 
         private bool IsAdmin()
         {
-            if (!IsLoggedIn())
-            {
-                return false;
-            }
-            var adminStatus = ActiveEmployee.Employee.IsAdmin;
-            return adminStatus.HasValue && adminStatus.Value;
+            return ActiveEmployee.Employee.IsAdmin ?? false;
         }
-
-        #endregion
     }
 }

@@ -172,7 +172,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupName = "NewGroup",
                 ManagerId = manager.EId,
                 GroupDescription = "A new group",
-                MemberIds = new List<int>() // No members for now.
+                MemberIds = new List<int>()
             };
 
             var result = await this.controller.CreateGroup(request);
@@ -219,7 +219,6 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestRemoveGroupInvalidRequestReturnsBadRequest()
         {
-            // Arrange: Prepare a request with an empty (whitespace) group name.
             var request = new RemoveGroupRequest
             {
                 GroupName = "   "
@@ -274,7 +273,6 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             this.context.Employees.AddRange(manager1, admin1, employee);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await controller.GetAllManagers();
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
