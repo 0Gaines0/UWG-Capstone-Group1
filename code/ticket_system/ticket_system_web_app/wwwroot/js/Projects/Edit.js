@@ -1,4 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", async function () {
+    authToken = document.getElementById("authToken").value;
     await fetchAllGroupsInitial();
 });
 
@@ -6,6 +7,8 @@ let selectedGroups = []
 let unselectedGroups = []
 let selectedManagerCount = {}
 let managerNames = {}
+
+let authToken = "FAILED TO GET AUTH TOKEN";
 
 async function fetchAllGroupsInitial() {
     let initialCollabIDs = []
@@ -16,7 +19,7 @@ async function fetchAllGroupsInitial() {
         initialCollabIDs.push(collabId);
     });
 
-    await fetch("/Groups/GetAllGroups").then(response => response.json()).then(data => {
+    await fetch(`/Groups/GetAllGroups/${authToken}`).then(response => response.json()).then(data => {
         data.forEach(group => {
             if (selectedManagerCount[group.managerId] == null || selectedManagerCount[group.managerId] == NaN) {
                 selectedManagerCount[group.managerId] = 0;

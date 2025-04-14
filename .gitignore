@@ -482,3 +482,5 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+code/ticket_system/ticket_system_database/ticket_system_database.jfm
+*.jfm

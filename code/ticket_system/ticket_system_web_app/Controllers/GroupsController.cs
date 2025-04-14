@@ -8,12 +8,19 @@ namespace ticket_system_web_app.Controllers
 {
     /// <summary>
     /// GroupController class
+    /// All client method calls require auth token validation.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class GroupsController : Controller
     {
 
+        #region Fields
+
         private readonly TicketSystemDbContext context;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupsController"/> class.
@@ -23,6 +30,10 @@ namespace ticket_system_web_app.Controllers
         {
             this.context = context;
         }
+
+        #endregion
+
+        #region View Loaders
 
         /// <summary>
         /// Indexes this instance.
@@ -43,24 +54,47 @@ namespace ticket_system_web_app.Controllers
             return PartialView("_CreateGroupModal");
         }
 
+        #endregion
+
+        #region Authenticated Methods
+
         /// <summary>
-        /// Gets all groups.
+        ///     Gets all groups.
+        ///     Requires manager perms.
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<JsonResult> GetAllGroups()
+        /// <param name="authToken">The auth token.</param>
+        /// <returns>A Json object of all the groups, or a Json with an error message if request is invalid.</returns>
+        [HttpGet("Groups/GetAllGroups/{authToken}")]
+        public async Task<JsonResult> GetAllGroups(string authToken)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetAllGroups)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             var groups = await this.constructGroups();
             return Json(groups);
         }
 
         /// <summary>
-        /// Gets the active user groups.
+        ///     Gets the groups containing the active user.
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<JsonResult> GetActiveUserGroups()
+        /// <param name="authToken">The auth token.</param>
+        /// <returns>A Json object of the groups, or a Json with an error message if request is invalid.</returns>
+        [HttpGet("Groups/GetActiveUserGroups/{authToken}")]
+        public async Task<JsonResult> GetActiveUserGroups(string authToken)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetActiveUserGroups)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+
             var activeEmployeeId = ActiveEmployee.Employee?.EId;
             if (activeEmployeeId == null)
             {
@@ -75,13 +109,25 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Gets the group by identifier.
+        ///     Gets the group with the specified ID.
+        ///     Requires manager perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<JsonResult> GetGroupById(int id)
+        /// <returns>A Json object of the group, or a Json with an error message if request is invalid.</returns>
+        [HttpGet("Groups/GetGroupById/{authToken}&{id}")]
+        public async Task<JsonResult> GetGroupById(string authToken, int id)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetGroupById)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             var group = await this.context.Groups.Where(g => g.GId == id).Select(g => new
             {
                 ActiveEmployee.Employee.EId,
@@ -101,13 +147,25 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Creates the group.
+        ///     Creates the group.
+        ///     Requires manager perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The json request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> CreateGroup([FromBody] CreateGroupRequest jsonRequest)
+        /// <returns>OK if successful, or a BadRequest with an error message if request is invalid.</returns>
+        [HttpPost("Groups/CreateGroup/{authToken}")]
+        public async Task<IActionResult> CreateGroup(string authToken, [FromBody] CreateGroupRequest jsonRequest)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(CreateGroup)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.GroupName) || jsonRequest.ManagerId == 0)
             {
                 return BadRequest(new { message = "Invalid request data" });
@@ -135,13 +193,25 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Removes the group.
+        ///     Removes the group.
+        ///     Requires manager perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> RemoveGroup([FromBody] RemoveGroupRequest request)
+        /// <returns>OK if successful, or a BadRequest with an error message if request is invalid.</returns>
+        [HttpPost("Groups/RemoveGroup/{authToken}")]
+        public async Task<IActionResult> RemoveGroup(string authToken, [FromBody] RemoveGroupRequest request)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(RemoveGroup)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             var groupName = request.GroupName;
             if (string.IsNullOrWhiteSpace(groupName))
             {
@@ -165,30 +235,26 @@ namespace ticket_system_web_app.Controllers
             }
         }
 
-        private async Task<bool> removeGroupFromDb(string groupName)
-        {
-            try
-            {
-                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
-                this.context.Groups.Remove(group);
-                await this.context.SaveChangesAsync();
-                return true;
-                
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         /// <summary>
-        /// Saves the group edits.
+        ///     Saves the group edits.
+        ///     Requires manager perms.
         /// </summary>
+        /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The json request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> SaveGroupEdits([FromBody] CreateGroupRequest jsonRequest)
+        /// <returns>A Json object with a confirmation message, or a Json with an error message if request is invalid.</returns>
+        [HttpPost("Groups/SaveGroupEdits/{authToken}")]
+        public async Task<IActionResult> SaveGroupEdits(string authToken, [FromBody] CreateGroupRequest jsonRequest)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(SaveGroupEdits)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             var group = await this.context.Groups.Include(g => g.Employees).FirstOrDefaultAsync(g => g.GId == jsonRequest.GroupId);
             var duplicateGroup = await this.context.Groups.FirstOrDefaultAsync(g => g.GName == jsonRequest.GroupName && g.GId != jsonRequest.GroupId);
             if (duplicateGroup != null)
@@ -213,25 +279,47 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Gets all managers.
+        ///     Gets all managers.
+        ///     Requires manager perms.
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<JsonResult> GetAllManagers()
+        /// <param name="authToken">The auth token.</param>
+        /// <returns>A Json object of all of the managers, or a Json with an error message if request is invalid.</returns>
+        [HttpGet("Groups/GetAllManagers/{authToken}")]
+        public async Task<JsonResult> GetAllManagers(string authToken)
         {
-            //Get all active employees? This feels wrong.
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetAllManagers)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
             var possibleManagers = await this.context.Employees.Where(e => e.IsActive == true).Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).AsNoTracking().ToListAsync();
 
             return Json(possibleManagers);
         }
 
         /// <summary>
-        /// Gets all employees.
+        ///     Gets all employees.
+        ///     Requires manager perms.
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<JsonResult> GetAllEmployees()
+        /// <param name="authToken">The auth token.</param>
+        /// <returns>A Json object of all of the employees, or a Json with an error message if request is invalid.</returns>
+        [HttpGet("Groups/GetAllEmployees/{authToken}")]
+        public async Task<JsonResult> GetAllEmployees(string authToken)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetAllEmployees)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             var employees = await this.context.Employees
                 .Select(employee => new { Id = employee.EId, Name = $"{employee.FName} {employee.LName}" }) // Standardized Id
                 .AsNoTracking()
@@ -240,24 +328,19 @@ namespace ticket_system_web_app.Controllers
             return Json(employees);
         }
 
-       
-        private async Task<List<object>> constructGroups()
+        [HttpPost("Groups/AssignGroups/{authToken}")]
+        public IActionResult AssignGroups(string authToken, [FromBody] GroupAssignmentRequest request)
         {
-            var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
-                group.GId,
-                group.GName,
-                ManagerName = this.context.Employees.Where(employee => employee.EId == group.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
-                group.ManagerId,
-                MembersCount = group.Employees.Count() + 1,
-                group.GDescription
-            }).ToListAsync();
-            return groups.Cast<object>().ToList();
-        }
+                Console.WriteLine($"{nameof(AssignGroups)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
 
-        [HttpPost]
-        public IActionResult AssignGroups([FromBody] GroupAssignmentRequest request)
-        {
             var state = context.BoardStates.Include(bs => bs.AssignedGroups)
                                            .FirstOrDefault(bs => bs.StateId == request.StateId);
 
@@ -290,9 +373,19 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Groups assigned successfully" });
         }
 
-        [HttpPost]
-        public IActionResult RemoveStateGroup([FromBody] GroupAssignmentRequest request)
+        [HttpPost("Groups/RemoveStateGroup/{authToken}")]
+        public IActionResult RemoveStateGroup(string authToken, [FromBody] GroupAssignmentRequest request)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(RemoveStateGroup)} Got auth token: {authToken}");
+                return Json("Not logged in.");
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return Json("Manager permissions required.");
+            }
+
             var assignment = context.StateAssignedGroups.FirstOrDefault(sg => sg.StateId == request.StateId && sg.GroupId == request.GroupIds.FirstOrDefault());
             if (assignment == null)
             {
@@ -305,6 +398,41 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Group removed successfully" });
         }
 
+        #endregion
+
+        #region Helpers
+
+        private async Task<bool> removeGroupFromDb(string groupName)
+        {
+            try
+            {
+                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
+                this.context.Groups.Remove(group);
+                await this.context.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task<List<object>> constructGroups()
+        {
+            var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
+            {
+                group.GId,
+                group.GName,
+                ManagerName = this.context.Employees.Where(employee => employee.EId == group.ManagerId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
+                group.ManagerId,
+                MembersCount = group.Employees.Count() + 1,
+                group.GDescription
+            }).ToListAsync();
+            return groups.Cast<object>().ToList();
+        }
+
+        #endregion
     }
 
 }

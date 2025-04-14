@@ -1,4 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
+    authToken = document.getElementById("authToken").value;
+
     function loadSortable(callback) {
         let script = document.createElement("script");
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js";
@@ -22,7 +24,7 @@
                         });
                     });
 
-                    fetch("/Projects/UpdateBoardStateOrder", {
+                    fetch(`/Projects/UpdateBoardStateOrder/${authToken}`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(stateOrder),
@@ -58,7 +60,7 @@
 
                 enableStateRename(newH3);
 
-                fetch("/Projects/UpdateStateName", {
+                fetch(`/Projects/UpdateStateName/${authToken}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ id: stateId, name: newText }),
@@ -81,7 +83,7 @@
 
     window.removeState = function (stateId) {
         if (confirm("Are you sure you want to delete this state?")) {
-            fetch("/Projects/DeleteState", {
+            fetch(`/Projects/DeleteState/${authToken}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: stateId }),
@@ -105,7 +107,7 @@
     };
 
     function reloadBoard() {
-        fetch("/Projects/GetBoardStates")
+        fetch(`/Projects/GetBoardStates/${authToken}`)
             .then(response => response.json())
             .then(states => {
                 const board = document.getElementById("board");
@@ -143,7 +145,7 @@
                 return;
             }
 
-            fetch("/Projects/AddState", {
+            fetch(`/Projects/AddState/${authToken}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -198,11 +200,13 @@
 
 });
 
+let authToken = "FAILED TO GET AUTH TOKEN";
+
 window.assignGroupToState = function () {
     const stateId = document.getElementById("state-select").value;
     const groupId = document.getElementById("group-select").value;
 
-    fetch(`/Groups/AssignGroups`, {
+    fetch(`/Groups/AssignGroups/${authToken}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -224,7 +228,7 @@ window.assignGroupToState = function () {
 }
 
 window.removeGroupFromState = function (stateId, groupId) {
-    fetch(`/Groups/RemoveStateGroup`, {
+    fetch(`/Groups/RemoveStateGroup/${authToken}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

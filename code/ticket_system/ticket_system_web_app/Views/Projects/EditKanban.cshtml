@@ -1,12 +1,11 @@
 ﻿@{
     @model ticket_system_web_app.Models.ProjectBoard
-    var notLogin = ActiveEmployee.Employee == null;
     var states = ((List<ticket_system_web_app.Models.BoardState>)ViewBag.ProjectBoard.States).OrderBy(s => s.Position);
 
-
-    if (notLogin)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
+        Context.Response.Redirect("/Login/Index");
         return;
     }
 }
@@ -271,5 +270,6 @@
     </div>
 
     <script src="~/js/boardEdit.js"></script>
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
 </body>
 </html>

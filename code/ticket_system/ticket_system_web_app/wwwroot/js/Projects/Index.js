@@ -1,7 +1,13 @@
-﻿let projectTitle = "";
+﻿document.addEventListener("DOMContentLoaded", async function () {
+    authToken = document.getElementById("authToken").value;
+});
+
+let projectTitle = "";
 let projectDescription = "";
 let projectLead = "";
 let projectCollaborators = [];
+
+let authToken = "FAILED TO GET AUTH TOKEN";
 
 async function viewProject(id) {
     await retrieveProject(id);
@@ -9,7 +15,7 @@ async function viewProject(id) {
 }
 
 async function retrieveProject(id) {
-    await fetch(`/Projects/Details/${id}`, {
+    await fetch(`/Projects/Details/${authToken}&${id}`, {
         method: "POST"
     }).then(response => response.json()).then(data => {
         projectTitle = data.pTitle;

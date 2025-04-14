@@ -1,4 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", async function () {
+    authToken = document.getElementById("authToken").value;
+
     fetchAllGroups();
 });
 
@@ -7,8 +9,10 @@ let unselectedGroups = []
 let selectedManagerCount = {}
 let managerNames = {}
 
+let authToken = "FAILED TO GET AUTH TOKEN";
+
 async function fetchAllGroups() {
-    await fetch("/Groups/GetAllGroups").then(response => response.json()).then(data => {
+    await fetch(`/Groups/GetAllGroups/${authToken}`).then(response => response.json()).then(data => {
         data.forEach(group => {
             unselectedGroups.push(group);
             selectedManagerCount[group.managerId] = 0;
@@ -135,7 +139,7 @@ async function createProject() {
     }
 
     try {
-        const response = await fetch("/Projects/CreateProject", {
+        const response = await fetch(`/Projects/CreateProject/${authToken}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(projectData)

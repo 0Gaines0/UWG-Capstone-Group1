@@ -1,13 +1,10 @@
-﻿
-@{
-
+﻿@{
     @model ticket_system_web_app.Models.Project
-    var notLogin = ActiveEmployee.Employee == null;
-    var hasAdminPerms = (ActiveEmployee.Employee?.IsAdmin ?? false);
 
-    if (notLogin)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
+        Context.Response.Redirect("/Login/Index");
         return;
     }
 
@@ -480,7 +477,7 @@
         <div class="sidebar">
             <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
             <h2>@Model.PTitle</h2>
-            @if (hasAdminPerms)
+            @if (ActiveEmployee.IsAdmin())
             {
                 <button class="button" onclick="openCreateTaskModal()">Create Task</button>
                 <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
@@ -510,22 +507,20 @@
                                 <div class="task">
                                     <div class="task-header">
                                         <strong>Task #@task.TaskId</strong>
-                                       
-                                            <div class="task-actions">
-                                                <a href="#" class="edit-btn"
-                                                   data-task-id="@task.TaskId"
-                                                   data-state-id="@task.StateId"
-                                                   data-priority="@task.Priority"
-                                                   data-summary="@task.Summary"
-                                                   data-description="@task.Description"
-                                                   data-assignee-id="@task.AssigneeId"
-                                                   onclick="openEditModal(this)">View</a>
+                                        <div class="task-actions">
+                                            <a href="#" class="edit-btn"
+                                                data-task-id="@task.TaskId"
+                                                data-state-id="@task.StateId"
+                                                data-priority="@task.Priority"
+                                                data-summary="@task.Summary"
+                                                data-description="@task.Description"
+                                                data-assignee-id="@task.AssigneeId"
+                                                onclick="openEditModal(this)">View</a>
 
-                                                <a href="#" class="delete-btn"
-                                                   data-task-id="@task.TaskId"
-                                                   onclick="confirmDeleteTask(this)">Delete</a>
-                                            </div>
-                                        
+                                            <a href="#" class="delete-btn"
+                                                data-task-id="@task.TaskId"
+                                                onclick="confirmDeleteTask(this)">Delete</a>
+                                        </div>
                                     </div>
                                     @task.Summary<br />
                                     <small>Priority: @task.Priority</small><br />
@@ -646,6 +641,7 @@
         </div>
     </div>
     <script src="~/js/Projects/ProjectBoard.js"></script>
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
     <script>
                 initStatesWithEmployees(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
             Model.ProjectBoard.States.Select(s => new

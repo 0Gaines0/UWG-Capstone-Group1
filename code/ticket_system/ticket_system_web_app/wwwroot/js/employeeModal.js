@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    authToken = document.getElementById("authToken").value;
+
     fetchEmployees();
 });
 
@@ -24,9 +26,10 @@ document.getElementById('employeeTableBody').addEventListener('click', function 
 });
 
 var selectedUsername = "";
+var authToken = "FAILED TO GET AUTH TOKEN";
 
 function fetchEmployees() {
-    fetch('/Employees/GetAllEmployees')
+    fetch(`/Employees/GetAllEmployees/${authToken}`)
         .then(response => response.json())
         .then(data => {
             let tableBody = document.getElementById('employeeTableBody');
@@ -78,7 +81,7 @@ function openEditModal() {
     const username = selectedRow.cells[1].textContent;
     selectedUsername = username;
 
-    fetch('/Employees/GetEmployee', {
+    fetch(`/Employees/GetEmployee/${authToken}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username })
@@ -217,7 +220,7 @@ async function createEmployee() {
     console.log("Sending Employee Data:", employeeData);
 
     try {
-        const response = await fetch("/Employees/CreateEmployee", {
+        const response = await fetch(`/Employees/CreateEmployee/${authToken}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(employeeData)
@@ -252,7 +255,7 @@ async function editEmployee() {
     if (!validateFormForEditingEmployees(employeeData)) return;
 
     try {
-        const response = await fetch("/Employees/EditEmployee", {
+        const response = await fetch(`/Employees/EditEmployee/${authToken}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(employeeData)
@@ -289,7 +292,7 @@ function removeEmployee() {
     }
     const username = selectedRow.cells[1].textContent;
 
-    fetch("/Employees/RemoveEmployee", {
+    fetch(`/Employees/RemoveEmployee/${authToken}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username })
