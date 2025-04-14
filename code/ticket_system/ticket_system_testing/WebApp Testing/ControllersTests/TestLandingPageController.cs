@@ -23,12 +23,14 @@ namespace ticket_system_testing.WebApp_Testing.ControllersTests
             var options = new DbContextOptionsBuilder<TicketSystemDbContext>().UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
             var context = new TicketSystemDbContext(options);
             this.controller = new LandingPageController(context);
+            ActiveEmployee.LogInEmployee(new Employee(), context);
         }
 
         [TearDown]
         public void Dispose()
         {
             this.controller.Dispose();
+            ActiveEmployee.LogoutCurrentEmployee();
         }
 
         [Test]
@@ -54,7 +56,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllersTests
         [Test]
         public void TestIndexReturnsViewResult()
         {
-            var result = this.controller.Index();
+            var result = this.controller.Index().Result;
             ClassicAssert.IsInstanceOf<ViewResult>(result);
         }
 

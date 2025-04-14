@@ -13,7 +13,6 @@ namespace ticket_system_web_app.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class GroupsController : Controller
     {
-
         #region Fields
 
         private readonly TicketSystemDbContext context;
@@ -25,9 +24,14 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupsController"/> class.
         /// </summary>
+        /// <precondition>context != null</precondition>
         /// <param name="context">The context.</param>
         public GroupsController(TicketSystemDbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context), "Parameter cannot be null");
+            }
             this.context = context;
         }
 
@@ -36,9 +40,10 @@ namespace ticket_system_web_app.Controllers
         #region View Loaders
 
         /// <summary>
-        /// Indexes this instance.
+        /// Loads the Groups homepage.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the homepage</returns>
         public async Task<IActionResult> Index()
         {
             var groups = await this.constructGroups();
@@ -46,9 +51,10 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Creates the group modal.
+        /// Loads the CreateGroup modal.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the modal</returns>
         public IActionResult CreateGroupModal()
         {
             return PartialView("_CreateGroupModal");
@@ -59,9 +65,10 @@ namespace ticket_system_web_app.Controllers
         #region Authenticated Methods
 
         /// <summary>
-        ///     Gets all groups.
+        ///     Gets all groups as a Json object.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all the groups, or a Json with an error message if request is invalid.</returns>
         [HttpGet("Groups/GetAllGroups/{authToken}")]
@@ -70,11 +77,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllGroups)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
 
             var groups = await this.constructGroups();
@@ -84,6 +91,7 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         ///     Gets the groups containing the active user.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of the groups, or a Json with an error message if request is invalid.</returns>
         [HttpGet("Groups/GetActiveUserGroups/{authToken}")]
@@ -92,14 +100,10 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetActiveUserGroups)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(null);
             }
 
             var activeEmployeeId = ActiveEmployee.Employee?.EId;
-            if (activeEmployeeId == null)
-            {
-                return Json(null);
-            }
 
             var managedGroups = this.context.Groups.Where(group => group.ManagerId == activeEmployeeId);
             var memberGroups = this.context.Groups.Where(group => group.Employees.Any(employ => employ.EId == activeEmployeeId));
@@ -112,6 +116,7 @@ namespace ticket_system_web_app.Controllers
         ///     Gets the group with the specified ID.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="id">The identifier.</param>
         /// <returns>A Json object of the group, or a Json with an error message if request is invalid.</returns>
@@ -147,9 +152,10 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        ///     Creates the group.
+        ///     Creates a new group with the specified info.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The json request.</param>
         /// <returns>OK if successful, or a BadRequest with an error message if request is invalid.</returns>
@@ -163,7 +169,7 @@ namespace ticket_system_web_app.Controllers
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             if (jsonRequest == null || string.IsNullOrWhiteSpace(jsonRequest.GroupName) || jsonRequest.ManagerId == 0)
@@ -188,14 +194,13 @@ namespace ticket_system_web_app.Controllers
             await this.context.SaveChangesAsync();
 
             return Ok(new { message = "Group created successfully", groupId = newGroup.GId });
-
-
         }
 
         /// <summary>
-        ///     Removes the group.
+        ///     Removes the group with the specified info.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="request">The request.</param>
         /// <returns>OK if successful, or a BadRequest with an error message if request is invalid.</returns>
@@ -209,7 +214,7 @@ namespace ticket_system_web_app.Controllers
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             var groupName = request.GroupName;
@@ -223,22 +228,15 @@ namespace ticket_system_web_app.Controllers
 
             }
 
-            bool isRemoved = await this.removeGroupFromDb(groupName);
-
-            if (isRemoved)
-            {
-                return Ok(new { success = true });
-            }
-            else
-            {
-                return BadRequest(new { success = false, message = "Failed to remove group." });
-            }
+            await this.removeGroupFromDb(groupName);
+            return Ok(new { success = true });
         }
 
         /// <summary>
-        ///     Saves the group edits.
+        ///     Saves the group edits using the specified info.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The json request.</param>
         /// <returns>A Json object with a confirmation message, or a Json with an error message if request is invalid.</returns>
@@ -282,6 +280,7 @@ namespace ticket_system_web_app.Controllers
         ///     Gets all managers.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all of the managers, or a Json with an error message if request is invalid.</returns>
         [HttpGet("Groups/GetAllManagers/{authToken}")]
@@ -290,11 +289,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllManagers)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
             var possibleManagers = await this.context.Employees.Where(e => e.IsActive == true).Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).AsNoTracking().ToListAsync();
 
@@ -305,6 +304,7 @@ namespace ticket_system_web_app.Controllers
         ///     Gets all employees.
         ///     Requires manager perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all of the employees, or a Json with an error message if request is invalid.</returns>
         [HttpGet("Groups/GetAllEmployees/{authToken}")]
@@ -313,11 +313,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllEmployees)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
 
             var employees = await this.context.Employees
@@ -328,17 +328,24 @@ namespace ticket_system_web_app.Controllers
             return Json(employees);
         }
 
+        /// <summary>
+        /// Assigns groups to a task state based on the specified info.
+        /// </summary>
+        /// <precondition>true</precondition>
+        /// <param name="authToken">The auth token.</param>
+        /// <param name="request">The request containing the info.</param>
+        /// <returns>OK if successful; NotFound otherwise</returns>
         [HttpPost("Groups/AssignGroups/{authToken}")]
         public IActionResult AssignGroups(string authToken, [FromBody] GroupAssignmentRequest request)
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(AssignGroups)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return NotFound("Not logged in.");
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return NotFound("Manager permissions required.");
             }
 
             var state = context.BoardStates.Include(bs => bs.AssignedGroups)
@@ -373,17 +380,24 @@ namespace ticket_system_web_app.Controllers
             return Ok(new { message = "Groups assigned successfully" });
         }
 
+        /// <summary>
+        /// Removes groups from a task state based on the specified info.
+        /// </summary>
+        /// <precondition>true</precondition>
+        /// <param name="authToken">The auth token.</param>
+        /// <param name="request">The request containing the info.</param>
+        /// <returns>OK if successful; NotFound otherwise</returns>
         [HttpPost("Groups/RemoveStateGroup/{authToken}")]
         public IActionResult RemoveStateGroup(string authToken, [FromBody] GroupAssignmentRequest request)
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(RemoveStateGroup)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return NotFound("Not logged in.");
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return NotFound("Manager permissions required.");
             }
 
             var assignment = context.StateAssignedGroups.FirstOrDefault(sg => sg.StateId == request.StateId && sg.GroupId == request.GroupIds.FirstOrDefault());
@@ -402,24 +416,16 @@ namespace ticket_system_web_app.Controllers
 
         #region Helpers
 
-        private async Task<bool> removeGroupFromDb(string groupName)
+        private async Task removeGroupFromDb(string groupName)
         {
-            try
-            {
-                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
-                this.context.Groups.Remove(group);
-                await this.context.SaveChangesAsync();
-                return true;
-
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
+            this.context.Groups.Remove(group);
+            await this.context.SaveChangesAsync();
         }
 
         private async Task<List<object>> constructGroups()
         {
+            Console.WriteLine(await this.context.Groups.CountAsync());
             var groups = await this.context.Groups.Include(group => group.Employees).Select(group => new
             {
                 group.GId,
@@ -429,6 +435,7 @@ namespace ticket_system_web_app.Controllers
                 MembersCount = group.Employees.Count() + 1,
                 group.GDescription
             }).ToListAsync();
+            Console.WriteLine(groups.Count);
             return groups.Cast<object>().ToList();
         }
 

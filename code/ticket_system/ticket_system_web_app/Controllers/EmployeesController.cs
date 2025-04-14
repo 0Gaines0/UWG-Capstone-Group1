@@ -13,9 +13,8 @@ namespace ticket_system_web_app.Controllers
     /// </summary>
     public class EmployeesController : Controller
     {
-
         #region Fields
-
+        
         private readonly TicketSystemDbContext context;
 
         #endregion
@@ -25,9 +24,14 @@ namespace ticket_system_web_app.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="EmployeesController"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <precondition>context != null</precondition>
+        /// <param name="context">The DB context.</param>
         public EmployeesController(TicketSystemDbContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context), "Parameter cannot be null");
+            }
             this.context = context;
         }
 
@@ -36,19 +40,21 @@ namespace ticket_system_web_app.Controllers
         #region View Loaders
 
         /// <summary>
-        /// Indexes this instance.
+        /// Loads the Employees homepage.
         /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> Index()
+        /// <precondition>true</precondition>
+        /// <returns>the homepage</returns>
+        public async Task<ViewResult> Index()
         {
             var employees = await this.constructEmployees();
             return View(employees);
         }
 
         /// <summary>
-        /// Creates the employee modal.
+        /// Loads the Employee creation modal.
         /// </summary>
-        /// <returns></returns>
+        /// <precondition>true</precondition>
+        /// <returns>the modal</returns>
         public IActionResult CreateEmployeeModal()
         {
             return PartialView("_CreateEmployeeModal");
@@ -59,9 +65,11 @@ namespace ticket_system_web_app.Controllers
         #region Authenticated Methods
 
         /// <summary>
-        ///     Returns a list of all the employees in a Json object.
+        ///     Returns the following information, in a Json object, for all employees:
+        ///     Id, full name, username, email address, and admin status.
         ///     Requires admin perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <returns>A Json object of all the employees, or a Json with an error message if request is invalid.</returns>
         [HttpGet("Employees/GetAllEmployees/{authToken}")]
@@ -85,6 +93,7 @@ namespace ticket_system_web_app.Controllers
         ///     Creates the employee with the given information if it doesn't exist already.
         ///     Requires admin perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The new employee information</param>
         /// <returns>Ok if employee was created, BadRequest otherwise</returns>
@@ -126,6 +135,7 @@ namespace ticket_system_web_app.Controllers
         ///     Removes the given employee if they are not the current user and don't manage a group.
         ///     Requires admin perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="request">The employee to be deleted username</param>
         /// <returns>Ok if employee was removed, BadRequest otherwise</returns>
@@ -146,8 +156,7 @@ namespace ticket_system_web_app.Controllers
             {
                 return BadRequest(new { message = "Invalid request data" });
             }
-
-            String userName = request.username;
+            string userName = request.username;
             if (!this.context.Employees.Where(employee => employee.Username == userName).Any())
             {
                 return BadRequest(new { success = false, message = "Employee with username does not exist." });
@@ -165,22 +174,15 @@ namespace ticket_system_web_app.Controllers
                 return BadRequest(new { success = false, message = "Employee can't be deleted while being a group manager" });
             }
 
-            bool isRemoved = await this.removeEmployeeFromDb(userName);
-
-            if (isRemoved)
-            {
-                return Ok(new { success = true });
-            }
-            else
-            {
-                return BadRequest(new { success = false, message = "Failed to remove Employee." });
-            }
+            await this.removeEmployeeFromDb(userName);
+            return Ok(new { success = true });
         }
 
         /// <summary>
         ///     Edits the given employee's data.
         ///     Requires admin perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="jsonRequest">The employee username and updated employee information</param>
         /// <returns>Ok if successful, BadRequest otherwise</returns>
@@ -228,9 +230,10 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        ///     Returns the employee data for the given username.
+        ///     Returns the data for the employee with the given username.
         ///     Requires admin perms.
         /// </summary>
+        /// <precondition>true</precondition>
         /// <param name="authToken">The auth token.</param>
         /// <param name="data">The employee's username</param>
         /// <returns>
@@ -239,7 +242,7 @@ namespace ticket_system_web_app.Controllers
         ///     Otherwise, returns the employee data for this username
         /// </returns>
         [HttpPost("Employees/GetEmployee/{authToken}")]
-        public async Task<object> GetEmployee(string authToken, [FromBody] GetEmployeeRequest data)
+        public async Task<IActionResult> GetEmployee(string authToken, [FromBody] GetEmployeeRequest data)
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
@@ -279,22 +282,6 @@ namespace ticket_system_web_app.Controllers
 
         #region Helpers
 
-        private async Task<bool> removeEmployeeFromDb(string username)
-        {
-            try
-            {
-                var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
-                this.context.Employees.Remove(employee);
-                await this.context.SaveChangesAsync();
-                return true;
-
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         private async Task<List<object>> constructEmployees()
         {
             var employees = await this.context.Employees.Select(employee => new
@@ -307,6 +294,14 @@ namespace ticket_system_web_app.Controllers
             }).ToListAsync();
             return employees.Cast<object>().ToList();
         }
+        
+        private async Task<bool> removeEmployeeFromDb(string username)
+        {
+            var employee = await this.context.Employees.FirstOrDefaultAsync(currentEmployee => currentEmployee.Username == username);
+            this.context.Employees.Remove(employee);
+            await this.context.SaveChangesAsync();
+            return true;
+        }       
 
         #endregion
     }

@@ -76,10 +76,6 @@ namespace ticket_system_web_app.Controllers
 
         private bool verifyCorrectPassword(string passwordEntered, string hashedPassword) 
         {
-            //String password = "password";
-            //String newPass = BCrypt.Net.BCrypt.HashPassword("password", BCrypt.Net.BCrypt.GenerateSalt());
-            //Boolean test = BCrypt.Net.BCrypt.Verify("password", newPass);
-            // password = $2a$11$ra.0VCrMj1kDeCUbQxysner1OH4HOX9EWwWoeoJAL6n.62szpw4q6
             return BCrypt.Net.BCrypt.Verify(passwordEntered, hashedPassword);
         }
 
