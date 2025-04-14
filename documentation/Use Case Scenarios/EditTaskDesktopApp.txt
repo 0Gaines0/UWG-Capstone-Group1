@@ -1,0 +1,7 @@
+Context: User is logged into desktop app, has at least one task assigned and user has selected view button
+
+Primary Flow
+1 - User edits the data they wish to edit on the task, such as stage or assignee of the task
+2 - User selects the save button
+3 - System updates task on backend
+4 - System displays edits to the user

@@ -1,0 +1,6 @@
+Context: User is logged into desktop app and has at least one task assigned
+
+Primary Flow
+1 - User selects view button on the task they wish to view
+2 - System displays view task modal with populated task information
+3 - System navigates user focus to modal
