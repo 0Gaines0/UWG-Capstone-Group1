@@ -1,0 +1,9 @@
+Context - User is logged and is navigated to project page they have access to
+
+Primary Flow
+1 - User select ticket to update
+2 - System displays view task to User
+3 - User selects Stage Combobox to switch task to a new stage
+4 - User selects edit task
+5 - System updates task moving it to the new stage and updates UI
+

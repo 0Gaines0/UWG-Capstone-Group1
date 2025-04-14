@@ -1,0 +1,7 @@
+Context - User is logged into system as admin or project lead, and navigate to Edit Board stage
+
+Primary Flow
+1 - User Adds or Removes Group from stage
+2 - System adds/ removes group from stage on backend
+3 - System updates UI to match backend
+

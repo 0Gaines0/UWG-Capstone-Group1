@@ -1,0 +1,8 @@
+Context - User is logged and is navigated to project page they have access to
+
+Primary Flow
+1 - User select ticket to update
+2 - User has ability to assign ticket to themselves or other
+3 - User selects the assign combobox and assigns the task to who they wish
+4 - System updates task on backend with expected assignee
+5 - System updates UI with expected assignee
