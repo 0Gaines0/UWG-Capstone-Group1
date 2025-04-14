@@ -148,6 +148,8 @@ namespace ticket_system_web_app.Migrations
 
                     b.HasKey("GId");
 
+                    b.HasIndex("ManagerId");
+
                     b.ToTable("Groups");
                 });
 
@@ -366,6 +368,17 @@ namespace ticket_system_web_app.Migrations
                     b.Navigation("ProjectBoard");
                 });
 
+            modelBuilder.Entity("ticket_system_web_app.Models.Group", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Employee", "Manager")
+                        .WithMany("ManagedGroups")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+                });
+
             modelBuilder.Entity("ticket_system_web_app.Models.Project", b =>
                 {
                     b.HasOne("ticket_system_web_app.Models.Employee", null)
@@ -487,6 +500,8 @@ namespace ticket_system_web_app.Migrations
 
             modelBuilder.Entity("ticket_system_web_app.Models.Employee", b =>
                 {
+                    b.Navigation("ManagedGroups");
+
                     b.Navigation("ProjectsLeading");
                 });
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ticket_system_web_app.Migrations
 {
     /// <inheritdoc />
-    public partial class InitCreate : Migration
+    public partial class newMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,6 +44,12 @@ namespace ticket_system_web_app.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Groups", x => x.g_id);
+                    table.ForeignKey(
+                        name: "FK_Groups_Employees_manager_id",
+                        column: x => x.manager_id,
+                        principalTable: "Employees",
+                        principalColumn: "e_id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -275,6 +281,11 @@ namespace ticket_system_web_app.Migrations
                 name: "IX_group_member_GroupsExistingInGId",
                 table: "group_member",
                 column: "GroupsExistingInGId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_manager_id",
+                table: "Groups",
+                column: "manager_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectBoards_p_id",
