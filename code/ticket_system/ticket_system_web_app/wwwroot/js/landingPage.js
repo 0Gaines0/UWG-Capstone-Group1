@@ -1,9 +1,12 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
+    authToken = document.getElementById("authToken").value;
     fetchProjects();
 });
 
+let authToken = "FAILED TO GET AUTH TOKEN";
+
 function fetchProjects() {
-    fetch('/Projects/GetProjectRelatedToEmployee')
+    fetch(`/Projects/GetProjectRelatedToEmployee/${authToken}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {

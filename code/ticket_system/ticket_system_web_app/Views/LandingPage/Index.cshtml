@@ -2,6 +2,7 @@
 @{
     Layout = null; // Set your layout here if applicable
     var notLogin = ActiveEmployee.Employee == null;
+    var hasManagerPerms = ActiveEmployee.IsManager();
 
     if (notLogin)
     {
@@ -276,7 +277,7 @@
                 <div class="greeting">
                     Good Day, @ticket_system_web_app.Models.ActiveEmployee.Employee?.FName!
                 </div>
-                @if (Model > 0) {
+                @if (hasManagerPerms && Model > 0) {
                     <button class="nav_item" onclick="location.href='@Url.Action("ViewCollabRequests", "Projects", new {managerId = @ActiveEmployee.Employee.EId})';">View @Model collaboration request(s)</button>
                 }
                 <form asp-action="LogOut" method="post" style="margin: 0;">
@@ -308,6 +309,7 @@
             </ul>
         </div>
     </div>
+    <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
 </body>
 
 <script src="~/js/landingPage.js"></script>

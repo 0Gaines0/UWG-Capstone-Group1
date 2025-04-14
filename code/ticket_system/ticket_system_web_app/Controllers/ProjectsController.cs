@@ -16,12 +16,19 @@ using Project = ticket_system_web_app.Models.Project;
 namespace ticket_system_web_app.Controllers
 {
     /// <summary>
-    /// ProjectsController class
+    ///     ProjectsController class
+    ///     All client method calls require auth token validation.
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     public class ProjectsController : Controller
     {
+        #region Fields
+
         private readonly TicketSystemDbContext _context;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectsController"/> class.
@@ -32,30 +39,37 @@ namespace ticket_system_web_app.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// Gets the list of all collaborators on the project with the specified ID. If no such project exists, returns null.
-        /// </summary>
-        /// <precondition>true</precondition>
-        /// <postcondition>true</postcondition>
-        /// <param name="id">The project ID.</param>
-        /// <returns>The list of collaborators.</returns>
-        public async Task<IEnumerable<ProjectGroup>?> GetCollaboratorsOn(int? id)
-        {
-            if (id == null)
-            {
-                return null;
-            }
+        #endregion
 
-            return await this._context.ProjectGroups.Where(collab => collab.ProjectId == id).ToListAsync();
+        #region View Loaders
+
+        /// <summary>
+        /// Creates this instance.
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Create()
+        {
+            return View();
         }
 
         /// <summary>
-        /// Backs this instance.
+        /// Edits the specified identifier.
         /// </summary>
+        /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public IActionResult Back()
+        public async Task<IActionResult> Edit(int? id)
         {
-            return RedirectToAction(nameof(Index));
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.Include(project => project.ProjectLead).Include(project => project.Collaborators).ThenInclude(collab => collab.Group).FirstOrDefaultAsync(project => project.PId == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            return View(project);
         }
 
         /// <summary>
@@ -67,6 +81,14 @@ namespace ticket_system_web_app.Controllers
             var projects = await _context.Projects.Include(project => project.ProjectLead).ToListAsync();
 
             return View(projects);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewCollabRequests()
+        {
+            IEnumerable<ProjectGroup> result = await this._context.ProjectGroups.Include(collab => collab.Project).Include(collab => collab.Group).Where(collab => !collab.Accepted && collab.Group.ManagerId == ActiveEmployee.Employee.EId).ToListAsync();
+            result.OrderBy(collab => collab.Project.PTitle).ThenBy(collab => collab.Group.GName);
+            return View(result);
         }
 
         /// <summary>
@@ -128,123 +150,29 @@ namespace ticket_system_web_app.Controllers
             return View("EditKanban");
         }
 
-        /// <summary>
-        /// Creates this instance.
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Create()
-        {
-            return View();
-        }
+        #endregion
+
+        #region Validated Methods
 
         /// <summary>
-        /// Updates the name of the state.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> UpdateStateName([FromBody] UpdateStateNameRequest request)
-        {
-            if (request == null || request.Id <= 0 || string.IsNullOrWhiteSpace(request.Name))
-            {
-                return BadRequest(new { message = "Invalid request data." });
-            }
-
-            try
-            {
-                var state = await this._context.BoardStates.FindAsync(request.Id);
-                if (state == null)
-                {
-                    return NotFound(new { message = "State not found." });
-                }
-                state.StateName = request.Name;
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "State name updated successfully.", updatedName = state.StateName });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while updating state name.", error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Deletes the state.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> DeleteState([FromBody] DeleteStateRequest request)
-        {
-            if (request == null || request.Id <= 0)
-            {
-                return BadRequest(new { message = "Invalid request data." });
-            }
-
-            try
-            {
-                var state = await _context.BoardStates.FindAsync(request.Id);
-                if (state == null)
-                {
-                    return NotFound(new { message = "State not found." });
-                }
-
-                _context.BoardStates.Remove(state);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "State deleted successfully.", success = true });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while deleting state.", error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Adds the state.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> AddState([FromBody] AddStateRequest request)
-        {
-            if (request == null || string.IsNullOrWhiteSpace(request.Name) || request.BoardId <= 0)
-            {
-                return BadRequest(new { success = false, message = "Invalid request data." });
-            }
-
-            try
-            {
-                int maxPosition = await _context.BoardStates
-                    .Where(s => s.BoardId == request.BoardId)
-                    .MaxAsync(s => (int?)s.Position) ?? 0;
-
-                var newState = new BoardState
-                {
-                    StateName = request.Name,
-                    BoardId = request.BoardId,
-                    Position = maxPosition + 1
-                };
-
-                _context.BoardStates.Add(newState);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { success = true, stateId = newState.StateId });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Error adding state.", error = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Creates a project from the specified json request.
+        ///     Creates a project from the specified json request.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="jsonRequest">The json request.</param>
         /// <returns>OK if successful; BadRequest otherwise.</returns>
-        [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest jsonRequest)
+        [HttpPost("Projects/CreateProject/{authToken}")]
+        public async Task<IActionResult> CreateProject(string authToken, [FromBody] CreateProjectRequest jsonRequest)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(CreateProject)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             if (jsonRequest == null)
             {
                 return BadRequest(new { message = "Invalid request data" });
@@ -276,43 +204,66 @@ namespace ticket_system_web_app.Controllers
             }
         }
 
-        private async Task AddProjectBoardAndDefaultStates(int projectId)
+        /// <summary>
+        ///     Returns the details of the project with the specified id.
+        /// </summary>
+        /// <param name="id">The desired project's ID.</param>
+        /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
+        [HttpPost("Projects/Details/{authToken}&{id}")]
+        public async Task<JsonResult?> Details(string authToken, int id)
         {
-            try
+            if (!ActiveEmployee.IsValidRequest(authToken))
             {
-                var board = new ProjectBoard { ProjectId = projectId };
-                await _context.ProjectBoards.AddAsync(board);
-                await _context.SaveChangesAsync();
-
-                board = await _context.ProjectBoards.FirstOrDefaultAsync(b => b.ProjectId == projectId);
-
-                if (board == null)
-                {
-                    Console.Out.WriteLine("Failed to create ProjectBoard.");
-                    return;
-                }
-
-                var boardStates = new List<BoardState>
-            {
-                new BoardState { BoardId = board.BoardId, StateName = "To Do", Position = 1, ProjectBoard = board },
-                new BoardState { BoardId = board.BoardId, StateName = "In Progress", Position = 2, ProjectBoard = board },
-                new BoardState { BoardId = board.BoardId, StateName = "Completed", Position = 3, ProjectBoard = board }
-            };
-
-                await _context.BoardStates.AddRangeAsync(boardStates);
-                var result = await _context.SaveChangesAsync();
-
-                Console.Out.WriteLine($"Saved {result} BoardStates successfully.");
-
+                Console.WriteLine($"{nameof(Details)} Got auth token: {authToken}");
+                return Json(new { message = "Not logged in." });
             }
-            catch (Exception ex)
+
+            var project = await this._context.Projects.Include(project => project.Collaborators).ThenInclude(collab => collab.Group).Select(project => new
             {
-                Console.Out.WriteLine($"Error in AddProjectBoardAndDefaultStates: {ex.Message}");
+                project.PId,
+                project.PTitle,
+                project.PDescription,
+                ProjectLeadName = this._context.Employees.Where(employee => employee.EId == project.ProjectLeadId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
+                Collaborators = project.Collaborators.Select(collab => new { Accepted = collab.Accepted, GName = collab.Group.GName }).ToList(),
+            }).FirstOrDefaultAsync(project => project.PId == id);
+
+            if (project == null)
+            {
+                return null;
             }
+
+            return Json(project);
         }
 
         /// <summary>
-        /// Edits the specified identifier.
+        ///     Gets the projects related to the current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Projects/GetProjectRelatedToEmployee/{authToken}")]
+        public async Task<JsonResult> GetProjectRelatedToEmployee(string authToken)
+        {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(GetProjectRelatedToEmployee)} Got auth token: {authToken}");
+                return Json(new { message = "Not logged in." });
+            }
+
+            var eId = ActiveEmployee.Employee?.EId;
+            var leadProject = await this._context.Projects.Where(proj => proj.ProjectLeadId == eId).ToListAsync();
+            var groupProject = await this._context.Projects.Include(proj => proj.Collaborators).Where(proj => proj.Collaborators.Any(collab => collab.Group.Employees.Any(employee => employee.EId == eId))).ToListAsync();
+            var allProjects = leadProject.Concat(groupProject).Distinct().ToList();
+
+            var projectData = allProjects.Select(proj => new
+            {
+                PId = proj.PId,
+                PTitle = proj.PTitle
+            }).ToList();
+            return Json(new { success = true, data = projectData });
+        }
+
+        /// <summary>
+        ///     Edits the specified identifier.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="project">The project.</param>
@@ -322,6 +273,11 @@ namespace ticket_system_web_app.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PId,ProjectLeadId,PTitle,PDescription")] Models.Project project, string csvCollabGroups)
         {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             project.Collaborators = this.getCollaboratorsFromCSV(id, csvCollabGroups);
             project.ProjectLead = await this._context.Employees.FindAsync(project.ProjectLeadId);
 
@@ -366,57 +322,20 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Edits the specified identifier.
+        ///     Deletes the confirmed.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects.Include(project => project.ProjectLead).Include(project => project.Collaborators).ThenInclude(collab => collab.Group).FirstOrDefaultAsync(project => project.PId == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-            return View(project);
-        }
-
-
-        /// <summary>
-        /// Deletes the specified identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects
-                .FirstOrDefaultAsync(m => m.PId == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return View(project);
-        }
-
-        /// <summary>
-        /// Deletes the confirmed.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns></returns>
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             var project = await _context.Projects.FindAsync(id);
             if (project != null)
             {
@@ -428,13 +347,213 @@ namespace ticket_system_web_app.Controllers
         }
 
         /// <summary>
-        /// Updates the board state order.
+        ///     Accepts the collab request.
+        ///     Requires manager perms.
+        /// </summary>
+        /// <param name="authToken">The authentication token.</param>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="groupId">The group identifier.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptCollabRequest(int projectId, int groupId)
+        {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
+            ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
+            if (collab != null)
+            {
+                collab.Accepted = true;
+                this._context.ProjectGroups.Update(collab);
+                await this._context.SaveChangesAsync();
+            }
+            return new NoContentResult();
+        }
+
+        /// <summary>
+        ///     Denies the collab request.
+        /// </summary>
+        /// <param name="authToken">The authentication token.</param>
+        /// <param name="projectId">The project identifier.</param>
+        /// <param name="groupId">The group identifier.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DenyCollabRequest(int projectId, int groupId)
+        {
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
+            ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
+            if (collab != null)
+            {
+                this._context.ProjectGroups.Remove(collab);
+                if (collab.Project.Collaborators.Count <= 1)
+                {
+                    this._context.Projects.Remove(collab.Project);
+                }
+                await this._context.SaveChangesAsync();
+            }
+            return new NoContentResult();
+        }
+
+        /// <summary>
+        ///     Updates the name of the state.
+        ///     Requires manager perms.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost("Projects/UpdateStateName/{authToken}")]
+        public async Task<IActionResult> UpdateStateName(string authToken, [FromBody] UpdateStateNameRequest request)
+        {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(UpdateStateName)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
+            if (request == null || request.Id <= 0 || string.IsNullOrWhiteSpace(request.Name))
+            {
+                return BadRequest(new { message = "Invalid request data." });
+            }
+
+            try
+            {
+                var state = await this._context.BoardStates.FindAsync(request.Id);
+                if (state == null)
+                {
+                    return NotFound(new { message = "State not found." });
+                }
+                state.StateName = request.Name;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "State name updated successfully.", updatedName = state.StateName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating state name.", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        ///     Deletes the state.
+        ///     Requires manager perms.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost("Projects/DeleteState/{authToken}")]
+        public async Task<IActionResult> DeleteState(string authToken, [FromBody] DeleteStateRequest request)
+        {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(DeleteState)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
+            if (request == null || request.Id <= 0)
+            {
+                return BadRequest(new { message = "Invalid request data." });
+            }
+
+            try
+            {
+                var state = await _context.BoardStates.FindAsync(request.Id);
+                if (state == null)
+                {
+                    return NotFound(new { message = "State not found." });
+                }
+
+                _context.BoardStates.Remove(state);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "State deleted successfully.", success = true });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting state.", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        ///     Adds the state.
+        ///     Requires manager perms.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns></returns>
+        [HttpPost("Projects/AddState/{authToken}")]
+        public async Task<IActionResult> AddState(string authToken, [FromBody] AddStateRequest request)
+        {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(AddState)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
+            if (request == null || string.IsNullOrWhiteSpace(request.Name) || request.BoardId <= 0)
+            {
+                return BadRequest(new { success = false, message = "Invalid request data." });
+            }
+
+            try
+            {
+                int maxPosition = await _context.BoardStates
+                    .Where(s => s.BoardId == request.BoardId)
+                    .MaxAsync(s => (int?)s.Position) ?? 0;
+
+                var newState = new BoardState
+                {
+                    StateName = request.Name,
+                    BoardId = request.BoardId,
+                    Position = maxPosition + 1
+                };
+
+                _context.BoardStates.Add(newState);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { success = true, stateId = newState.StateId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Error adding state.", error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        ///     Updates the board state order.
+        ///     Requires manager perms.
         /// </summary>
         /// <param name="stateOrder">The state order.</param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> UpdateBoardStateOrder([FromBody] List<UpdateBoardStateOrderRequest> stateOrder)
+        [HttpPost("Projects/UpdateBoardStateOrder/{authToken}")]
+        public async Task<IActionResult> UpdateBoardStateOrder(string authToken, [FromBody] List<UpdateBoardStateOrderRequest> stateOrder)
         {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                Console.WriteLine($"{nameof(UpdateBoardStateOrder)} Got auth token: {authToken}");
+                return BadRequest(new { message = "Not logged in." });
+            }
+            if (!ActiveEmployee.IsManager())
+            {
+                return BadRequest(new { message = "Manager permissions required." });
+            }
+
             if (stateOrder == null || !stateOrder.Any())
             {
                 return BadRequest(new { message = "Invalid request data." });
@@ -465,49 +584,43 @@ namespace ticket_system_web_app.Controllers
             }
         }
 
+        #endregion
 
-        /// <summary>
-        /// Gets the project related to employee.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<JsonResult> GetProjectRelatedToEmployee()
+        #region Helpers
+
+        private async Task AddProjectBoardAndDefaultStates(int projectId)
         {
-            var eId = ActiveEmployee.Employee?.EId;
-            var leadProject = await this._context.Projects.Where(proj => proj.ProjectLeadId == eId).ToListAsync();
-            var groupProject = await this._context.Projects.Include(proj => proj.Collaborators).Where(proj => proj.Collaborators.Any(collab => collab.Group.Employees.Any(employee => employee.EId == eId))).ToListAsync();
-            var allProjects = leadProject.Concat(groupProject).Distinct().ToList();
-
-            var projectData = allProjects.Select(proj => new
+            try
             {
-                PId = proj.PId,
-                PTitle = proj.PTitle
-            }).ToList();
-            return Json(new { success = true, data = projectData });
-        }
+                var board = new ProjectBoard { ProjectId = projectId };
+                await _context.ProjectBoards.AddAsync(board);
+                await _context.SaveChangesAsync();
 
-        /// <summary>
-        /// Returns the details of the project with the specified id.
-        /// </summary>
-        /// <param name="id">The desired project's ID.</param>
-        /// <returns>The project details as a JsonResult, or null if none could be found.</returns>
-        public async Task<JsonResult?> Details(int id)
-        {
-            var project = await this._context.Projects.Include(project => project.Collaborators).ThenInclude(collab => collab.Group).Select(project => new
-            {
-                project.PId,
-                project.PTitle,
-                project.PDescription,
-                ProjectLeadName = this._context.Employees.Where(employee => employee.EId == project.ProjectLeadId).Select(employee => employee.FName + " " + employee.LName).FirstOrDefault(),
-                Collaborators = project.Collaborators.Select(collab => new { Accepted = collab.Accepted, GName = collab.Group.GName }).ToList(),
-            }).FirstOrDefaultAsync(project => project.PId == id);
+                board = await _context.ProjectBoards.FirstOrDefaultAsync(b => b.ProjectId == projectId);
 
-            if (project == null)
+                if (board == null)
+                {
+                    Console.Out.WriteLine("Failed to create ProjectBoard.");
+                    return;
+                }
+
+                var boardStates = new List<BoardState>
             {
-                return null;
+                new BoardState { BoardId = board.BoardId, StateName = "To Do", Position = 1, ProjectBoard = board },
+                new BoardState { BoardId = board.BoardId, StateName = "In Progress", Position = 2, ProjectBoard = board },
+                new BoardState { BoardId = board.BoardId, StateName = "Completed", Position = 3, ProjectBoard = board }
+            };
+
+                await _context.BoardStates.AddRangeAsync(boardStates);
+                var result = await _context.SaveChangesAsync();
+
+                Console.Out.WriteLine($"Saved {result} BoardStates successfully.");
+
             }
-
-            return Json(project);
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine($"Error in AddProjectBoardAndDefaultStates: {ex.Message}");
+            }
         }
 
         private bool ProjectExists(int id)
@@ -541,40 +654,6 @@ namespace ticket_system_web_app.Controllers
             return result;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ViewCollabRequests(int managerId)
-        {
-            IEnumerable<ProjectGroup> result = await this._context.ProjectGroups.Include(collab => collab.Project).Include(collab => collab.Group).Where(collab => !collab.Accepted && collab.Group.ManagerId == managerId).ToListAsync();
-            result.OrderBy(collab => collab.Project.PTitle).ThenBy(collab => collab.Group.GName);
-            return View(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AcceptCollabRequest(int projectId, int groupId)
-        {
-            ProjectGroup? collab = this._context.ProjectGroups.FindAsync(projectId, groupId).Result;
-            if (collab != null)
-            {
-                collab.Accepted = true;
-                this._context.ProjectGroups.Update(collab);
-                await this._context.SaveChangesAsync();
-            }
-            return new NoContentResult();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DenyCollabRequest(int projectId, int groupId)
-        {
-            ProjectGroup? collab = this._context.ProjectGroups.Include(collab => collab.Project).ThenInclude(project => project.Collaborators).Where(collab => collab.ProjectId == projectId && collab.GroupId == groupId).FirstOrDefaultAsync().Result;
-            if (collab != null) {
-                this._context.ProjectGroups.Remove(collab);
-                if (collab.Project.Collaborators.Count <= 1)
-                {
-                    this._context.Projects.Remove(collab.Project);
-                }
-                await this._context.SaveChangesAsync();
-            }
-            return new NoContentResult();
-        }
+        #endregion
     }
 }

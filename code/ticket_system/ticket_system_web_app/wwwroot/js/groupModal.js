@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
-   
+    authToken = document.getElementById("authToken").value;   
 
     fetchGroups();
     fetchUserGroups();
@@ -38,9 +38,10 @@ let selectedEditManager = "";
 let selectedEditMembers = [];
 let selectedEditGroupId = null;
 
+let authToken = "FAILED TO GET AUTH TOKEN";
 
 function fetchGroups() {
-    fetch('/Groups/GetAllGroups')
+    fetch(`/Groups/GetAllGroups/${authToken}`)
         .then(response => response.json())
         .then(data => {
             let tableBody = document.getElementById('groupTableBody');
@@ -66,7 +67,7 @@ function fetchGroups() {
 }
 
 function fetchUserGroups() {
-    fetch('/Groups/GetActiveUserGroups')
+    fetch(`/Groups/GetActiveUserGroups/${authToken}`)
         .then(response => response.json())
         .then(data => {
             if (!data || !Array.isArray(data)) { 
@@ -91,7 +92,7 @@ function fetchUserGroups() {
 
 async function fetchAllAvailableManagers() {
     try {
-        const response = await fetch('/Groups/GetAllManagers');
+        const response = await fetch(`/Groups/GetAllManagers/${authToken}`);
         const data = await response.json();
         return data || [];
     } catch (error) {
@@ -102,7 +103,7 @@ async function fetchAllAvailableManagers() {
 
 async function fetchAllEmployees() {
     try {
-        const response = await fetch('/Groups/GetAllEmployees');
+        const response = await fetch(`/Groups/GetAllEmployees/${authToken}`);
         const data = await response.json();
         return data || [];
     } catch (error) {
@@ -182,7 +183,7 @@ async function createGroup() {
     console.log("Sending Group Data:", groupData);
 
     try {
-        const response = await fetch("/Groups/CreateGroup", {
+        const response = await fetch(`/Groups/CreateGroup/${authToken}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(groupData)
@@ -339,7 +340,7 @@ function removeGroup() {
         return;
     }
 
-    fetch("/Groups/RemoveGroup", {
+    fetch(`/Groups/RemoveGroup/${authToken}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ groupName })
@@ -392,7 +393,7 @@ async function openEditModal() {
     }
     try {
         selectedEditGroupId = selectedGroupId
-        const response = await fetch(`/Groups/GetGroupById/${selectedGroupId}`);
+        const response = await fetch(`/Groups/GetGroupById/${authToken}&${selectedGroupId}`);
         const groupDataArray = await response.json();
         const groupData = groupDataArray[0];
 
@@ -546,7 +547,7 @@ async function saveGroupEdits() {
     console.log("Sending Edited Group Data:", groupData);
 
     try {
-        const response = await fetch(`/Groups/SaveGroupEdits`, {
+        const response = await fetch(`/Groups/SaveGroupEdits/${authToken}`, {
             method: "POST", 
             headers: {
                 "Content-Type": "application/json"

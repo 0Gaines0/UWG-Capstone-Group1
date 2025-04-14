@@ -1,4 +1,10 @@
-﻿function openEditModal(btn) {
+﻿document.addEventListener("DOMContentLoaded", async function () {
+    authToken = document.getElementById("authToken").value;
+});
+
+let authToken = "FAILED TO GET AUTH TOKEN";
+
+function openEditModal(btn) {
 
     document.getElementById('editTaskId').value = btn.dataset.taskId;
     document.getElementById('editTaskStateId').value = btn.dataset.stateId;
@@ -44,7 +50,7 @@ function openCreateTaskModal() {
 async function submitCreateTask() {
     const form = document.getElementById('editTaskForm');
     const formData = new FormData(form);
-    const response = await fetch('/Task/Create', {
+    const response = await fetch(`/Task/Create/${authToken}`, {
         method: 'POST',
         body: formData
     });
@@ -59,7 +65,7 @@ async function submitCreateTask() {
     async function submitEditTask() {
         const form = document.getElementById('editTaskForm');
         const formData = new FormData(form);
-        const response = await fetch('/Task/Edit', {
+        const response = await fetch(`/Task/Edit/${authToken}`, {
             method: 'POST',
             body: formData
         });
@@ -77,7 +83,7 @@ async function submitCreateTask() {
         const confirmed = confirm(`Are you sure you want to delete Task #${taskId}?`);
         if (!confirmed) return;
 
-        const response = await fetch(`/Task/Delete/${taskId}`, {
+        const response = await fetch(`/Task/Delete/${authToken}&${taskId}`, {
             method: 'DELETE'
         });
 
@@ -99,7 +105,7 @@ function switchTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.add('active');
 }
 async function loadTaskHistory(taskId) {
-    const response = await fetch(`/Task/History/${taskId}`);
+    const response = await fetch(`/Task/History/${authToken}&${taskId}`);
     if (!response.ok) {
         console.error("Failed to fetch history");
         return;

@@ -25,7 +25,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
 
             this.context = new TicketSystemDbContext(options);
             this.controller = new GroupsController(context);
-            ActiveEmployee.Employee = null;
+            ActiveEmployee.LogInEmployee(new Employee(), this.context);
         }
 
         [TearDown]
@@ -71,7 +71,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             this.context.Groups.Add(group);
             await context.SaveChangesAsync();
 
-            var result = await this.controller.GetAllGroups();
+            var result = await this.controller.GetAllGroups(ActiveEmployee.AuthToken);
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
             var jsonResult = result as JsonResult;
@@ -84,7 +84,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestGetActiveUserGroupsNoActiveEmployeeReturnsJsonNull()
         {
-            var result = await controller.GetActiveUserGroups();
+            var result = await controller.GetActiveUserGroups(ActiveEmployee.AuthToken);
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
             var jsonResult = result as JsonResult;
@@ -107,7 +107,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
 
             await this.context.SaveChangesAsync();
 
-            var result = await this.controller.GetActiveUserGroups();
+            var result = await this.controller.GetActiveUserGroups(ActiveEmployee.AuthToken);
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
             var jsonResult = result as JsonResult;
@@ -121,7 +121,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         [Test]
         public async Task TestCreateGroupInvalidRequestReturnsBadRequest()
         {
-            var resultNull = await this.controller.CreateGroup(null);
+            var resultNull = await this.controller.CreateGroup(ActiveEmployee.AuthToken, null);
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(resultNull);
 
             var invalidRequest = new CreateGroupRequest
@@ -129,7 +129,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupName = "   ",
                 ManagerId = 5
             };
-            var resultInvalid = await controller.CreateGroup(invalidRequest);
+            var resultInvalid = await controller.CreateGroup(ActiveEmployee.AuthToken, invalidRequest);
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(resultInvalid);
 
             invalidRequest = new CreateGroupRequest
@@ -137,7 +137,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupName = "ValidGroup",
                 ManagerId = 0
             };
-            resultInvalid = await this.controller.CreateGroup(invalidRequest);
+            resultInvalid = await this.controller.CreateGroup(ActiveEmployee.AuthToken, invalidRequest);
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(resultInvalid);
         }
 
@@ -155,7 +155,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupDescription = "New description",
                 MemberIds = new List<int>()
             };
-            var result = await this.controller.CreateGroup(request);
+            var result = await this.controller.CreateGroup(ActiveEmployee.AuthToken, request);
 
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(result);
         }
@@ -175,7 +175,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 MemberIds = new List<int>()
             };
 
-            var result = await this.controller.CreateGroup(request);
+            var result = await this.controller.CreateGroup(ActiveEmployee.AuthToken, request);
 
             ClassicAssert.IsInstanceOf<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
@@ -203,7 +203,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 MemberIds = new List<int> { member1.EId, member2.EId }
             };
 
-            var result = await this.controller.CreateGroup(request);
+            var result = await this.controller.CreateGroup(ActiveEmployee.AuthToken, request);
 
             ClassicAssert.IsInstanceOf<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
@@ -224,7 +224,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupName = "   "
             };
 
-            var result = await this.controller.RemoveGroup(request);
+            var result = await this.controller.RemoveGroup(ActiveEmployee.AuthToken, request);
 
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(result);
         }
@@ -237,7 +237,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupName = "NonExistentGroup"
             };
 
-            var result = await this.controller.RemoveGroup(request);
+            var result = await this.controller.RemoveGroup(ActiveEmployee.AuthToken, request);
 
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(result);
         }
@@ -257,7 +257,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
                 GroupName = "GroupToRemove"
             };
 
-            var result = await controller.RemoveGroup(request);
+            var result = await controller.RemoveGroup(ActiveEmployee.AuthToken, request);
 
             ClassicAssert.IsInstanceOf<OkObjectResult>(result);
             var removedGroup = await context.Groups.FirstOrDefaultAsync(g => g.GName == "GroupToRemove");
@@ -273,7 +273,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             this.context.Employees.AddRange(manager1, admin1, employee);
             await context.SaveChangesAsync();
 
-            var result = await controller.GetAllManagers();
+            var result = await controller.GetAllManagers(ActiveEmployee.AuthToken);
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
             var jsonResult = result as JsonResult;
@@ -298,7 +298,7 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             context.Employees.AddRange(employee1, employee2);
             await context.SaveChangesAsync();
 
-            var result = await controller.GetAllEmployees();
+            var result = await controller.GetAllEmployees(ActiveEmployee.AuthToken);
 
             ClassicAssert.IsInstanceOf<JsonResult>(result);
             var jsonResult = result as JsonResult;
