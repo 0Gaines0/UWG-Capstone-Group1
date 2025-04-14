@@ -1,0 +1,5 @@
+Context - User is logged into desktop app
+
+Primary Flow
+1 - User selects combobox in top left, changing between Available and Active tasks
+2 - Upon user selection the system updates the displayed tasks on the windows form
