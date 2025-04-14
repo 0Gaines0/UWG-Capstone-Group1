@@ -77,11 +77,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllGroups)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
 
             var groups = await this.constructGroups();
@@ -214,7 +214,7 @@ namespace ticket_system_web_app.Controllers
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return BadRequest(new { message = "Manager permissions required." });
             }
 
             var groupName = request.GroupName;
@@ -228,16 +228,8 @@ namespace ticket_system_web_app.Controllers
 
             }
 
-            bool isRemoved = await this.removeGroupFromDb(groupName);
-
-            if (isRemoved)
-            {
-                return Ok(new { success = true });
-            }
-            else
-            {
-                return BadRequest(new { success = false, message = "Failed to remove group." });
-            }
+            await this.removeGroupFromDb(groupName);
+            return Ok(new { success = true });
         }
 
         /// <summary>
@@ -297,11 +289,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllManagers)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
             var possibleManagers = await this.context.Employees.Where(e => e.IsActive == true).Select(e => new { Id = e.EId, Name = $"{e.FName} {e.LName}" }).AsNoTracking().ToListAsync();
 
@@ -321,11 +313,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetAllEmployees)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return Json(new { message = "Not logged in." });
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return Json(new { message = "Manager permissions required." });
             }
 
             var employees = await this.context.Employees
@@ -401,11 +393,11 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(RemoveStateGroup)} Got auth token: {authToken}");
-                return Json("Not logged in.");
+                return NotFound("Not logged in.");
             }
             if (!ActiveEmployee.IsManager())
             {
-                return Json("Manager permissions required.");
+                return NotFound("Manager permissions required.");
             }
 
             var assignment = context.StateAssignedGroups.FirstOrDefault(sg => sg.StateId == request.StateId && sg.GroupId == request.GroupIds.FirstOrDefault());
@@ -424,20 +416,11 @@ namespace ticket_system_web_app.Controllers
 
         #region Helpers
 
-        private async Task<bool> removeGroupFromDb(string groupName)
+        private async Task removeGroupFromDb(string groupName)
         {
-            try
-            {
-                var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
-                this.context.Groups.Remove(group);
-                await this.context.SaveChangesAsync();
-                return true;
-
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var group = await this.context.Groups.FirstOrDefaultAsync(currGroup => currGroup.GName == groupName);
+            this.context.Groups.Remove(group);
+            await this.context.SaveChangesAsync();
         }
 
         private async Task<List<object>> constructGroups()

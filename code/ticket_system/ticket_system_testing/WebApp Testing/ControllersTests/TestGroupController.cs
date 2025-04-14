@@ -7,6 +7,7 @@ using ticket_system_web_app.Models;
 using ticket_system_web_app.Models.RequestObj;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Newtonsoft.Json;
 
 
 namespace ticket_system_testing.WebApp_Testing.ControllerTests
@@ -16,6 +17,11 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
     {
         private TicketSystemDbContext context;
         private GroupsController controller;
+
+        private class JsonFailure
+        {
+            public string Message { get; set; }
+        }
 
         private void setActiveUserPermsToManager()
         {
@@ -50,6 +56,26 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
         }
 
         [Test]
+        public void TestNullConstructor()
+        {
+            var ex = Assert.Throws<ArgumentNullException>(() => {
+                this.controller = new GroupsController(null);
+            });
+            Assert.That(ex.ParamName, Is.EqualTo("context"));
+            Assert.That(ex.Message, Does.Contain("null"));
+        }
+
+        [Test]
+        public void TestValidConstructor()
+        {
+            var options = new DbContextOptionsBuilder<TicketSystemDbContext>().UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
+            var context = new TicketSystemDbContext(options);
+            Assert.DoesNotThrow(() => {
+                this.controller = new GroupsController(context);
+            });
+        }
+
+        [Test]
         public async Task TestIndexReturnsViewResultWithGroups()
         {
             var employee = new Employee { EId = 10, FName = "John", LName = "Doe" };
@@ -78,6 +104,32 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             ClassicAssert.That(partialResult?.ViewName, Is.EqualTo("_CreateGroupModal"));
         }
 
+
+
+        [Test]
+        public void TestGetAllGroupsNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.GetAllGroups(ActiveEmployee.AuthToken).Result;
+
+            string json = JsonConvert.SerializeObject(response.Value);
+            var result = JsonConvert.DeserializeObject<JsonFailure>(json);
+
+
+            Assert.That(result.Message.ToLower(), Does.Contain("not logged in"));
+        }
+
+        [Test]
+        public void TestGetAllGroupsNotManager()
+        {
+            var response = this.controller.GetAllGroups(ActiveEmployee.AuthToken).Result;
+
+            string json = JsonConvert.SerializeObject(response.Value);
+            var result = JsonConvert.DeserializeObject<JsonFailure>(json);
+
+            Assert.That(result.Message.ToLower(), Does.Contain("manager permissions"));
+        }
+
         [Test]
         public async Task TestGetAllGroupsReturnsJsonResult()
         {
@@ -96,6 +148,8 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             ClassicAssert.IsNotNull(groups);
             ClassicAssert.That(groups.Count, Is.EqualTo(1));
         }
+
+
 
         [Test]
         public async Task TestGetActiveUserGroupsNoActiveEmployeeReturnsJsonNull()
@@ -135,6 +189,25 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             ClassicAssert.IsNotNull(userGroups);
             Assert.That(userGroups, Does.Contain("ManagerGroup"));
             Assert.That(userGroups, Does.Contain("MemberGroup"));
+        }
+
+
+
+        [Test]
+        public void TestCreateGroupNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.CreateGroup(ActiveEmployee.AuthToken, new CreateGroupRequest()).Result;
+
+            ClassicAssert.IsInstanceOf<BadRequestObjectResult>(response);
+        }
+
+        [Test]
+        public void TestCreateGroupNotManager()
+        {
+            var response = this.controller.CreateGroup(ActiveEmployee.AuthToken, new CreateGroupRequest()).Result;
+
+            ClassicAssert.IsInstanceOf<BadRequestObjectResult>(response);
         }
 
         [Test]
@@ -242,6 +315,25 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             Assert.That(memberIds, Is.EquivalentTo(request.MemberIds));
         }
 
+
+
+        [Test]
+        public void TestRemoveGroupNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.RemoveGroup(ActiveEmployee.AuthToken, new RemoveGroupRequest()).Result;
+
+            ClassicAssert.IsInstanceOf<BadRequestObjectResult>(response);
+        }
+
+        [Test]
+        public void TestRemoveGroupNotManager()
+        {
+            var response = this.controller.RemoveGroup(ActiveEmployee.AuthToken, new RemoveGroupRequest()).Result;
+
+            ClassicAssert.IsInstanceOf<BadRequestObjectResult>(response);
+        }
+
         [Test]
         public async Task TestRemoveGroupInvalidRequestReturnsBadRequest()
         {
@@ -272,9 +364,6 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             ClassicAssert.IsInstanceOf<BadRequestObjectResult>(result);
         }
 
-
-
-
         [Test]
         public async Task TestRemoveGroupValidRequestReturnsOk()
         {
@@ -294,6 +383,31 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             ClassicAssert.IsInstanceOf<OkObjectResult>(result);
             var removedGroup = await context.Groups.FirstOrDefaultAsync(g => g.GName == "GroupToRemove");
             ClassicAssert.IsNull(removedGroup);
+        }
+
+
+
+        [Test]
+        public void TestGetAllManagersNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.GetAllManagers(ActiveEmployee.AuthToken).Result;
+
+            string json = JsonConvert.SerializeObject(response.Value);
+            var result = JsonConvert.DeserializeObject<JsonFailure>(json);
+
+            Assert.That(result.Message.ToLower(), Does.Contain("not logged in"));
+        }
+
+        [Test]
+        public void TestGetAllManagersNotManager()
+        {
+            var response = this.controller.GetAllManagers(ActiveEmployee.AuthToken).Result;
+
+            string json = JsonConvert.SerializeObject(response.Value);
+            var result = JsonConvert.DeserializeObject<JsonFailure>(json);
+
+            Assert.That(result.Message.ToLower(), Does.Contain("manager permissions"));
         }
 
         [Test]
@@ -325,6 +439,30 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             }
         }
 
+
+        [Test]
+        public void TestGetAllEmployeesNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.GetAllEmployees(ActiveEmployee.AuthToken).Result;
+
+            string json = JsonConvert.SerializeObject(response.Value);
+            var result = JsonConvert.DeserializeObject<JsonFailure>(json);
+
+            Assert.That(result.Message.ToLower(), Does.Contain("not logged in"));
+        }
+
+        [Test]
+        public void TestGetAllEmployeesNotManager()
+        {
+            var response = this.controller.GetAllEmployees(ActiveEmployee.AuthToken).Result;
+
+            string json = JsonConvert.SerializeObject(response.Value);
+            var result = JsonConvert.DeserializeObject<JsonFailure>(json);
+
+            Assert.That(result.Message.ToLower(), Does.Contain("manager permissions"));
+        }
+
         [Test]
         public async Task TestGetAllEmployeesReturnsJsonResult()
         {
@@ -346,6 +484,111 @@ namespace ticket_system_testing.WebApp_Testing.ControllerTests
             Assert.That(employeesList.Count, Is.EqualTo(2));
             Assert.That(employeesList.Any(e => e.GetType().GetProperty("Name", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(e) == "Alice Smith"));
             Assert.That(employeesList.Any(e => e.GetType().GetProperty("Name", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(e) == "Bob Jones"));
+        }
+
+
+
+        [Test]
+        public void TestAssignGroupsNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.AssignGroups(ActiveEmployee.AuthToken, new GroupAssignmentRequest());
+
+            ClassicAssert.IsInstanceOf<NotFoundObjectResult>(response);
+        }
+
+        [Test]
+        public void TestAssignGroupsNotManager()
+        {
+            var response = this.controller.AssignGroups(ActiveEmployee.AuthToken, new GroupAssignmentRequest());
+
+            ClassicAssert.IsInstanceOf<NotFoundObjectResult>(response);
+        }
+
+        [Test]
+        public void TestAssignGroupsStateDNE()
+        {
+            this.setActiveUserPermsToManager();
+
+            var result = this.controller.AssignGroups(ActiveEmployee.AuthToken, new GroupAssignmentRequest { StateId = 1 });
+
+            ClassicAssert.IsInstanceOf<NotFoundObjectResult>(result);
+        }
+
+        [Test]
+        public void TestAssignGroupsValidNoDuplicates()
+        {
+            this.setActiveUserPermsToManager();
+            this.context.BoardStates.Add(new BoardState { StateId = 1 });
+            this.context.SaveChanges();
+
+            var result = this.controller.AssignGroups(ActiveEmployee.AuthToken, new GroupAssignmentRequest { StateId = 1, GroupIds = [1, 2, 4] });
+
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(this.context.StateAssignedGroups.Count(), Is.EqualTo(3));
+            Assert.That(this.context.StateAssignedGroups.Where(bs => bs.StateId == 1 && bs.GroupId == 1).Count(), Is.EqualTo(1));
+            Assert.That(this.context.StateAssignedGroups.Where(bs => bs.StateId == 1 && bs.GroupId == 2).Count(), Is.EqualTo(1));
+            Assert.That(this.context.StateAssignedGroups.Where(bs => bs.StateId == 1 && bs.GroupId == 4).Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void TestAssignGroupsValidWithDuplicates()
+        {
+            this.setActiveUserPermsToManager();
+            this.context.BoardStates.Add(new BoardState { StateId = 1 });
+            this.context.StateAssignedGroups.Add(new StateAssignedGroup { StateId = 1 , GroupId = 1});
+            this.context.SaveChanges();
+
+            var result = this.controller.AssignGroups(ActiveEmployee.AuthToken, new GroupAssignmentRequest { StateId = 1, GroupIds = [1, 2, 2, 4] });
+
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(this.context.StateAssignedGroups.Count(), Is.EqualTo(3));
+            Assert.That(this.context.StateAssignedGroups.Where(bs => bs.StateId == 1 && bs.GroupId == 1).Count(), Is.EqualTo(1));
+            Assert.That(this.context.StateAssignedGroups.Where(bs => bs.StateId == 1 && bs.GroupId == 2).Count(), Is.EqualTo(1));
+            Assert.That(this.context.StateAssignedGroups.Where(bs => bs.StateId == 1 && bs.GroupId == 4).Count(), Is.EqualTo(1));
+        }
+
+
+
+        [Test]
+        public void TestRemoveGroupsNotLoggedIn()
+        {
+            ActiveEmployee.LogoutCurrentEmployee();
+            var response = this.controller.RemoveStateGroup(ActiveEmployee.AuthToken, new GroupAssignmentRequest());
+
+            ClassicAssert.IsInstanceOf<NotFoundObjectResult>(response);
+        }
+
+        [Test]
+        public void TestRemoveGroupsNotManager()
+        {
+            var response = this.controller.RemoveStateGroup(ActiveEmployee.AuthToken, new GroupAssignmentRequest());
+
+            ClassicAssert.IsInstanceOf<NotFoundObjectResult>(response);
+        }
+
+        [Test]
+        public void TestRemoveStateGroupAssignmentDNE()
+        {
+            this.setActiveUserPermsToManager();
+
+            var result = this.controller.RemoveStateGroup(ActiveEmployee.AuthToken, new GroupAssignmentRequest { StateId = 1, GroupIds = [1] });
+
+            ClassicAssert.IsInstanceOf<NotFoundObjectResult>(result);
+        }
+
+        [Test]
+        public void TestRemoveStateGroupValid()
+        {
+            this.setActiveUserPermsToManager();
+            this.context.BoardStates.Add(new BoardState { StateId = 1 });
+            this.context.StateAssignedGroups.Add(new StateAssignedGroup { StateId = 1, GroupId = 2 });
+            this.context.SaveChangesAsync();
+
+            var result = this.controller.RemoveStateGroup(ActiveEmployee.AuthToken, new GroupAssignmentRequest { StateId = 1, GroupIds = [2] });
+
+            ClassicAssert.IsInstanceOf<OkObjectResult>(result);
+            Assert.That(this.context.StateAssignedGroups.Count(), Is.EqualTo(0));
         }
     }
 }
