@@ -17,6 +17,9 @@
     <Compile Update="View\PrivacyForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="View\TicketDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\UserControls\TaskItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -1,4 +1,6 @@
-﻿namespace ticket_system_winforms.View
+﻿using System.Windows.Forms;
+
+namespace ticket_system_winforms.View
 {
     partial class ViewTasksPage
     {
@@ -6,6 +8,7 @@
 
         private System.Windows.Forms.ComboBox comboBoxTaskFilter;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelTasks;
+        private System.Windows.Forms.Button createTaskButton;
         private System.Windows.Forms.Button logoutButton;
 
         protected override void Dispose(bool disposing)
@@ -17,54 +20,64 @@
 
         private void InitializeComponent()
         {
-            this.comboBoxTaskFilter = new System.Windows.Forms.ComboBox();
-            this.flowLayoutPanelTasks = new System.Windows.Forms.FlowLayoutPanel();
-            this.logoutButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            comboBoxTaskFilter = new ComboBox();
+            flowLayoutPanelTasks = new FlowLayoutPanel();
+            logoutButton = new Button();
+            createTaskButton = new Button();
+            SuspendLayout();
             // 
             // comboBoxTaskFilter
             // 
-            this.comboBoxTaskFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTaskFilter.FormattingEnabled = true;
-            this.comboBoxTaskFilter.Location = new System.Drawing.Point(12, 12);
-            this.comboBoxTaskFilter.Name = "comboBoxTaskFilter";
-            this.comboBoxTaskFilter.Size = new System.Drawing.Size(200, 23);
-            this.comboBoxTaskFilter.TabIndex = 0;
-            // 
-            // logoutButton
-            // 
-            this.logoutButton.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            this.logoutButton.Location = new System.Drawing.Point(680, 12);
-            this.logoutButton.Name = "logoutButton";
-            this.logoutButton.Size = new System.Drawing.Size(100, 23);
-            this.logoutButton.TabIndex = 2;
-            this.logoutButton.Text = "Logout";
-            this.logoutButton.UseVisualStyleBackColor = true;
-            this.logoutButton.Click += new System.EventHandler(this.logoutButton_Click);
+            comboBoxTaskFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxTaskFilter.FormattingEnabled = true;
+            comboBoxTaskFilter.Location = new System.Drawing.Point(12, 12);
+            comboBoxTaskFilter.Name = "comboBoxTaskFilter";
+            comboBoxTaskFilter.Size = new System.Drawing.Size(200, 23);
+            comboBoxTaskFilter.TabIndex = 0;
             // 
             // flowLayoutPanelTasks
             // 
-            this.flowLayoutPanelTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                                    | System.Windows.Forms.AnchorStyles.Left)
-                                    | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanelTasks.AutoScroll = true;
-            this.flowLayoutPanelTasks.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanelTasks.Location = new System.Drawing.Point(12, 50);
-            this.flowLayoutPanelTasks.Name = "flowLayoutPanelTasks";
-            this.flowLayoutPanelTasks.Size = new System.Drawing.Size(776, 388);
-            this.flowLayoutPanelTasks.TabIndex = 1;
-            this.flowLayoutPanelTasks.WrapContents = false;
+            flowLayoutPanelTasks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanelTasks.AutoScroll = true;
+            flowLayoutPanelTasks.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanelTasks.Location = new System.Drawing.Point(12, 50);
+            flowLayoutPanelTasks.Name = "flowLayoutPanelTasks";
+            flowLayoutPanelTasks.Size = new System.Drawing.Size(776, 388);
+            flowLayoutPanelTasks.TabIndex = 1;
+            flowLayoutPanelTasks.WrapContents = false;
+            // 
+            // logoutButton
+            // 
+            logoutButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            logoutButton.Location = new System.Drawing.Point(680, 12);
+            logoutButton.Name = "logoutButton";
+            logoutButton.Size = new System.Drawing.Size(100, 23);
+            logoutButton.TabIndex = 2;
+            logoutButton.Text = "Logout";
+            logoutButton.UseVisualStyleBackColor = true;
+            logoutButton.Click += logoutButton_Click;
+            // 
+            // createTaskButton
+            // 
+            createTaskButton.Location = new System.Drawing.Point(230, 7);
+            createTaskButton.Name = "createTaskButton";
+            createTaskButton.Size = new System.Drawing.Size(122, 32);
+            createTaskButton.TabIndex = 0;
+            createTaskButton.Text = "Create Task";
+            createTaskButton.UseVisualStyleBackColor = true;
+            createTaskButton.Click += createTaskButton_Click;
             // 
             // ViewTasksPage
             // 
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.logoutButton);
-            this.Controls.Add(this.flowLayoutPanelTasks);
-            this.Controls.Add(this.comboBoxTaskFilter);
-            this.Name = "ViewTasksPage";
-            this.Text = "View Tasks";
-            this.Load += new System.EventHandler(this.ViewTasksPage_Load);
-            this.ResumeLayout(false);
+            ClientSize = new System.Drawing.Size(800, 450);
+            Controls.Add(createTaskButton);
+            Controls.Add(logoutButton);
+            Controls.Add(flowLayoutPanelTasks);
+            Controls.Add(comboBoxTaskFilter);
+            Name = "ViewTasksPage";
+            Text = "View Tasks";
+            Load += ViewTasksPage_Load;
+            ResumeLayout(false);
         }
     }
 }

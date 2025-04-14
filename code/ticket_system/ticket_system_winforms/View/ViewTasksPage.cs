@@ -38,9 +38,15 @@ namespace ticket_system_winforms.View
             comboBoxTaskFilter.SelectedIndexChanged += ComboBoxTaskFilter_SelectedIndexChanged;
 
             var employeeId = ActiveEmployee.Employee.EId;
-            allTasks = await this.getTasksForUserAsync(employeeId);
+            allTasks = await this.getTasksForUser(employeeId);
 
             DisplayTasks("Available Tasks");
+        }
+
+        public void ReloadTasks()
+        {
+            string selected = comboBoxTaskFilter.SelectedItem.ToString();
+            DisplayTasks(selected);
         }
 
         private void ComboBoxTaskFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -60,10 +66,11 @@ namespace ticket_system_winforms.View
 
             foreach (var task in filteredTasks)
             {
-                var control = new TaskItemControl(task);
+                var control = new TaskItemControl(task, this.context);
                 control.ViewClicked += TaskControl_ViewClicked;
                 control.Margin = new Padding(5);
                 flowLayoutPanelTasks.Controls.Add(control);
+                control.ReloadRequested += (s, e) => ReloadTasks();
             }
         }
 
@@ -82,7 +89,12 @@ namespace ticket_system_winforms.View
             this.Hide();
         }
 
-        private async Task<List<ProjectTask>> getTasksForUserAsync(int userId)
+        private void createTaskButton_Click(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private async Task<List<ProjectTask>> getTasksForUser(int userId)
         {
             string query = @"
             SELECT t.*

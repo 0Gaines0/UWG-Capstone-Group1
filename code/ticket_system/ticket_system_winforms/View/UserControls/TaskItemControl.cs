@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
 using ticket_system_winforms.Model;
 
@@ -18,7 +20,9 @@ namespace ticket_system_winforms.View.UserControls
 
         public event EventHandler<ProjectTask> ViewClicked;
 
-        public TaskItemControl(ProjectTask task)
+        public event EventHandler ReloadRequested;
+
+        public TaskItemControl(ProjectTask task, TicketSystemDbContext context)
         {
             InitializeComponent();
             this.task = task;
@@ -26,7 +30,15 @@ namespace ticket_system_winforms.View.UserControls
             infoLabel.Text = $"Ticket#{this.task.TaskId} - {this.task.Summary} ({this.task.Priority})";
             viewButton.Text = "View";
 
-            viewButton.Click += (s, e) => ViewClicked?.Invoke(this, task);
+            viewButton.Click += (s, e) =>
+            {
+                var form = new TaskDetailsForm(task, context);
+                form.FormClosed += (sender, args) =>
+                {
+                    ReloadRequested?.Invoke(this, EventArgs.Empty);
+                };
+                form.ShowDialog();
+            };
         }
     }
 }
