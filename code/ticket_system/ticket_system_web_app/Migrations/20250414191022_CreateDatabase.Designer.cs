@@ -12,8 +12,8 @@ using ticket_system_web_app.Data;
 namespace ticket_system_web_app.Migrations
 {
     [DbContext(typeof(TicketSystemDbContext))]
-    [Migration("20250414164438_newMig")]
-    partial class newMig
+    [Migration("20250414191022_CreateDatabase")]
+    partial class CreateDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,6 +345,41 @@ namespace ticket_system_web_app.Migrations
                     b.ToTable("TaskChangeLogs");
                 });
 
+            modelBuilder.Entity("ticket_system_web_app.Models.TaskComment", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("comment_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("comment_text");
+
+                    b.Property<DateTime>("CommentedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("commented_at");
+
+                    b.Property<int>("CommenterId")
+                        .HasColumnType("int")
+                        .HasColumnName("commenter_id");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int")
+                        .HasColumnName("task_id");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("CommenterId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("task_comment");
+                });
+
             modelBuilder.Entity("EmployeeGroup", b =>
                 {
                     b.HasOne("ticket_system_web_app.Models.Employee", null)
@@ -492,6 +527,25 @@ namespace ticket_system_web_app.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("TaskChange");
+                });
+
+            modelBuilder.Entity("ticket_system_web_app.Models.TaskComment", b =>
+                {
+                    b.HasOne("ticket_system_web_app.Models.Employee", "Commenter")
+                        .WithMany()
+                        .HasForeignKey("CommenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ticket_system_web_app.Models.ProjectTask", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Commenter");
+
+                    b.Navigation("Task");
                 });
 
             modelBuilder.Entity("ticket_system_web_app.Models.BoardState", b =>
