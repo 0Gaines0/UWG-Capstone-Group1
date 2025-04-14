@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ticket_system_web_app.Migrations
 {
     /// <inheritdoc />
-    public partial class newMigration : Migration
+    public partial class InitCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -185,6 +185,30 @@ namespace ticket_system_web_app.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StateAssignedGroups",
+                columns: table => new
+                {
+                    StateId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StateAssignedGroups", x => new { x.StateId, x.GroupId });
+                    table.ForeignKey(
+                        name: "FK_StateAssignedGroups_BoardStates_StateId",
+                        column: x => x.StateId,
+                        principalTable: "BoardStates",
+                        principalColumn: "state_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StateAssignedGroups_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "g_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "task",
                 columns: table => new
                 {
@@ -274,6 +298,11 @@ namespace ticket_system_web_app.Migrations
                 column: "project_lead_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StateAssignedGroups_GroupId",
+                table: "StateAssignedGroups",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_task_assignee_id",
                 table: "task",
                 column: "assignee_id");
@@ -302,6 +331,9 @@ namespace ticket_system_web_app.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectGroups");
+
+            migrationBuilder.DropTable(
+                name: "StateAssignedGroups");
 
             migrationBuilder.DropTable(
                 name: "TaskChangeLogs");

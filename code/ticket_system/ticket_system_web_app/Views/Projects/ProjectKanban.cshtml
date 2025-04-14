@@ -510,8 +510,7 @@
                                 <div class="task">
                                     <div class="task-header">
                                         <strong>Task #@task.TaskId</strong>
-                                        @if (hasAdminPerms)
-                                        {
+                                       
                                             <div class="task-actions">
                                                 <a href="#" class="edit-btn"
                                                    data-task-id="@task.TaskId"
@@ -520,13 +519,13 @@
                                                    data-summary="@task.Summary"
                                                    data-description="@task.Description"
                                                    data-assignee-id="@task.AssigneeId"
-                                                   onclick="openEditModal(this)">Edit</a>
+                                                   onclick="openEditModal(this)">View</a>
 
                                                 <a href="#" class="delete-btn"
                                                    data-task-id="@task.TaskId"
                                                    onclick="confirmDeleteTask(this)">Delete</a>
                                             </div>
-                                        }
+                                        
                                     </div>
                                     @task.Summary<br />
                                     <small>Priority: @task.Priority</small><br />
@@ -552,7 +551,7 @@
 
     <div id="editTaskModal" class="modal" style="display:none;">
         <div class="modal-content">
-            <h2 id="modal-title">Edit Task</h2>
+            <h2 id="modal-title">Task</h2>
             <form id="editTaskForm">
                 <input type="hidden" id="editTaskId" name="TaskId" />
 
@@ -566,6 +565,7 @@
                             }
                         </select>
                     </div>
+
                     <div class="modal-column">
                         <label for="editTaskPriority">Priority</label>
                         <select id="editTaskPriority" name="Priority">
@@ -574,20 +574,18 @@
                             <option value="3">High</option>
                         </select>
                     </div>
+
                     <div class="modal-column">
                         <label for="editTaskAssigneeId">Assignee</label>
                         <select id="editTaskAssigneeId" name="AssigneeId">
                             <option value="">Unassigned</option>
-                            @foreach (var emp in ViewBag.ProjectTeam as List<ticket_system_web_app.Models.Employee>)
-                            {
-                                <option value="@emp.EId">@emp.FName @emp.LName @(emp.EId == Model.ProjectLeadId ? "(Project Lead)" : "")</option>
-                            }
                         </select>
                     </div>
                 </div>
 
+
                 <div class="form-group">
-                    <label for="editTaskSummary">Summary</label>
+                    <label for="editTaskSummary">Summary*</label>
                     <input type="text" id="editTaskSummary" name="Summary" />
                 </div>
 
@@ -648,6 +646,23 @@
         </div>
     </div>
     <script src="~/js/Projects/ProjectBoard.js"></script>
+    <script>
+                initStatesWithEmployees(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+            Model.ProjectBoard.States.Select(s => new
+            {
+                StateId = s.StateId,
+                Employees = s.AssignedGroups
+                    .SelectMany(ag => ag.Group.Employees)
+                    .Concat(s.AssignedGroups
+                        .Where(ag => ag.Group.Manager != null)
+                        .Select(ag => ag.Group.Manager))
+                    .Select(e => new { e.EId, Name = e.FName + " " + e.LName })
+                    .Distinct()
+            })
+        )));
+
+    </script>
+
 </body>
 </html>
 
