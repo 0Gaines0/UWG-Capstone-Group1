@@ -206,7 +206,7 @@ window.assignGroupToState = function () {
     const stateId = document.getElementById("state-select").value;
     const groupId = document.getElementById("group-select").value;
 
-    fetch(`/Groups/AssignGroups`, {
+    fetch(`/Groups/AssignGroups/${authToken}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -228,7 +228,7 @@ window.assignGroupToState = function () {
 }
 
 window.removeGroupFromState = function (stateId, groupId) {
-    fetch(`/Groups/RemoveStateGroup`, {
+    fetch(`/Groups/RemoveStateGroup/${authToken}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
