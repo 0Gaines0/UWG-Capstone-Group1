@@ -210,6 +210,58 @@ namespace ticket_system_web_app.Controllers
             return Json(changes);
         }
 
+        [HttpPost("/Task/AddComment/{authToken}&{taskId}")]
+        public async Task<IActionResult> AddComment(string authToken, int taskId, [FromForm] string commentText)
+        {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                return BadRequest(new { message = "Not logged in." });
+            }
+
+            if (string.IsNullOrWhiteSpace(commentText))
+            {
+                return BadRequest(new { message = "Comment text cannot be empty." });
+            }
+
+            var task = await _context.Tasks.FindAsync(taskId);
+            if (task == null)
+            {
+                return NotFound(new { message = "Task not found." });
+            }
+
+            var comment = new TaskComment
+            {
+                TaskId = taskId,
+                CommenterId = ActiveEmployee.Employee.EId,
+                CommentText = commentText,
+                CommentedAt = DateTime.Now
+            };
+
+            _context.TaskComments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Comment added successfully." });
+        }
+
+        [HttpGet("/Task/Comments/{taskId}")]
+        public async Task<IActionResult> GetTaskComments(int taskId)
+        {
+            var comments = await _context.TaskComments
+                .Where(c => c.TaskId == taskId)
+                .Include(c => c.Commenter)
+                .OrderByDescending(c => c.CommentedAt)
+                .Select(c => new {
+                    commenter = c.Commenter.FName + " " + c.Commenter.LName,
+                    text = c.CommentText,
+                    date = c.CommentedAt.ToString("g")
+                })
+                .ToListAsync();
+
+            return Json(comments);
+        }
+
+
+
         #endregion
 
         #region Helper Methods

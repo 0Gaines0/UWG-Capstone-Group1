@@ -91,6 +91,15 @@ table state_assigned_group {
   group_id integer [ref: > group.g_id]
 }
 
+table task_comment {
+  comment_id integer pk
+  task_id integer [ref: > task.task_id]
+  commenter_id integer [ref: > employee.e_id]
+  comment_text text
+  commented_at datetime
+}
+
+
 
 
 

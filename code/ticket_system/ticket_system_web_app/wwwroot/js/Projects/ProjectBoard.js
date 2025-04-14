@@ -5,8 +5,8 @@
 let authToken = "FAILED TO GET AUTH TOKEN";
 
 function openEditModal(btn) {
-
-    document.getElementById('editTaskId').value = btn.dataset.taskId;
+    const taskId = btn.dataset.taskId;
+    document.getElementById('editTaskId').value = taskId;
     document.getElementById('editTaskStateId').value = btn.dataset.stateId;
     document.getElementById('editTaskPriority').value = btn.dataset.priority;
     document.getElementById('editTaskSummary').value = btn.dataset.summary;
@@ -19,11 +19,25 @@ function openEditModal(btn) {
     document.getElementById('create-task').style.display = "none";
     document.getElementById('comments-history').style.display = "block";
     document.getElementById('modal-title').textContent = "Edit Task";
-
     document.getElementById('editTaskModal').style.display = 'flex';
-    loadTaskHistory(btn.dataset.taskId);
 
+    loadTaskHistory(taskId);
+    fetch(`/Task/Comments/${taskId}`)
+        .then(res => res.json())
+        .then(comments => {
+            const ul = document.querySelector("#tab-comments ul");
+            ul.innerHTML = "";
+            for (const comment of comments) {
+                const li = document.createElement("li");
+                li.textContent = `${comment.commenter}: ${comment.text} (${comment.date})`;
+                ul.appendChild(li);
+            }
+        })
+        .catch(err => {
+            console.error("Failed to load comments:", err);
+        });
 }
+
 
 function openCreateTaskModal() {
 
@@ -149,14 +163,49 @@ async function loadTaskHistory(taskId) {
 
 function submitComment(event) {
     event.preventDefault();
+
     const commentText = document.getElementById('newCommentText').value.trim();
     if (!commentText) {
         alert("Please enter a comment.");
         return;
     }
-    console.log("Submitting comment:", commentText);
-    document.getElementById('newCommentText').value = "";
+
+    const authToken = document.getElementById("authToken").value;
+    const taskId = document.getElementById("editTaskId").value;
+
+    fetch(`/Task/AddComment/${authToken}&${taskId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({ commentText })
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to submit comment.");
+            return response.json();
+        })
+        .then(() => {
+            document.getElementById('newCommentText').value = "";
+
+            return fetch(`/Task/Comments/${taskId}`);
+        })
+        .then(res => res.json())
+        .then(comments => {
+            const ul = document.querySelector("#tab-comments ul");
+            ul.innerHTML = "";
+            for (const comment of comments) {
+                const li = document.createElement("li");
+                li.textContent = `${comment.commenter}: ${comment.text} (${comment.date})`;
+                ul.appendChild(li);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Failed to submit comment.");
+        });
 }
+
+
 
 let statesWithEmployees = [];
 

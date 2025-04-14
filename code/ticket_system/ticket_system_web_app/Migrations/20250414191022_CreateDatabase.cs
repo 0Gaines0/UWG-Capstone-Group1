@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ticket_system_web_app.Migrations
 {
     /// <inheritdoc />
-    public partial class newMig : Migration
+    public partial class CreateDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -244,6 +244,34 @@ namespace ticket_system_web_app.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "task_comment",
+                columns: table => new
+                {
+                    comment_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    task_id = table.Column<int>(type: "int", nullable: false),
+                    commenter_id = table.Column<int>(type: "int", nullable: false),
+                    comment_text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    commented_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_task_comment", x => x.comment_id);
+                    table.ForeignKey(
+                        name: "FK_task_comment_Employees_commenter_id",
+                        column: x => x.commenter_id,
+                        principalTable: "Employees",
+                        principalColumn: "e_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_task_comment_task_task_id",
+                        column: x => x.task_id,
+                        principalTable: "task",
+                        principalColumn: "task_id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaskChangeLogs",
                 columns: table => new
                 {
@@ -324,6 +352,16 @@ namespace ticket_system_web_app.Migrations
                 column: "state_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_task_comment_commenter_id",
+                table: "task_comment",
+                column: "commenter_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_task_comment_task_id",
+                table: "task_comment",
+                column: "task_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TaskChangeLogs_change_id",
                 table: "TaskChangeLogs",
                 column: "change_id");
@@ -345,6 +383,9 @@ namespace ticket_system_web_app.Migrations
 
             migrationBuilder.DropTable(
                 name: "StateAssignedGroups");
+
+            migrationBuilder.DropTable(
+                name: "task_comment");
 
             migrationBuilder.DropTable(
                 name: "TaskChangeLogs");

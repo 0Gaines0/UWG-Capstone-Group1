@@ -80,6 +80,14 @@ namespace ticket_system_web_app.Data
         /// </value>
         public DbSet<StateAssignedGroup> StateAssignedGroups { get; set; }
 
+        /// <summary>
+        /// Gets or sets the task comments.
+        /// </summary>
+        /// <value>
+        /// The task comments.
+        /// </value>
+        public DbSet<TaskComment> TaskComments { get; set; }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TicketSystemDbContext"/> class.
@@ -149,6 +157,18 @@ namespace ticket_system_web_app.Data
             .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TaskComment>()
+        .HasOne(tc => tc.Task)
+        .WithMany() 
+        .HasForeignKey(tc => tc.TaskId)
+        .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<TaskComment>()
+                .HasOne(tc => tc.Commenter)
+                .WithMany() 
+                .HasForeignKey(tc => tc.CommenterId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
 
