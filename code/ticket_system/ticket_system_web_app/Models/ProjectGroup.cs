@@ -5,8 +5,8 @@
         public int ProjectId { get; set; }
         public int GroupId { get; set; }
 
-        public Project? Project { get; set; }
-        public Group? Group { get; set; }
+        public virtual Project? Project { get; set; }
+        public virtual Group? Group { get; set; }
 
         public bool Accepted { get; set; }
 

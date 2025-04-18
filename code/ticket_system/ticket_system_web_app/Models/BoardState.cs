@@ -22,11 +22,11 @@ namespace ticket_system_web_app.Models
         public int Position { get; set; }
 
         [ForeignKey("BoardId")]
-        public ProjectBoard? ProjectBoard { get; set; }
+        public virtual ProjectBoard? ProjectBoard { get; set; }
 
-        public List<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
+        public virtual ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
 
-        public List<StateAssignedGroup> AssignedGroups { get; set; } = new List<StateAssignedGroup>();
+        public virtual List<StateAssignedGroup> AssignedGroups { get; set; } = new List<StateAssignedGroup>();
 
     }
 }

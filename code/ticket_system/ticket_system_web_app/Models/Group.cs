@@ -47,21 +47,21 @@ namespace ticket_system_web_app.Models
         public string? GDescription { get; set; }
 
         [ForeignKey("ManagerId")]
-        public Employee? Manager { get; set; }
+        public virtual Employee? Manager { get; set; }
         /// <summary>
         /// Gets or sets the employees.
         /// </summary>
         /// <value>
         /// The employees.
         /// </value>
-        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
         /// <summary>
         /// Gets or sets the assigned projects.
         /// </summary>
         /// <value>
         /// The assigned projects.
         /// </value>
-        public ICollection<ProjectGroup> Collaborations { get; set; } = new List<ProjectGroup>();
+        public virtual ICollection<ProjectGroup> Collaborations { get; set; } = new List<ProjectGroup>();
 
     
 

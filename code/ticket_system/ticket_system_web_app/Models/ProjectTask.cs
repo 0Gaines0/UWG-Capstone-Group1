@@ -44,8 +44,7 @@ namespace ticket_system_web_app.Models
         /// Gets or sets the state identifier.
         /// </summary>
         [Column("state_id")]
-        [Required]
-        public int? StateId { get; set; }
+        public int StateId { get; set; }
 
         /// <summary>
         /// Gets or sets the assignee identifier.

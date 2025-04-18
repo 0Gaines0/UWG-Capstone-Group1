@@ -27,7 +27,7 @@ namespace ticket_system_winforms.View
             this.context = context;
         }
 
-        private void login_button_Click(object sender, EventArgs e)
+        private async void login_button_Click(object sender, EventArgs e)
         {
             String username = userNameTextField.Text;
             String password = passwordTextField.Text;
@@ -59,7 +59,7 @@ namespace ticket_system_winforms.View
                 return;
             }
 
-            Employee user = this.context.Employees.FirstOrDefault(employee => employee.Username != null && employee.Username.Equals(username));
+            Employee user = await this.context.Employees.FirstOrDefaultAsync(employee => employee.Username.Equals(username));
             var userPassword = user?.HashedPassword;
             if (user == null || userPassword == null || !this.verifyCorrectPassword(password, userPassword))
             {

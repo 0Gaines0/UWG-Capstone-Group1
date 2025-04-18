@@ -25,9 +25,11 @@ namespace ticket_system_winforms
             string connectionString = DBConfig.ConnectionString;
             var serviceProvider = new ServiceCollection()
                 .AddDbContext<TicketSystemDbContext>(options =>
-                    options.UseSqlServer(connectionString)) 
+                    options.UseLazyLoadingProxies().UseSqlServer(connectionString)) 
                 .BuildServiceProvider();
             var context = serviceProvider.GetRequiredService<TicketSystemDbContext>();
+            context.Database.EnsureCreated();
+
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
