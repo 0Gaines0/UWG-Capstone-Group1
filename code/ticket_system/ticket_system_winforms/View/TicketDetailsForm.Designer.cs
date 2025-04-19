@@ -37,16 +37,21 @@
             // lblSummary
             // 
             lblSummary.AutoSize = true;
+            lblSummary.BackColor = System.Drawing.Color.Black;
+            lblSummary.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            lblSummary.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            lblSummary.ForeColor = System.Drawing.Color.White;
             lblSummary.Location = new System.Drawing.Point(12, 9);
             lblSummary.Name = "lblSummary";
-            lblSummary.Size = new System.Drawing.Size(64, 15);
+            lblSummary.Size = new System.Drawing.Size(183, 47);
             lblSummary.TabIndex = 0;
             lblSummary.Text = "Summary: ";
             // 
             // lblDescription
             // 
             lblDescription.AutoSize = true;
-            lblDescription.Location = new System.Drawing.Point(12, 40);
+            lblDescription.ForeColor = System.Drawing.Color.White;
+            lblDescription.Location = new System.Drawing.Point(12, 112);
             lblDescription.Name = "lblDescription";
             lblDescription.Size = new System.Drawing.Size(73, 15);
             lblDescription.TabIndex = 1;
@@ -54,8 +59,10 @@
             // 
             // lblPriority
             // 
+            lblPriority.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             lblPriority.AutoSize = true;
-            lblPriority.Location = new System.Drawing.Point(12, 70);
+            lblPriority.ForeColor = System.Drawing.Color.White;
+            lblPriority.Location = new System.Drawing.Point(12, 180);
             lblPriority.Name = "lblPriority";
             lblPriority.Size = new System.Drawing.Size(51, 15);
             lblPriority.TabIndex = 2;
@@ -63,8 +70,10 @@
             // 
             // lblState
             // 
+            lblState.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             lblState.AutoSize = true;
-            lblState.Location = new System.Drawing.Point(12, 100);
+            lblState.ForeColor = System.Drawing.Color.White;
+            lblState.Location = new System.Drawing.Point(12, 204);
             lblState.Name = "lblState";
             lblState.Size = new System.Drawing.Size(39, 15);
             lblState.TabIndex = 3;
@@ -72,16 +81,19 @@
             // 
             // cmbState
             // 
+            cmbState.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             cmbState.FormattingEnabled = true;
-            cmbState.Location = new System.Drawing.Point(12, 120);
+            cmbState.Location = new System.Drawing.Point(12, 222);
             cmbState.Name = "cmbState";
-            cmbState.Size = new System.Drawing.Size(200, 23);
+            cmbState.Size = new System.Drawing.Size(246, 23);
             cmbState.TabIndex = 4;
             // 
             // chkAssigned
             // 
+            chkAssigned.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             chkAssigned.AutoSize = true;
-            chkAssigned.Location = new System.Drawing.Point(12, 150);
+            chkAssigned.ForeColor = System.Drawing.Color.White;
+            chkAssigned.Location = new System.Drawing.Point(12, 251);
             chkAssigned.Name = "chkAssigned";
             chkAssigned.Size = new System.Drawing.Size(108, 19);
             chkAssigned.TabIndex = 5;
@@ -90,27 +102,37 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new System.Drawing.Point(12, 180);
+            btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            btnSave.BackColor = System.Drawing.Color.FromArgb(159, 122, 234);
+            btnSave.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            btnSave.ForeColor = System.Drawing.Color.White;
+            btnSave.Location = new System.Drawing.Point(12, 276);
             btnSave.Name = "btnSave";
-            btnSave.Size = new System.Drawing.Size(100, 30);
+            btnSave.Size = new System.Drawing.Size(120, 40);
             btnSave.TabIndex = 6;
             btnSave.Text = "Save Changes";
-            btnSave.UseVisualStyleBackColor = true;
+            btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new System.Drawing.Point(130, 180);
+            btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
+            btnCancel.BackColor = System.Drawing.Color.FromArgb(159, 122, 234);
+            btnCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            btnCancel.ForeColor = System.Drawing.Color.White;
+            btnCancel.Location = new System.Drawing.Point(138, 276);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new System.Drawing.Size(120, 30);
+            btnCancel.Padding = new System.Windows.Forms.Padding(3);
+            btnCancel.Size = new System.Drawing.Size(120, 40);
             btnCancel.TabIndex = 7;
             btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
             // TaskDetailsForm
             // 
-            ClientSize = new System.Drawing.Size(284, 221);
+            BackColor = System.Drawing.Color.FromArgb(41, 84, 61);
+            ClientSize = new System.Drawing.Size(269, 328);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(chkAssigned);

@@ -36,8 +36,8 @@ namespace ticket_system_winforms.View
             cmbState.ValueMember = "StateId";
             cmbState.SelectedValue = task.StateId;
 
-            lblSummary.Text = $"Summary: {task.Summary}";
-            lblDescription.Text = $"Description: {task.Description}";
+            lblSummary.Text = $"Summary: {Environment.NewLine}{task.Summary}";
+            lblDescription.Text = $"Description: {Environment.NewLine}{task.Description}";
             lblPriority.Text = $"Priority: {this.getPriority(task.Priority)}";
 
             chkAssigned.Checked = task.AssigneeId == this.currentUserId;

@@ -28,17 +28,19 @@ namespace ticket_system_winforms.View.UserControls
             this.task = task;
 
             infoLabel.Text = $"Ticket#{this.task.TaskId} - {this.task.Summary} ({this.task.Priority})";
-            viewButton.Text = "View";
 
-            viewButton.Click += (s, e) =>
+            this.Click += (s, e) => onClick(task, context);
+            infoLabel.Click += (s, e) => onClick(task, context);
+        }
+
+        private void onClick(ProjectTask task, TicketSystemDbContext context)
+        {
+            var form = new TaskDetailsForm(task, context);
+            form.FormClosed += (sender, args) =>
             {
-                var form = new TaskDetailsForm(task, context);
-                form.FormClosed += (sender, args) =>
-                {
-                    ReloadRequested?.Invoke(this, EventArgs.Empty);
-                };
-                form.ShowDialog();
+                ReloadRequested?.Invoke(this, EventArgs.Empty);
             };
+            form.ShowDialog();
         }
     }
 }
