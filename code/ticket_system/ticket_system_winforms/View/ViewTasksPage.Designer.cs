@@ -8,7 +8,6 @@ namespace ticket_system_winforms.View
 
         private System.Windows.Forms.ComboBox comboBoxTaskFilter;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelTasks;
-        private System.Windows.Forms.Button createTaskButton;
         private System.Windows.Forms.Button logoutButton;
 
         protected override void Dispose(bool disposing)
@@ -23,7 +22,6 @@ namespace ticket_system_winforms.View
             comboBoxTaskFilter = new ComboBox();
             flowLayoutPanelTasks = new FlowLayoutPanel();
             logoutButton = new Button();
-            createTaskButton = new Button();
             SuspendLayout();
             // 
             // comboBoxTaskFilter
@@ -57,20 +55,9 @@ namespace ticket_system_winforms.View
             logoutButton.UseVisualStyleBackColor = true;
             logoutButton.Click += logoutButton_Click;
             // 
-            // createTaskButton
-            // 
-            createTaskButton.Location = new System.Drawing.Point(230, 7);
-            createTaskButton.Name = "createTaskButton";
-            createTaskButton.Size = new System.Drawing.Size(122, 32);
-            createTaskButton.TabIndex = 0;
-            createTaskButton.Text = "Create Task";
-            createTaskButton.UseVisualStyleBackColor = true;
-            createTaskButton.Click += createTaskButton_Click;
-            // 
             // ViewTasksPage
             // 
             ClientSize = new System.Drawing.Size(800, 450);
-            Controls.Add(createTaskButton);
             Controls.Add(logoutButton);
             Controls.Add(flowLayoutPanelTasks);
             Controls.Add(comboBoxTaskFilter);

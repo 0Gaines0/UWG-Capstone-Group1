@@ -40,7 +40,7 @@ namespace ticket_system_web_app.Models
         /// </value>
         [BindNever]
         [Column("project_lead")]
-        public Employee? ProjectLead { get; set; }
+        public virtual Employee? ProjectLead { get; set; }
 
         /// <summary>
         /// Gets or sets the p title.
@@ -66,9 +66,9 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The assigned groups.
         /// </value>
-        public ICollection<ProjectGroup> Collaborators { get; set; }
+        public virtual ICollection<ProjectGroup> Collaborators { get; set; }
 
-        public ProjectBoard? ProjectBoard { get; set; }
+        public virtual ProjectBoard? ProjectBoard { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.

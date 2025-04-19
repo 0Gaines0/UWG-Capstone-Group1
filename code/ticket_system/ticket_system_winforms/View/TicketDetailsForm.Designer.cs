@@ -10,8 +10,8 @@
         private System.Windows.Forms.Label lblState;
         private System.Windows.Forms.ComboBox cmbState;  // Dropdown for Task State
         private System.Windows.Forms.CheckBox chkAssigned;
-        private System.Windows.Forms.Button btnChangeState;
-        private System.Windows.Forms.Button btnAssignUnassign;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnCancel;
 
         protected override void Dispose(bool disposing)
         {
@@ -30,8 +30,8 @@
             lblState = new System.Windows.Forms.Label();
             cmbState = new System.Windows.Forms.ComboBox();
             chkAssigned = new System.Windows.Forms.CheckBox();
-            btnChangeState = new System.Windows.Forms.Button();
-            btnAssignUnassign = new System.Windows.Forms.Button();
+            btnSave = new System.Windows.Forms.Button();
+            btnCancel = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // lblSummary
@@ -80,7 +80,6 @@
             // 
             // chkAssigned
             // 
-            chkAssigned.AutoCheck = false;
             chkAssigned.AutoSize = true;
             chkAssigned.Location = new System.Drawing.Point(12, 150);
             chkAssigned.Name = "chkAssigned";
@@ -89,31 +88,31 @@
             chkAssigned.Text = "Assigned to me";
             chkAssigned.UseVisualStyleBackColor = true;
             // 
-            // btnChangeState
+            // btnSave
             // 
-            btnChangeState.Location = new System.Drawing.Point(12, 180);
-            btnChangeState.Name = "btnChangeState";
-            btnChangeState.Size = new System.Drawing.Size(100, 30);
-            btnChangeState.TabIndex = 6;
-            btnChangeState.Text = "Change State";
-            btnChangeState.UseVisualStyleBackColor = true;
-            btnChangeState.Click += btnChangeState_Click;
+            btnSave.Location = new System.Drawing.Point(12, 180);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new System.Drawing.Size(100, 30);
+            btnSave.TabIndex = 6;
+            btnSave.Text = "Save Changes";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
-            // btnAssignUnassign
+            // btnCancel
             // 
-            btnAssignUnassign.Location = new System.Drawing.Point(130, 180);
-            btnAssignUnassign.Name = "btnAssignUnassign";
-            btnAssignUnassign.Size = new System.Drawing.Size(120, 30);
-            btnAssignUnassign.TabIndex = 7;
-            btnAssignUnassign.Text = "Assign / Unassign";
-            btnAssignUnassign.UseVisualStyleBackColor = true;
-            btnAssignUnassign.Click += btnAssignUnassign_Click;
+            btnCancel.Location = new System.Drawing.Point(130, 180);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new System.Drawing.Size(120, 30);
+            btnCancel.TabIndex = 7;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // TaskDetailsForm
             // 
             ClientSize = new System.Drawing.Size(284, 221);
-            Controls.Add(btnAssignUnassign);
-            Controls.Add(btnChangeState);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSave);
             Controls.Add(chkAssigned);
             Controls.Add(cmbState);
             Controls.Add(lblState);

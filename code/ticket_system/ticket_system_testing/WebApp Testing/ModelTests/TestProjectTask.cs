@@ -20,7 +20,7 @@ namespace ticket_system_testing.WebApp_Testing.ModelTests
             Assert.That(projectTask.Description, Is.Null);
             Assert.That(projectTask.Priority, Is.EqualTo(0));
             Assert.That(projectTask.CreatedDate, Is.EqualTo(DateTime.MinValue));
-            Assert.That(projectTask.StateId, Is.Null);
+            Assert.That(projectTask.StateId, Is.EqualTo(0));
             Assert.That(projectTask.AssigneeId, Is.Null);
             Assert.That(projectTask.BoardState, Is.Null);
             Assert.That(projectTask.Assignee, Is.Null);

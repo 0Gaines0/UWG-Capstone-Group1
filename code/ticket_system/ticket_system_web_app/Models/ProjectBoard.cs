@@ -34,7 +34,7 @@ namespace ticket_system_web_app.Models
         /// The project.
         /// </value>
         [ForeignKey("ProjectId")]
-        public Project? Project { get; set; }
+        public virtual Project? Project { get; set; }
 
         /// <summary>
         /// Gets or sets the states.
@@ -42,6 +42,6 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The states.
         /// </value>
-        public List<BoardState> States { get; set; } = new List<BoardState>();
+        public virtual List<BoardState> States { get; set; } = new List<BoardState>();
     }
 }

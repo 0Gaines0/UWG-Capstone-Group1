@@ -8,6 +8,6 @@ namespace ticket_system_winforms.DAL
 {
     internal class DBConfig
     {
-        internal const string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ticket_system_database;Integrated Security=True;Pooling=False;Connect Timeout=30";
+        internal const string ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ticket_system_database;Integrated Security=True;Connect Timeout=30;MultipleActiveResultSets=True";
     }
 }

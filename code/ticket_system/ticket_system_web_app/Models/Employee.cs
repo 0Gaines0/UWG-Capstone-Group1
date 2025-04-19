@@ -97,14 +97,14 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The groups existing in.
         /// </value>
-        public ICollection<Group> GroupsExistingIn {  get; set; } = new List<Group>();
+        public virtual ICollection<Group> GroupsExistingIn {  get; set; } = new List<Group>();
         /// <summary>
         /// Gets or sets the projects leading.
         /// </summary>
         /// <value>
         /// The projects leading.
         /// </value>
-        public ICollection<Project> ProjectsLeading { get; set; } = new List<Project>();
+        public virtual ICollection<Project> ProjectsLeading { get; set; } = new List<Project>();
 
         /// <summary>
         /// Gets or sets the managed groups.
@@ -112,7 +112,7 @@ namespace ticket_system_web_app.Models
         /// <value>
         /// The managed groups.
         /// </value>
-        public ICollection<Group> ManagedGroups { get; set; } = new List<Group>();
+        public virtual ICollection<Group> ManagedGroups { get; set; } = new List<Group>();
 
 
         private static string VALID_ERROR_MESSAGE = "Parameter must not be null or empty";

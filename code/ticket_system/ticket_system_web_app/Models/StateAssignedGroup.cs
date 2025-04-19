@@ -12,9 +12,9 @@ namespace ticket_system_web_app.Models
         public int GroupId { get; set; }
 
         [ForeignKey("StateId")]
-        public BoardState? BoardState { get; set; }
+        public virtual BoardState? BoardState { get; set; }
 
         [ForeignKey("GroupId")]
-        public Group? Group { get; set; }
+        public virtual Group? Group { get; set; }
     }
 }

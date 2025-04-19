@@ -18,80 +18,83 @@ namespace ticket_system_winforms.View
     public partial class TaskDetailsForm : Form
     {
         private ProjectTask task;
-        private TicketSystemDbContext _context;
+        private TicketSystemDbContext context;
         private readonly int currentUserId;
+        private int originalStateId;
+        private int? originalAssigneeId;
 
         public TaskDetailsForm(ProjectTask task, TicketSystemDbContext context)
         {
             InitializeComponent();
             this.task = task;
             currentUserId = ActiveEmployee.Employee.EId;
-            _context = context;
+            this.context = context;
 
-            /*         string query = @"
-                     select g.*
-                     from groups g
-                     where g.g_id in (
-                         select gm.groupsexistingingid
-                         from group_member gm
-                         where gm.employeeseid = @userid
-                         ) or g.manager_id = @userid;";
-
-                     var groups = this._context.groups.fromsqlraw(query, new sqlparameter("@userid", currentuserid)).tolist();
-                     var boardstates = this._context.stateassignedgroups.where(sag => groups.contains(sag.group)).select(sag => sag.boardstate).tolist();*/
-            //context.ProjectBoards.Where(pb => pb.BoardId == task.BoardState.BoardId).SelectMany(pb => pb.States).ToList()
-
-            cmbState.DataSource = _context.BoardStates.ToList();
+            var boardStatesForTask = this.context.ProjectBoards.Where(pb => pb.BoardId == this.task.BoardState.BoardId).SelectMany(pb => pb.States).ToList();
+            cmbState.DataSource = boardStatesForTask;
             cmbState.DisplayMember = "StateName";
             cmbState.ValueMember = "StateId";
             cmbState.SelectedValue = task.StateId;
 
             lblSummary.Text = $"Summary: {task.Summary}";
             lblDescription.Text = $"Description: {task.Description}";
-            lblPriority.Text = $"Priority: {task.Priority}";
-            lblState.Text = $"State: {task.StateId}";
+            lblPriority.Text = $"Priority: {this.getPriority(task.Priority)}";
 
-            chkAssigned.Checked = task.AssigneeId == currentUserId;
-            btnAssignUnassign.Text = chkAssigned.Checked ? "Unassign" : "Assign";
+            chkAssigned.Checked = task.AssigneeId == this.currentUserId;
+
+            originalStateId = task.StateId;
+            originalAssigneeId = task.AssigneeId;
         }
 
-        private void btnAssignUnassign_Click(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            if (chkAssigned.Checked)
-            {
-                task.AssigneeId = null;
-                btnAssignUnassign.Text = "Assign";
-                chkAssigned.Checked = false;
-            }
-            else
-            {
-                task.AssigneeId = currentUserId;
-                btnAssignUnassign.Text = "Unassign";
-                chkAssigned.Checked = true;
-            }
-            _context.SaveChanges();
-        }
-
-        private void btnChangeState_Click(object sender, EventArgs e)
-        {
+            var selfAssigned = chkAssigned.Checked;
             var selectedStateId = (int)cmbState.SelectedValue;
-            task.StateId = selectedStateId;
 
-            _context.SaveChanges();
+            if ((selfAssigned == (originalAssigneeId.HasValue)) && (this.originalStateId == selectedStateId))
+            {
+                MessageBox.Show("No changes made.");
+                return;
+            }
+
+            if (selfAssigned)
+            {
+                var employeeGroups = ActiveEmployee.Employee.GroupsExistingIn.Union(ActiveEmployee.Employee.ManagedGroups);
+                var employeeStates = this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).Select(pb => pb.StateId).ToList();
+                if (!employeeStates.Contains((int)cmbState.SelectedValue))
+                {
+                    MessageBox.Show($"You can't be assigned to a ticket in the {cmbState.Text} state.");
+                    return;
+                }
+            }
+                       
+
+            task.StateId = selectedStateId;
+            task.AssigneeId = selfAssigned ? currentUserId : (int?)null;
+
+            context.SaveChanges();
+            MessageBox.Show("Changes saved.");
+            Close();
         }
 
-/*        private async Task<List<Group>> getGroupsForUser(int userId)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            string query = @"
-            SELECT g.*
-            FROM Groups g
-            WHERE g.g_id IN (
-                SELECT gm.GroupsExistingInGId
-                FROM group_member gm
-                WHERE gm.EmployeesEId = @UserId
-                ) OR g.manager_id = @UserId;";
+            Close();
+        }
 
-            return await this._context.Groups.FromSqlRaw(query, new SqlParameter("@UserId", userId)).ToListAsync();
-        }*/
+        private String getPriority(int priority)
+        {
+            switch (priority)
+            {
+                case 1:
+                    return "Low";
+                case 2:
+                    return "Medium";
+                case 3:
+                    return "High";
+                default:
+                    return "Medium";
+            }
+        }
     }
 }
