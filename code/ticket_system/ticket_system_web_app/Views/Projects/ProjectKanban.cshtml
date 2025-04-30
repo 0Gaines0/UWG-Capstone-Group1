@@ -1,6 +1,4 @@
 ﻿@{
-    @model ticket_system_web_app.Models.Project
-
     if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
@@ -8,6 +6,7 @@
         return;
     }
 
+    @model ticket_system_web_app.Models.Project
 }
 
 
@@ -477,16 +476,13 @@
         <div class="sidebar">
             <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
             <h2>@Model.PTitle</h2>
-            @if (ActiveEmployee.IsAdmin())
+            <button class="button" onclick="openCreateTaskModal()">Create Task</button>
+            @if (ActiveEmployee.IsAdmin() || ActiveEmployee.IsManager())
             {
-                <button class="button" onclick="openCreateTaskModal()">Create Task</button>
                 <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
                     Edit Board
                 </button>
             }
-
-            
-
         </div>
 
         <div class="main-content">
@@ -647,7 +643,7 @@
             Model.ProjectBoard.States.Select(s => new
             {
                 StateId = s.StateId,
-                Employees = s.AssignedGroups
+                    Employees = s.AssignedGroups
                     .SelectMany(ag => ag.Group.Employees)
                     .Concat(s.AssignedGroups
                         .Where(ag => ag.Group.Manager != null)
