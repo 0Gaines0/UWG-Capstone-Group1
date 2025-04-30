@@ -35,37 +35,44 @@
             usernameLabel = new System.Windows.Forms.Label();
             passwordLabel = new System.Windows.Forms.Label();
             validationErrorProvider = new System.Windows.Forms.ErrorProvider(components);
+            label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)validationErrorProvider).BeginInit();
             SuspendLayout();
             // 
             // login_button
             // 
-            login_button.Location = new System.Drawing.Point(357, 207);
+            login_button.BackColor = System.Drawing.Color.FromArgb(159, 122, 234);
+            login_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            login_button.ForeColor = System.Drawing.Color.White;
+            login_button.Location = new System.Drawing.Point(122, 280);
             login_button.Name = "login_button";
-            login_button.Size = new System.Drawing.Size(75, 23);
+            login_button.Padding = new System.Windows.Forms.Padding(3);
+            login_button.Size = new System.Drawing.Size(100, 40);
             login_button.TabIndex = 0;
             login_button.Text = "Log In";
-            login_button.UseVisualStyleBackColor = true;
+            login_button.UseVisualStyleBackColor = false;
             login_button.Click += login_button_Click;
             // 
             // userNameTextField
             // 
-            userNameTextField.Location = new System.Drawing.Point(346, 94);
+            userNameTextField.Location = new System.Drawing.Point(95, 172);
             userNameTextField.Name = "userNameTextField";
-            userNameTextField.Size = new System.Drawing.Size(100, 23);
+            userNameTextField.Size = new System.Drawing.Size(151, 23);
             userNameTextField.TabIndex = 1;
             // 
             // passwordTextField
             // 
-            passwordTextField.Location = new System.Drawing.Point(346, 160);
+            passwordTextField.Location = new System.Drawing.Point(95, 229);
             passwordTextField.Name = "passwordTextField";
-            passwordTextField.Size = new System.Drawing.Size(100, 23);
+            passwordTextField.PasswordChar = '*';
+            passwordTextField.Size = new System.Drawing.Size(151, 23);
             passwordTextField.TabIndex = 2;
             // 
             // usernameLabel
             // 
             usernameLabel.AutoSize = true;
-            usernameLabel.Location = new System.Drawing.Point(346, 67);
+            usernameLabel.ForeColor = System.Drawing.Color.White;
+            usernameLabel.Location = new System.Drawing.Point(95, 154);
             usernameLabel.Name = "usernameLabel";
             usernameLabel.Size = new System.Drawing.Size(60, 15);
             usernameLabel.TabIndex = 3;
@@ -74,7 +81,8 @@
             // passwordLabel
             // 
             passwordLabel.AutoSize = true;
-            passwordLabel.Location = new System.Drawing.Point(346, 133);
+            passwordLabel.ForeColor = System.Drawing.Color.White;
+            passwordLabel.Location = new System.Drawing.Point(95, 211);
             passwordLabel.Name = "passwordLabel";
             passwordLabel.Size = new System.Drawing.Size(57, 15);
             passwordLabel.TabIndex = 4;
@@ -85,11 +93,26 @@
             validationErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             validationErrorProvider.ContainerControl = this;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = System.Drawing.Color.Black;
+            label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            label1.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+            label1.ForeColor = System.Drawing.Color.White;
+            label1.Location = new System.Drawing.Point(28, 41);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(106, 47);
+            label1.TabIndex = 5;
+            label1.Text = "Login";
+            // 
             // LoginPage
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(800, 450);
+            BackColor = System.Drawing.Color.FromArgb(41, 84, 61);
+            ClientSize = new System.Drawing.Size(334, 461);
+            Controls.Add(label1);
             Controls.Add(passwordLabel);
             Controls.Add(usernameLabel);
             Controls.Add(passwordTextField);
@@ -110,5 +133,6 @@
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.ErrorProvider validationErrorProvider;
+        private System.Windows.Forms.Label label1;
     }
 }
