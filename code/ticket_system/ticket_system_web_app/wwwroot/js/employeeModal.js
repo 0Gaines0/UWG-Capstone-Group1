@@ -97,6 +97,7 @@ function openEditModal() {
         .catch(error => console.error('Error fetching employee:', error));
     document.getElementById("modalTitle").textContent = "Edit Employee";
     document.getElementById("passwordField").style.display = "none";
+    document.getElementById("confirmPasswordField").style.display = "none";
     document.getElementById("create-btn").style.display = "none";
     document.getElementById("edit-btn").style.display = "flex";
     document.getElementById("createEmployeeModal").style.display = "flex";
@@ -120,6 +121,7 @@ async function resetModal() {
     document.getElementById("lastName").value = "";
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
+    document.getElementById("confirmPassword").value = "";
     document.getElementById("email").value = "";
     document.getElementById("isAdmin").checked = false;
 
@@ -153,10 +155,20 @@ function validateFormForCreatingEmployee(formData) {
         displayError("passwordError", "Password is required.");
         isValid = false;
     }
+
     if (formData.Email === "") {
         displayError("emailError", "Email is required.");
         isValid = false;
     }
+
+    if (formData.Password === "") {
+        displayError("passwordError", "Password is required.");
+        isValid = false;
+    } else if (formData.Password !== document.getElementById("confirmPassword").value.trim()) {
+        displayError("confirmPasswordError", "Passwords do not match.");
+        isValid = false;
+    }
+
 
     return isValid;
 }
