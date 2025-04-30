@@ -27,10 +27,25 @@ namespace ticket_system_winforms.View.UserControls
             InitializeComponent();
             this.task = task;
 
-            infoLabel.Text = $"Ticket#{this.task.TaskId} - {this.task.Summary} ({this.task.Priority})";
+            infoLabel.Text = $"Ticket#{this.task.TaskId} - {this.task.Summary} ({this.getPriority(this.task.Priority)})";
 
             this.Click += (s, e) => onClick(task, context);
             infoLabel.Click += (s, e) => onClick(task, context);
+        }
+
+        private String getPriority(int priority)
+        {
+            switch (priority)
+            {
+                case 1:
+                    return "Low";
+                case 2:
+                    return "Medium";
+                case 3:
+                    return "High";
+                default:
+                    return "Medium";
+            }
         }
 
         private void onClick(ProjectTask task, TicketSystemDbContext context)

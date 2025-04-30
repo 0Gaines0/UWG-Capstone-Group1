@@ -1,8 +1,11 @@
-﻿namespace ticket_system_winforms.View.UserControls
+﻿using System;
+
+namespace ticket_system_winforms.View.UserControls
 {
     partial class TaskItemControl
     {
         private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Label infoLabel;
 
         protected override void Dispose(bool disposing)
         {
@@ -37,11 +40,9 @@
             Controls.Add(infoLabel);
             Margin = new System.Windows.Forms.Padding(5);
             Name = "TaskItemControl";
-            Size = new System.Drawing.Size(300, 40);
+            AutoSize = true;
             ResumeLayout(false);
             PerformLayout();
         }
-
-        private System.Windows.Forms.Label infoLabel;
     }
 }

@@ -38,6 +38,7 @@ namespace ticket_system_winforms.View
             // 
             flowLayoutPanelTasks.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             flowLayoutPanelTasks.AutoScroll = true;
+            flowLayoutPanelTasks.WrapContents = true;
             flowLayoutPanelTasks.BackColor = System.Drawing.Color.FromArgb(15, 30, 19);
             flowLayoutPanelTasks.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanelTasks.Location = new System.Drawing.Point(12, 50);
