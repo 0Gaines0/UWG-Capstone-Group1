@@ -464,6 +464,35 @@
             border-radius: 5px;
         }
 
+        .assigned-groups {
+            background-color: #3b5743;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+            .assigned-groups strong {
+                display: block;
+                margin-bottom: 5px;
+                color: #9f7aea;
+            }
+
+            .assigned-groups ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+            }
+
+            .assigned-groups li {
+                background-color: #4a6c57;
+                padding: 6px 10px;
+                margin-bottom: 5px;
+                border-radius: 5px;
+            }
+
+
 
 
 
@@ -497,6 +526,24 @@
                     {
                         <div class="column">
                             <h3>@state.StateName</h3>
+                            @if (state.AssignedGroups != null && state.AssignedGroups.Any())
+                            {
+                                <div class="assigned-groups">
+                                    <strong>Groups:</strong>
+                                    <ul>
+                                        @foreach (var assignedGroup in state.AssignedGroups)
+                                        {
+                                            <li>@assignedGroup.Group?.GName</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="assigned-groups">
+                                    <em>No groups assigned</em>
+                                </div>
+                            }
 
                             @foreach (var task in state.Tasks ?? Enumerable.Empty<ticket_system_web_app.Models.ProjectTask>())
                             {
@@ -505,17 +552,17 @@
                                         <strong>Task #@task.TaskId</strong>
                                         <div class="task-actions">
                                             <a href="#" class="edit-btn"
-                                                data-task-id="@task.TaskId"
-                                                data-state-id="@task.StateId"
-                                                data-priority="@task.Priority"
-                                                data-summary="@task.Summary"
-                                                data-description="@task.Description"
-                                                data-assignee-id="@task.AssigneeId"
-                                                onclick="openEditModal(this)">View</a>
+                                               data-task-id="@task.TaskId"
+                                               data-state-id="@task.StateId"
+                                               data-priority="@task.Priority"
+                                               data-summary="@task.Summary"
+                                               data-description="@task.Description"
+                                               data-assignee-id="@task.AssigneeId"
+                                               onclick="openEditModal(this)">View</a>
 
                                             <a href="#" class="delete-btn"
-                                                data-task-id="@task.TaskId"
-                                                onclick="confirmDeleteTask(this)">Delete</a>
+                                               data-task-id="@task.TaskId"
+                                               onclick="confirmDeleteTask(this)">Delete</a>
                                         </div>
                                     </div>
                                     @task.Summary<br />
