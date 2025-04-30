@@ -1,15 +1,14 @@
 ﻿@model int
 @{
-    Layout = null; // Set your layout here if applicable
-    var notLogin = ActiveEmployee.Employee == null;
-    var hasManagerPerms = ActiveEmployee.IsManager();
-
-    if (notLogin)
+    if (!ActiveEmployee.IsLoggedIn())
     {
         Context.Response.StatusCode = 404;
         Context.Response.Redirect("/Login/Index");
         return;
     }
+
+    Layout = null; // Set your layout here if applicable
+    var hasManagerPerms = ActiveEmployee.IsManager();
 }
 
 <!DOCTYPE html>
