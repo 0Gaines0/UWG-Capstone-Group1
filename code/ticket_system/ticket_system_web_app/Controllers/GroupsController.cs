@@ -368,11 +368,9 @@ namespace ticket_system_web_app.Controllers
                 .Where(sg => sg.StateId == request.StateId)
                 .ToList();
 
-            var newGroupIds = request.GroupIds.Except(existingAssignments.Select(ea => ea.GroupId)).ToList();
-
-            var groupsToRemove = existingAssignments
-                .Where(ea => !request.GroupIds.Contains(ea.GroupId)).ToList();
-            context.StateAssignedGroups.RemoveRange(groupsToRemove);
+            var newGroupIds = request.GroupIds
+                .Except(existingAssignments.Select(ea => ea.GroupId))
+                .ToList();
 
             foreach (var groupId in newGroupIds)
             {
@@ -387,6 +385,7 @@ namespace ticket_system_web_app.Controllers
 
             return Ok(new { message = "Groups assigned successfully" });
         }
+
 
         /// <summary>
         /// Removes groups from a task state based on the specified info.

@@ -38,7 +38,6 @@ function openEditModal(btn) {
         });
 }
 
-
 function openCreateTaskModal() {
 
     document.getElementById('editTaskStateId').value = document.getElementById('editTaskStateId').options[0].value;
