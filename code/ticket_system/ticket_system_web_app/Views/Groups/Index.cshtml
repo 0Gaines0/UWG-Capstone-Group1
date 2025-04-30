@@ -327,10 +327,13 @@
                         <input type="text" id="groupSearch" placeholder="Search Groups..." oninput="filterGroups()">
                     </div>
 
-                    @if (ActiveEmployee.IsAdmin())
+                    @if (ActiveEmployee.IsAdmin() || ActiveEmployee.IsManager())
                     {
                         <div class="button-container">
-                            <button class="btn" onclick="openCreateModal()">+ Add New Group</button>
+                            @if (ActiveEmployee.IsAdmin())
+                            {
+                                <button class="btn" onclick="openCreateModal()">+ Add New Group</button>
+                            }
                             <button class="btn" onclick="openEditModal()">Edit Group</button>
                             <button class="btn" onclick="openRemoveModal()">- Remove Group</button>
                         </div>
