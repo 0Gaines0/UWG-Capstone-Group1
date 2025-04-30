@@ -212,9 +212,9 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(RemoveGroup)} Got auth token: {authToken}");
                 return BadRequest(new { message = "Not logged in." });
             }
-            if (!ActiveEmployee.IsManager())
+            if (!(ActiveEmployee.IsManager() || ActiveEmployee.IsAdmin()))
             {
-                return BadRequest(new { message = "Manager permissions required." });
+                return BadRequest(new { message = "Manager or admin permissions required." });
             }
 
             var groupName = request.GroupName;
@@ -226,6 +226,10 @@ namespace ticket_system_web_app.Controllers
             {
                 return BadRequest(new { success = false, message = "Group name does not exist." });
 
+            }
+            if (!(ActiveEmployee.IsAdmin() || this.context.Groups.Any(group => group.GName == groupName && group.ManagerId == ActiveEmployee.Employee.EId)))
+            {
+                return BadRequest(new { success = false, message = "Not manager of the deleted group." });
             }
 
             await this.removeGroupFromDb(groupName);
@@ -248,12 +252,16 @@ namespace ticket_system_web_app.Controllers
                 Console.WriteLine($"{nameof(SaveGroupEdits)} Got auth token: {authToken}");
                 return Json("Not logged in.");
             }
-            if (!ActiveEmployee.IsManager())
+            if (!(ActiveEmployee.IsManager() || ActiveEmployee.IsAdmin()))
             {
-                return Json("Manager permissions required.");
+                return BadRequest(new { message = "Manager or admin permissions required." });
             }
 
             var group = await this.context.Groups.Include(g => g.Employees).FirstOrDefaultAsync(g => g.GId == jsonRequest.GroupId);
+            if (!(ActiveEmployee.IsAdmin() || this.context.Groups.Any(g => g.GName == group.GName && g.ManagerId == ActiveEmployee.Employee.EId)))
+            {
+                return BadRequest(new { success = false, message = "Not manager of the modified group." });
+            }
             var duplicateGroup = await this.context.Groups.FirstOrDefaultAsync(g => g.GName == jsonRequest.GroupName && g.GId != jsonRequest.GroupId);
             if (duplicateGroup != null)
             {
