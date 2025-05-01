@@ -245,21 +245,48 @@ namespace ticket_system_web_app.Controllers
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 Console.WriteLine($"{nameof(GetProjectRelatedToEmployee)} Got auth token: {authToken}");
-                return Json(new { message = "Not logged in." });
+                return Json(new { success = false, message = "Not logged in." });
             }
 
             var eId = ActiveEmployee.Employee?.EId;
-            var leadProject = await this._context.Projects.Where(proj => proj.ProjectLeadId == eId).ToListAsync();
-            var groupProject = await this._context.Projects.Include(proj => proj.Collaborators).Where(proj => proj.Collaborators.Any(collab => collab.Group.Employees.Any(employee => employee.EId == eId))).ToListAsync();
-            var allProjects = leadProject.Concat(groupProject).Distinct().ToList();
 
-            var projectData = allProjects.Select(proj => new
+            if (ActiveEmployee.Employee?.IsAdmin == true)
+            {
+                var allProjects = await _context.Projects.ToListAsync();
+
+                var allProjectData = allProjects.Select(proj => new
+                {
+                    PId = proj.PId,
+                    PTitle = proj.PTitle
+                }).ToList();
+
+                return Json(new { success = true, data = allProjectData });
+            }
+
+            var leadProject = await _context.Projects
+                .Where(proj => proj.ProjectLeadId == eId)
+                .ToListAsync();
+
+            var groupProject = await _context.Projects
+                .Include(proj => proj.Collaborators)
+                .Where(proj => proj.Collaborators.Any(collab =>
+                    collab.Group.Employees.Any(employee => employee.EId == eId)))
+                .ToListAsync();
+
+            var allRelatedProjects = leadProject
+                .Concat(groupProject)
+                .Distinct()
+                .ToList();
+
+            var projectData = allRelatedProjects.Select(proj => new
             {
                 PId = proj.PId,
                 PTitle = proj.PTitle
             }).ToList();
+
             return Json(new { success = true, data = projectData });
         }
+
 
         /// <summary>
         ///     Edits the specified identifier.
