@@ -220,19 +220,35 @@ function populateEmployeesByState(selectedAssigneeId = "") {
     employeeSelect.innerHTML = '<option value="">Unassigned</option>';
 
     const state = statesWithEmployees.find(s => s.StateId === stateId);
+    let employeesToUse = [];
 
     if (state && state.Employees.length > 0) {
-        state.Employees.forEach(emp => {
-            const option = document.createElement("option");
-            option.value = emp.EId;
-            option.textContent = emp.Name;
-            if (emp.EId.toString() === selectedAssigneeId.toString()) {
-                option.selected = true;
-            }
-            employeeSelect.appendChild(option);
+        employeesToUse = state.Employees;
+    } else {
+        const allEmployeesMap = new Map();
+
+        statesWithEmployees.forEach(s => {
+            s.Employees.forEach(emp => {
+                if (!allEmployeesMap.has(emp.EId)) {
+                    allEmployeesMap.set(emp.EId, emp);
+                }
+            });
         });
+
+        employeesToUse = Array.from(allEmployeesMap.values());
     }
+
+    employeesToUse.forEach(emp => {
+        const option = document.createElement("option");
+        option.value = emp.EId;
+        option.textContent = emp.Name;
+        if (emp.EId.toString() === selectedAssigneeId.toString()) {
+            option.selected = true;
+        }
+        employeeSelect.appendChild(option);
+    });
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editTaskStateId').addEventListener('change', () => {
