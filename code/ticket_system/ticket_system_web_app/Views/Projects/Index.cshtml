@@ -57,7 +57,8 @@
                                         @Html.DisplayFor(modelItem => item.PDescription)
                                     </td>
                                     <td>
-                                    @if (ActiveEmployee.IsManager()) {
+                                    @if (ActiveEmployee.IsAdmin() || item.ProjectLeadId == ActiveEmployee.Employee?.EId)
+                                    {
                                         <button type="button" class="btn" onclick="gotoEditProject(@item.PId);">Edit</button>
                                         <form asp-action="Edit" method="get" class="hidden">
                                             <input type="hidden" name="id" value="@item.PId" />
@@ -66,10 +67,11 @@
 
                                         <button type="button" class="btn" onclick="promptDeleteProject(@item.PId);">Delete</button>
                                         <form asp-action="Delete" method="post" class="hidden">
-                                            <input type="hidden" name="id" value="@item.PId"/>
+                                            <input type="hidden" name="id" value="@item.PId" />
                                             <button class="hidden" id="delete-row-@item.PId"></button>
                                         </form>
                                     }
+
                                         <button type="button" class="btn" onclick="viewProject(@item.PId);">View</button>
                                     </td>
                                 </tr>

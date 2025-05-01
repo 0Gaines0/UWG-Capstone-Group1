@@ -30,11 +30,23 @@ namespace ticket_system_web_app.Controllers
         /// Indexes this instance.
         /// </summary>
         /// <returns></returns>
-        public async Task<ViewResult> Index()
+        public async Task<IActionResult> Index()
         {
-            int numPendingRequests = await this._context.ProjectGroups.Include(collab => collab.Group).CountAsync(collab => collab.Group.ManagerId == ActiveEmployee.Employee.EId && !collab.Accepted);
+            // Redirect to login if the user is not logged in or Employee object is null
+            if (!ActiveEmployee.IsLoggedIn() || ActiveEmployee.Employee == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            int eId = ActiveEmployee.Employee.EId;
+
+            int numPendingRequests = await _context.ProjectGroups
+                .Include(collab => collab.Group)
+                .CountAsync(collab => collab.Group.ManagerId == eId && !collab.Accepted);
+
             return View(numPendingRequests);
         }
+
 
         /// <summary>
         /// Logs the out.
