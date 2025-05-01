@@ -541,7 +541,7 @@ async function saveGroupEdits() {
         managerId: selectedEditManager
             ? selectedEditManager.id
             : parseInt(document.getElementById("editGroupManager").value) || 0,
-        memberIds: selectedEditMembers.map(member => member.id)
+        memberIds: selectedEditMembers.map(member => member.eId || member.id)
     };
 
     console.log("Sending Edited Group Data:", groupData);
