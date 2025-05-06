@@ -174,7 +174,8 @@ namespace ticket_system_web_app.Data
 
         private static Employee tempAdminCreation()
         {
-            var password = "$2a$11$tqFhRcVPxPe/F7g4i2.9c.tms9AlneY5RDZb1SipsY1FQtMcaaecu";
+            // The tempAdmin password is now password.
+            var password = "$2a$11$wQMl3xgNyJ.8MfbEmSI8SuypYgyefazrYrGRAHRz.Kts7AuSk77.e";
             return new Employee
             {
                 EId = 1,

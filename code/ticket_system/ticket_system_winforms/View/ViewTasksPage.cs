@@ -38,7 +38,11 @@ namespace ticket_system_winforms.View
             comboBoxTaskFilter.SelectedIndexChanged += ComboBoxTaskFilter_SelectedIndexChanged;
 
             var employeeGroups = ActiveEmployee.Employee.GroupsExistingIn.Union(ActiveEmployee.Employee.ManagedGroups);
-            allTasks =  this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).SelectMany(sag => sag.BoardState.Tasks).Include(pt => pt.BoardState).ToList();
+            var groupedTasks =  this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).SelectMany(sag => sag.BoardState.Tasks).Include(pt => pt.BoardState).ToList();
+            var ungroupedTasks = employeeGroups.SelectMany(g => g.Collaborations).Where(pg => pg.Accepted).SelectMany(pg => pg.Project?.ProjectBoard?.States ?? new List<BoardState>())
+                .Where(state => state.AssignedGroups == null || !state.AssignedGroups.Any()).SelectMany(state => state.Tasks).ToList();
+
+            this.allTasks = groupedTasks.Union(ungroupedTasks).ToList();
 
             DisplayTasks("Available Tasks");
         }
@@ -60,8 +64,13 @@ namespace ticket_system_winforms.View
             flowLayoutPanelTasks.Controls.Clear();
 
             var currentUserId = ActiveEmployee.Employee.EId;
+
             var employeeGroups = ActiveEmployee.Employee.GroupsExistingIn.Union(ActiveEmployee.Employee.ManagedGroups);
-            allTasks = this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).SelectMany(sag => sag.BoardState.Tasks).Include(pt => pt.BoardState).ToList();
+            var groupedTasks = this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).SelectMany(sag => sag.BoardState.Tasks).Include(pt => pt.BoardState).ToList();
+            var ungroupedTasks = employeeGroups.SelectMany(g => g.Collaborations).Where(pg => pg.Accepted).SelectMany(pg => pg.Project?.ProjectBoard?.States ?? new List<BoardState>())
+                .Where(state => state.AssignedGroups == null || !state.AssignedGroups.Any()).SelectMany(state => state.Tasks).ToList();
+            this.allTasks = groupedTasks.Union(ungroupedTasks).ToList();
+
             var filteredTasks = filter == "Available Tasks"
                 ? allTasks.Where(t => t.AssigneeId == null).ToList()
                 : allTasks.Where(t => t.AssigneeId == currentUserId).ToList();

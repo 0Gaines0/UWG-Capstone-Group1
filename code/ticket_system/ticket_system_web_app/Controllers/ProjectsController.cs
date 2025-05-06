@@ -269,8 +269,7 @@ namespace ticket_system_web_app.Controllers
 
             var groupProject = await _context.Projects
                 .Include(proj => proj.Collaborators)
-                .Where(proj => proj.Collaborators.Any(collab =>
-                    collab.Group.Employees.Any(employee => employee.EId == eId)))
+                .Where(proj => proj.Collaborators.Any(collab => collab.Group.Employees.Any(employee => employee.EId == eId) || (collab.Group.ManagerId == eId)))
                 .ToListAsync();
 
             var allRelatedProjects = leadProject

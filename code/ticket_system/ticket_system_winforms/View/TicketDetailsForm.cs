@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -63,7 +65,7 @@ namespace ticket_system_winforms.View
             LoadChangeLog();
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             var selfAssigned = chkAssigned.Checked;
             var selectedStateId = (int)cmbState.SelectedValue;
@@ -74,22 +76,90 @@ namespace ticket_system_winforms.View
                 return;
             }
 
+            var employeeGroups = ActiveEmployee.Employee.GroupsExistingIn.Union(ActiveEmployee.Employee.ManagedGroups);
+            var employeeStates = this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).Select(sag => sag.StateId)
+                .Union(employeeGroups.SelectMany(g => g.Collaborations).Where(pg => pg.Project != null && pg.Project.ProjectBoard != null).SelectMany(pg => pg.Project.ProjectBoard.States)
+                        .Where(state => !state.AssignedGroups.Any(sag => sag.StateId == state.StateId)).Select(state => state.StateId)
+                ).Distinct().ToList();
+
             if (selfAssigned)
             {
-                var employeeGroups = ActiveEmployee.Employee.GroupsExistingIn.Union(ActiveEmployee.Employee.ManagedGroups);
-                var employeeStates = this.context.StateAssignedGroups.Where(sag => employeeGroups.Contains(sag.Group)).Select(pb => pb.StateId).ToList();
                 if (!employeeStates.Contains((int)cmbState.SelectedValue))
                 {
                     MessageBox.Show($"You can't be assigned to a ticket in the {cmbState.Text} state.");
                     return;
                 }
             }
+            if (!employeeStates.Contains((int)cmbState.SelectedValue))
+            {
+                var result = MessageBox.Show(
+                    $"You will no longer be able to access this ticket in the {cmbState.Text} state.\n\nDo you want to continue?",
+                    "Confirm State Change",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
 
 
-            task.StateId = selectedStateId;
-            task.AssigneeId = selfAssigned ? currentUserId : (int?)null;
+            var assigneeId = selfAssigned ? currentUserId : (int?)null;
+            var changes = new List<TaskChange>();
 
-            context.SaveChanges();
+            if (task.StateId != selectedStateId)
+            {
+                var newState = await context.BoardStates.FirstOrDefaultAsync(s => s.StateId == selectedStateId);
+                var previousState = await context.BoardStates.FirstOrDefaultAsync(s => s.StateId == task.StateId);
+                changes.Add(new TaskChange
+                {
+                    Type = "StateChange",
+                    PreviousValue = previousState?.StateName.ToString() ?? "Unknown",
+                    NewValue = newState?.StateName.ToString() ?? "Unknown",
+                    ChangedDate = DateTime.Now,
+                    AssigneeId = ActiveEmployee.Employee.EId
+                });
+
+                task.StateId = selectedStateId;
+            }
+
+            if (task.AssigneeId != assigneeId)
+            {
+                var previousAssignee = await context.Employees.FirstOrDefaultAsync(x => x.EId == task.AssigneeId);
+                var newAssignee = await context.Employees.FirstOrDefaultAsync(x => x.EId == assigneeId);
+
+                changes.Add(new TaskChange
+                {
+                    Type = "AssigneeChange",
+                    PreviousValue = previousAssignee != null
+                    ? $"{previousAssignee.FName} {previousAssignee.LName}"
+                    : "Unassigned",
+                    NewValue = newAssignee != null
+                    ? $"{newAssignee.FName} {newAssignee.LName}"
+                    : "Unassigned",
+                    ChangedDate = DateTime.Now,
+                    AssigneeId = ActiveEmployee.Employee.EId
+                });
+
+                task.AssigneeId = assigneeId;
+            }
+
+            if (changes.Any())
+            {
+                await context.TaskChanges.AddRangeAsync(changes);
+                await context.SaveChangesAsync();
+
+                var changeLogs = changes.Select(c => new TaskChangeLog
+                {
+                    TaskId = task.TaskId,
+                    ChangeId = c.ChangeId
+                });
+
+                await context.TaskChangeLogs.AddRangeAsync(changeLogs);
+            }
+
+            await context.SaveChangesAsync();
             MessageBox.Show("Changes saved.");
             Close();
         }
@@ -116,7 +186,7 @@ namespace ticket_system_winforms.View
 
         private void LoadComments()
         {
-            var comments = context.TaskComments
+                var comments = context.TaskComments
                 .Where(c => c.TaskId == task.TaskId)
                 .Include(c => c.Commenter)
                 .OrderByDescending(c => c.CommentedAt)
