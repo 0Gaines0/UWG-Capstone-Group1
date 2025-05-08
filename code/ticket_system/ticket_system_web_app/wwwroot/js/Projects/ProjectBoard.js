@@ -209,14 +209,6 @@ function submitComment(event) {
         });
 }
 
-
-
-let statesWithEmployees = [];
-
-function initStatesWithEmployees(statesData) {
-    statesWithEmployees = statesData;
-}
-
 async function populateEmployeesByState(selectedAssigneeId = "", projectId = null) {
     selectedAssigneeId = selectedAssigneeId?.toString() ?? "";
 
@@ -226,14 +218,12 @@ async function populateEmployeesByState(selectedAssigneeId = "", projectId = nul
 
     employeeSelect.innerHTML = '<option value="">Unassigned</option>';
 
-    const state = statesWithEmployees.find(s => s.StateId === stateId);
     let employeesToUse = [];
+    let matchFound = false;
 
-    if (state && Array.isArray(state.Employees) && state.Employees.length > 0) {
-        employeesToUse = state.Employees;
-    } else if (projectId) {
+    if (projectId) {
         try {
-            const response = await fetch(`/Projects/GetProjectEmployees/${authToken}&${projectId}`);
+            const response = await fetch(`/Projects/GetProjectEmployees/${authToken}&${projectId}&${stateId}`);
             if (response.ok) {
                 employeesToUse = await response.json();
             } else {
@@ -259,11 +249,18 @@ async function populateEmployeesByState(selectedAssigneeId = "", projectId = nul
 
         if (id.toString() === selectedAssigneeId?.toString()) {
             option.selected = true;
+            matchFound = true;
         }
 
         employeeSelect.appendChild(option);
     });
 
+    if (!matchFound) {
+        const unassignedOption = employeeSelect.querySelector('option[value=""]');
+        if (unassignedOption) {
+            unassignedOption.selected = true;
+        }
+    }
 }
 
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Build.Evaluation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Mono.TextTemplating;
 using ticket_system_web_app.Data;
 using ticket_system_web_app.Models;
 using ticket_system_web_app.Models.RequestObj;
@@ -680,13 +681,15 @@ namespace ticket_system_web_app.Controllers
             return result;
         }
 
-        [HttpGet("Projects/GetProjectEmployees/{authToken}&{projectId}")]
-        public async Task<IActionResult> GetProjectEmployees(string authToken, int projectId)
+        [HttpGet("Projects/GetProjectEmployees/{authToken}&{projectId}&{stateId}")]
+        public async Task<IActionResult> GetProjectEmployees(string authToken, int projectId, int stateId)
         {
             if (!ActiveEmployee.IsValidRequest(authToken))
             {
                 return BadRequest(new { message = "Not logged in." });
             }
+
+            var currentUser = ActiveEmployee.Employee;
 
             var project = await _context.Projects
                 .Include(p => p.Collaborators)
@@ -701,17 +704,94 @@ namespace ticket_system_web_app.Controllers
             {
                 return NotFound(new { message = "Project not found." });
             }
+            var isProjectManager = project.Collaborators.Any(c => c.Group?.ManagerId == currentUser.EId);
+            var state = project.ProjectBoard?.States.FirstOrDefault(s => s.StateId == stateId);
+            if (state == null)
+            {
+                return NotFound(new { message = "State not found." });
+            }
 
-            var employees = project.Collaborators
-                .SelectMany(collab =>
+            List<Employee> employees = new();
+
+            if (ActiveEmployee.IsAdmin())
+            {
+                employees = state.AssignedGroups.Any()
+                        ? state.AssignedGroups.SelectMany(ag =>
+                        {
+                            var groupEmps = ag.Group.Employees ?? new List<Employee>();
+                            var manager = ag.Group.Manager;
+                            return manager != null ? groupEmps.Append(manager) : groupEmps;
+                        }).ToList()
+                        : project.Collaborators.SelectMany(c =>
+                        {
+                            var groupEmps = c.Group.Employees ?? new List<Employee>();
+                            var manager = c.Group.Manager;
+                            return manager != null ? groupEmps.Append(manager) : groupEmps;
+                        }).ToList();
+            }
+            else if (isProjectManager)
+            {
+                var groupsInState = state.AssignedGroups
+                    .Select(ag => ag.Group)
+                    .ToList();
+
+                var managedGroups = groupsInState
+                    .Where(g => g.ManagerId == currentUser.EId)
+                    .ToList();
+
+                if (managedGroups.Any())
                 {
-                    var groupEmployees = collab.Group.Employees ?? new List<Employee>();
-                    var manager = collab.Group.Manager;
-                    return manager != null
-                        ? groupEmployees.Append(manager)
-                        : groupEmployees;
-                })
-                .GroupBy(e => e.EId) 
+                    employees = managedGroups.SelectMany(g =>
+                    {
+                        var groupEmps = g.Employees ?? new List<Employee>();
+                        return g.Manager != null ? groupEmps.Append(g.Manager) : groupEmps;
+                    }).ToList();
+                }
+                else if (!groupsInState.Any())
+                {
+                    managedGroups = project.Collaborators
+                        .Where(c => c.Group.ManagerId == currentUser.EId)
+                        .Select(c => c.Group)
+                        .ToList();
+
+                    employees = managedGroups.SelectMany(g =>
+                    {
+                        var groupEmps = g.Employees ?? new List<Employee>();
+                        return g.Manager != null ? groupEmps.Append(g.Manager) : groupEmps;
+                    }).ToList();
+                }
+                else
+                {
+                    employees = new List<Employee>();
+                }
+            }
+            else
+            {
+                var assignedGroups = state.AssignedGroups;
+
+                if (!assignedGroups.Any())
+                {
+                    employees.Add(currentUser);
+                }
+                else
+                {
+                    var employeeGroups = project.Collaborators
+                        .Where(c => c.Group.Employees.Any(e => e.EId == currentUser.EId))
+                        .Select(c => c.Group)
+                        .ToList();
+
+                    var assignedGroupIds = assignedGroups.Select(ag => ag.Group.GId).ToHashSet();
+                    var isInAssignedGroup = employeeGroups.Any(g => assignedGroupIds.Contains(g.GId));
+
+                    if (isInAssignedGroup)
+                    {
+                        employees.Add(currentUser);
+                    }
+                }
+            }
+
+            var result = employees
+                .GroupBy(e => e.EId)
                 .Select(g => g.First())
                 .Select(e => new
                 {
@@ -720,11 +800,8 @@ namespace ticket_system_web_app.Controllers
                 })
                 .ToList();
 
-            return Ok(employees);
+            return Ok(result);
         }
-
-
-
         #endregion
     }
 }

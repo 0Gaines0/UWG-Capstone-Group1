@@ -506,7 +506,11 @@
             <img src="~/assets/ticket_system_logo.png" alt="Project Icon">
             <h2>@Model.PTitle</h2>
             <button class="button" onclick="openCreateTaskModal()">Create Task</button>
-            @if (ActiveEmployee.IsAdmin() || ActiveEmployee.IsManager())
+            @{
+                var isProjectManager = Model.Collaborators
+                .Any(c => c.Group?.ManagerId == ActiveEmployee.Employee.EId);
+            }
+            @if (ActiveEmployee.IsAdmin() || isProjectManager)
             {
                 <button class="button" onclick="location.href='/Project/EditKanban/@Model.PId'">
                     Edit Board
@@ -685,22 +689,6 @@
     </div>
     <script src="~/js/Projects/ProjectBoard.js"></script>
     <input type="hidden" id="authToken" value="@(ActiveEmployee.AuthToken)" />
-    <script>
-                initStatesWithEmployees(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
-            Model.ProjectBoard.States.Select(s => new
-            {
-                StateId = s.StateId,
-                    Employees = s.AssignedGroups
-                    .SelectMany(ag => ag.Group.Employees)
-                    .Concat(s.AssignedGroups
-                        .Where(ag => ag.Group.Manager != null)
-                        .Select(ag => ag.Group.Manager))
-                    .Select(e => new { e.EId, Name = e.FName + " " + e.LName })
-                    .Distinct()
-            })
-        )));
-
-    </script>
     <input type="hidden" id="projectIdHolder" value="@Model.PId" />
 
 </body>
