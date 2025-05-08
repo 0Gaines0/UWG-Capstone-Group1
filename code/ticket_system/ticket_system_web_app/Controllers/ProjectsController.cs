@@ -680,6 +680,51 @@ namespace ticket_system_web_app.Controllers
             return result;
         }
 
+        [HttpGet("Projects/GetProjectEmployees/{authToken}&{projectId}")]
+        public async Task<IActionResult> GetProjectEmployees(string authToken, int projectId)
+        {
+            if (!ActiveEmployee.IsValidRequest(authToken))
+            {
+                return BadRequest(new { message = "Not logged in." });
+            }
+
+            var project = await _context.Projects
+                .Include(p => p.Collaborators)
+                    .ThenInclude(collab => collab.Group)
+                        .ThenInclude(group => group.Employees)
+                .Include(p => p.Collaborators)
+                    .ThenInclude(collab => collab.Group)
+                        .ThenInclude(group => group.Manager)
+                .FirstOrDefaultAsync(p => p.PId == projectId);
+
+            if (project == null)
+            {
+                return NotFound(new { message = "Project not found." });
+            }
+
+            var employees = project.Collaborators
+                .SelectMany(collab =>
+                {
+                    var groupEmployees = collab.Group.Employees ?? new List<Employee>();
+                    var manager = collab.Group.Manager;
+                    return manager != null
+                        ? groupEmployees.Append(manager)
+                        : groupEmployees;
+                })
+                .GroupBy(e => e.EId) 
+                .Select(g => g.First())
+                .Select(e => new
+                {
+                    EId = e.EId,
+                    Name = $"{e.FName} {e.LName}"
+                })
+                .ToList();
+
+            return Ok(employees);
+        }
+
+
+
         #endregion
     }
 }

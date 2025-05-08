@@ -6,13 +6,15 @@ let authToken = "FAILED TO GET AUTH TOKEN";
 
 function openEditModal(btn) {
     const taskId = btn.dataset.taskId;
+    const projectId = btn.dataset.projectId;
+
     document.getElementById('editTaskId').value = taskId;
     document.getElementById('editTaskStateId').value = btn.dataset.stateId;
     document.getElementById('editTaskPriority').value = btn.dataset.priority;
     document.getElementById('editTaskSummary').value = btn.dataset.summary;
     document.getElementById('editTaskDescription').value = btn.dataset.description;
 
-    populateEmployeesByState(btn.dataset.assigneeId || "");
+    populateEmployeesByState(btn.dataset.assigneeId || "", document.getElementById("projectIdHolder").value);
     document.getElementById('editTaskAssigneeId').value = btn.dataset.assigneeId || "";
 
     document.getElementById('edit-task').style.display = "flex";
@@ -38,14 +40,16 @@ function openEditModal(btn) {
         });
 }
 
+
 function openCreateTaskModal() {
+    const projectId = document.getElementById('projectIdHolder').value;
 
     document.getElementById('editTaskStateId').value = document.getElementById('editTaskStateId').options[0].value;
     document.getElementById('editTaskPriority').value = 1;
     document.getElementById('editTaskSummary').value = "";
     document.getElementById('editTaskDescription').value = "";
 
-    populateEmployeesByState();
+    populateEmployeesByState("", document.getElementById("projectIdHolder").value);
     document.getElementById('editTaskAssigneeId').value = "";
 
     document.getElementById('comments-history').style.display = "none";
@@ -55,6 +59,7 @@ function openCreateTaskModal() {
 
     document.getElementById('editTaskModal').style.display = 'flex';
 }
+
 
     function closeModal() {
         document.getElementById('editTaskModal').style.display = 'none';
@@ -212,7 +217,9 @@ function initStatesWithEmployees(statesData) {
     statesWithEmployees = statesData;
 }
 
-function populateEmployeesByState(selectedAssigneeId = "") {
+async function populateEmployeesByState(selectedAssigneeId = "", projectId = null) {
+    selectedAssigneeId = selectedAssigneeId?.toString() ?? "";
+
     const stateSelect = document.getElementById('editTaskStateId');
     const employeeSelect = document.getElementById('editTaskAssigneeId');
     const stateId = parseInt(stateSelect.value);
@@ -222,38 +229,50 @@ function populateEmployeesByState(selectedAssigneeId = "") {
     const state = statesWithEmployees.find(s => s.StateId === stateId);
     let employeesToUse = [];
 
-    if (state && state.Employees.length > 0) {
+    if (state && Array.isArray(state.Employees) && state.Employees.length > 0) {
         employeesToUse = state.Employees;
-    } else {
-        const allEmployeesMap = new Map();
-
-        statesWithEmployees.forEach(s => {
-            s.Employees.forEach(emp => {
-                if (!allEmployeesMap.has(emp.EId)) {
-                    allEmployeesMap.set(emp.EId, emp);
-                }
-            });
-        });
-
-        employeesToUse = Array.from(allEmployeesMap.values());
+    } else if (projectId) {
+        try {
+            const response = await fetch(`/Projects/GetProjectEmployees/${authToken}&${projectId}`);
+            if (response.ok) {
+                employeesToUse = await response.json();
+            } else {
+                console.warn("Fallback failed to load project employees");
+            }
+        } catch (error) {
+            console.error("Error fetching fallback employees:", error);
+        }
     }
 
     employeesToUse.forEach(emp => {
+        const id = emp.EId ?? emp.eId;
+        const name = emp.Name ?? emp.name;
+
+        if (!id || !name) {
+            console.warn("Skipping invalid employee entry:", emp);
+            return;
+        }
+
         const option = document.createElement("option");
-        option.value = emp.EId;
-        option.textContent = emp.Name;
-        if (emp.EId.toString() === selectedAssigneeId.toString()) {
+        option.value = id;
+        option.textContent = name;
+
+        if (id.toString() === selectedAssigneeId?.toString()) {
             option.selected = true;
         }
+
         employeeSelect.appendChild(option);
     });
+
 }
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('editTaskStateId').addEventListener('change', () => {
         const currentAssigneeId = document.getElementById('editTaskAssigneeId').value || "";
-        populateEmployeesByState(currentAssigneeId);
+        const projectId = document.getElementById('projectIdHolder').value;
+        populateEmployeesByState(currentAssigneeId, projectId);
     });
 });
 
